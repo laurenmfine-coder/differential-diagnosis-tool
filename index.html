@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Differential Diagnosis Tool</title>
+    <meta name="description" content="Interactive medical education tool teaching how environmental exposures reshape diagnosis">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@400;600;700&display=swap" rel="stylesheet">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface2: #334155;
+            --primary: #22d3ee;
+            --secondary: #f472b6;
+            --accent: #a78bfa;
+            --warning: #fbbf24;
+            --success: #34d399;
+            --danger: #f87171;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #475569;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-in { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .pulse { animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 5px var(--primary); }
+            50% { box-shadow: 0 0 20px var(--primary); }
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const ChevronDown = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>;
+const ChevronRight = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>;
+const UserIcon = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+const HomeIcon = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+const BriefcaseIcon = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
+const AlertIcon = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>;
+
+const cases = [
+  {
+    id: 1, category: "Pulmonary", title: "Productive Cough & Dyspnea",
+    initial: { age: 42, sex: "Male", complaint: "Productive cough, fever, and dyspnea × 3 days", imaging: "Chest X-ray", findings: "Right lower lobe opacity with air bronchograms" },
+    initialDx: [
+      { dx: "Community-acquired pneumonia", likelihood: "High", reason: "Classic presentation with focal consolidation" },
+      { dx: "Aspiration pneumonia", likelihood: "Moderate", reason: "RLL location common for aspiration" },
+      { dx: "Pulmonary embolism with infarction", likelihood: "Low", reason: "Less common presentation" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Location", data: { "Zip Code": "48217 (Southwest Detroit)", "Occupation": "Auto factory worker (25 years)", "Insurance": "Medicaid", "Housing": "Rental apartment built 1960" }, impact: "This zip code has the highest air pollution levels in Michigan due to industrial facilities and highways." },
+      home: { title: "Home Environment", data: { "Heating": "Natural gas furnace (>20 years old)", "Ventilation": "Poor - windows painted shut", "Moisture": "Visible mold in bathroom/bedroom", "Smoking": "Non-smoker; landlord smokes in building" }, impact: "Old gas appliances + poor ventilation = chronic CO/NO2 exposure. Visible mold indicates significant allergen burden." },
+      work: { title: "Occupational History", data: { "Current": "Automotive paint line worker", "Exposures": "Isocyanates, metal fumes, solvents", "PPE": "Inconsistent respirator use", "Duration": "25 years cumulative exposure" }, impact: "Isocyanates are potent respiratory sensitizers causing occupational asthma. Metal fumes increase pneumonia susceptibility." }
+    },
+    revisedDx: [
+      { dx: "Occupational asthma with superimposed infection", likelihood: "Very High", reason: "25-year isocyanate exposure + acute infection", change: "↑ Previously not considered" },
+      { dx: "Hypersensitivity pneumonitis", likelihood: "High", reason: "Mold exposure at home + industrial chemicals at work", change: "↑ Previously not considered" },
+      { dx: "Community-acquired pneumonia", likelihood: "Moderate", reason: "Still possible but environmental factors modify treatment", change: "↓ From High" }
+    ],
+    actions: ["Obtain detailed occupational history", "Order spirometry with bronchodilator response", "Check specific IgE for isocyanates", "Consider CO-oximetry", "Refer to occupational medicine"],
+    teaching: ["Zip codes can be diagnostic clues—environmental justice communities face disproportionate pollution", "Always ask about ALL jobs, not just current employment", "Industrial exposure + infection often coexist"]
+  },
+  {
+    id: 2, category: "Pediatric", title: "Developmental Delay in Toddler",
+    initial: { age: 3, sex: "Male", complaint: "Speech delay, behavioral changes, decreased appetite × 2 months", imaging: "Head CT", findings: "No acute intracranial abnormality. Dense metaphyseal bands noted at visualized humeral heads." },
+    initialDx: [
+      { dx: "Autism spectrum disorder", likelihood: "Moderate", reason: "Speech delay and behavioral changes" },
+      { dx: "Global developmental delay", likelihood: "Moderate", reason: "Multiple developmental domains affected" },
+      { dx: "Hearing impairment", likelihood: "Low-Moderate", reason: "Could explain speech delay" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Location", data: { "Zip Code": "21217 (West Baltimore)", "Housing": "Row home built 1920", "Family": "Lives with grandmother (fixed income)", "Insurance": "Medicaid" }, impact: "Pre-1978 housing in this area has extremely high rates of lead paint. Low-income families often cannot remediate." },
+      home: { title: "Home Environment", data: { "Paint condition": "Peeling paint on windowsills", "Renovation": "Grandmother sanding windows last month", "Child behavior": "Mouths toys near windows", "Water": "Old lead service lines" }, impact: "Active renovation creates enormous exposure. Window friction surfaces generate lead dust daily." },
+      medical: { title: "Medical History", data: { "Lead screening": "Never performed", "Pica": "Eats paint chips ('taste sweet')", "Nutrition": "Food insecurity, iron deficient", "Sibling": "5-year-old sister with 'ADHD'" }, impact: "Iron deficiency increases GI lead absorption. Pica is both symptom AND risk factor." }
+    },
+    revisedDx: [
+      { dx: "Lead poisoning (plumbism)", likelihood: "Very High", reason: "Dense metaphyseal bands + pre-1978 housing + pica + renovation", change: "↑ Previously not considered" },
+      { dx: "Lead encephalopathy", likelihood: "High", reason: "Behavioral changes suggest CNS involvement", change: "↑ Previously not considered" },
+      { dx: "Iron deficiency (concurrent)", likelihood: "High", reason: "Food insecurity, increases lead absorption", change: "↑ Previously not considered" },
+      { dx: "Autism spectrum disorder", likelihood: "Low", reason: "Symptoms better explained by toxic exposure", change: "↓ From Moderate" }
+    ],
+    actions: ["STAT venous blood lead level", "CBC, iron studies, zinc protoporphyrin", "Abdominal X-ray (paint chips visible)", "Test sibling immediately", "Report to health department", "Urgent chelation if BLL > 45 µg/dL"],
+    teaching: ["'Lead lines' on ANY imaging should trigger immediate lead testing", "Pre-1978 housing is the #1 risk factor", "One poisoned child = screen all children in the home"]
+  },
+  {
+    id: 3, category: "Emergency", title: "Family with Headaches",
+    initial: { age: 45, sex: "Female", complaint: "Headache, nausea, dizziness × 1 week. Husband and two children similar symptoms.", imaging: "Head CT", findings: "No acute abnormality. Bilateral globus pallidus hypodensities noted." },
+    initialDx: [
+      { dx: "Viral syndrome", likelihood: "High", reason: "Multiple family members suggests infectious etiology" },
+      { dx: "Tension headache", likelihood: "Moderate", reason: "Chronic headache pattern" },
+      { dx: "Migraine", likelihood: "Low-Moderate", reason: "Associated nausea and dizziness" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Season", data: { "Season": "January (winter heating)", "Housing": "Single-family home, 1965", "Utilities": "Gas furnace, water heater, stove", "Recent": "Furnace 'serviced' by unlicensed contractor" }, impact: "Winter heating season is peak time for CO poisoning. Unlicensed furnace work is major red flag." },
+      home: { title: "Home Environment", data: { "CO detectors": "None installed", "Ventilation": "Storm windows sealed", "Pattern": "Worse in morning, improve at work", "Pets": "Dog has been lethargic 2 weeks" }, impact: "Symptoms improving away from home is pathognomonic. Pets affected = environmental toxin." },
+      additional: { title: "Critical Details", data: { "Husband": "Works night shift, sleeps at home during day", "Children": "6 and 8 years old, 'sleeping more'", "Timeline": "Started after furnace repair", "Observation": "Pilot light flame is yellow, not blue" }, impact: "Yellow flame indicates incomplete combustion. Children and sleeping adults have highest exposure." }
+    },
+    revisedDx: [
+      { dx: "Carbon monoxide poisoning", likelihood: "Very High", reason: "Multiple family + winter + gas appliances + symptoms improve away + globus pallidus changes", change: "↑ Previously not considered" },
+      { dx: "CO-induced encephalopathy", likelihood: "High", reason: "Bilateral globus pallidus hypodensities are classic", change: "↑ Previously not considered" },
+      { dx: "Viral syndrome", likelihood: "Very Low", reason: "Pet symptoms and location-dependent pattern rule this out", change: "↓ From High" }
+    ],
+    actions: ["STAT CO-oximetry on all family members (not pulse ox!)", "100% oxygen via non-rebreather immediately", "Do NOT send family home", "Call fire department for home evaluation", "Consider hyperbaric oxygen"],
+    teaching: ["Multiple family members + location pattern = ENVIRONMENTAL TOXIN", "Pets affected = not infectious", "Standard pulse ox cannot detect CO", "Globus pallidus bilateral lesions are nearly pathognomonic for CO"]
+  },
+  {
+    id: 4, category: "Pulmonary", title: "Post-Hurricane Respiratory Illness",
+    initial: { age: 58, sex: "Male", complaint: "Progressive dyspnea, cough, fever × 3 weeks. Not improving with antibiotics.", imaging: "Chest CT", findings: "Multiple bilateral nodular opacities with ground-glass halos. Tree-in-bud pattern." },
+    initialDx: [
+      { dx: "Bacterial pneumonia (treatment failure)", likelihood: "High", reason: "Persistent symptoms despite antibiotics" },
+      { dx: "Atypical pneumonia", likelihood: "Moderate", reason: "Poor response to standard antibiotics" },
+      { dx: "Lung malignancy", likelihood: "Low-Moderate", reason: "Multiple nodular opacities" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Timeline", data: { "Location": "Fort Myers, FL", "Timeline": "Symptoms started 10 days post-Hurricane Ian", "Activity": "Doing home repairs", "Insurance": "Medicare" }, impact: "Hurricane Ian caused catastrophic flooding. Post-hurricane mold causes respiratory illness spikes." },
+      home: { title: "Home Environment", data: { "Flood damage": "4 feet of water × 5 days", "Mold": "Extensive visible mold", "Remediation": "DIY removal without PPE", "Duration": "8+ hours/day × 2 weeks" }, impact: "Massive mold exposure without respiratory protection. DIY dramatically increases exposure." },
+      medical: { title: "Medical History", data: { "Diabetes": "Type 2, A1c 8.9%", "Prednisone": "Recent course for 'bronchitis'", "Medications": "Metformin, lisinopril", "Smoking": "Former, quit 10 years ago" }, impact: "Diabetes + recent steroids = immunocompromised. Dramatically increased invasive fungal risk." }
+    },
+    revisedDx: [
+      { dx: "Invasive pulmonary aspergillosis", likelihood: "Very High", reason: "Halo sign + immunocompromised + massive mold exposure", change: "↑ Previously not considered" },
+      { dx: "Mucormycosis", likelihood: "High", reason: "Diabetic with environmental mold exposure", change: "↑ Previously not considered" },
+      { dx: "Hypersensitivity pneumonitis", likelihood: "Moderate-High", reason: "Massive organic dust/mold during remediation", change: "↑ Previously not considered" },
+      { dx: "Bacterial pneumonia", likelihood: "Low", reason: "Nodular pattern with halos atypical", change: "↓ From High" }
+    ],
+    actions: ["Serum galactomannan and beta-D-glucan", "Bronchoscopy with BAL for fungal culture", "Hold steroids", "Start empiric voriconazole", "Optimize diabetes urgently"],
+    teaching: ["Post-disaster environments are high-risk for fungal exposure", "The 'halo sign' suggests angioinvasive fungal infection", "DIY remediation without PPE creates extreme exposure risk"]
+  },
+  {
+    id: 5, category: "Toxicology", title: "Farmworker with Neuro Symptoms",
+    initial: { age: 34, sex: "Male", complaint: "Excessive salivation, abdominal cramps, blurred vision, muscle twitching × 6 hours", imaging: "CT Head", findings: "No acute intracranial abnormality" },
+    initialDx: [
+      { dx: "Gastroenteritis", likelihood: "Moderate", reason: "Abdominal cramps, salivation" },
+      { dx: "Anxiety/panic attack", likelihood: "Low-Moderate", reason: "Multiple somatic symptoms" },
+      { dx: "Viral syndrome", likelihood: "Low", reason: "Acute onset with multiple symptoms" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Location", data: { "Occupation": "Agricultural worker (citrus)", "Location": "Immokalee, FL", "Housing": "Shared migrant housing, 8 workers", "Language": "Spanish-speaking, limited English" }, impact: "Immokalee is agricultural heartland. Migrant workers face extreme pesticide exposure risk." },
+      work: { title: "Occupational Details", data: { "Today": "Re-entered recently sprayed grove", "Pesticide": "Organophosphate application yesterday", "PPE": "None provided by employer", "REI": "Re-entry interval not observed" }, impact: "Organophosphates inhibit acetylcholinesterase. Re-entry before restricted interval = major exposure." },
+      clinical: { title: "Physical Exam", data: { "Vitals": "HR 52, BP 100/60, profuse diaphoresis", "Eyes": "Miosis (pinpoint pupils), lacrimation", "Lungs": "Diffuse wheezing, rhonchi", "Neuro": "Fasciculations, muscle weakness" }, impact: "Classic SLUDGE syndrome: cholinergic toxidrome from organophosphate poisoning." }
+    },
+    revisedDx: [
+      { dx: "Organophosphate poisoning", likelihood: "Very High", reason: "SLUDGE syndrome + pesticide exposure + miosis + bradycardia", change: "↑ Previously not considered" },
+      { dx: "Cholinergic crisis", likelihood: "Very High", reason: "Same mechanism—acetylcholinesterase inhibition", change: "↑ Previously not considered" },
+      { dx: "Gastroenteritis", likelihood: "Very Low", reason: "Does not explain miosis, bradycardia, fasciculations", change: "↓ From Moderate" }
+    ],
+    actions: ["IMMEDIATE: Atropine 2-4mg IV, repeat until secretions dry", "Pralidoxime (2-PAM) 1-2g IV", "Decontaminate: remove clothing, wash skin", "Protect healthcare workers", "Report to OSHA"],
+    teaching: ["SLUDGE = Salivation, Lacrimation, Urination, Defecation, GI upset, Emesis", "Agricultural workers at extreme risk—always ask about occupation", "Miosis + bradycardia + secretions = organophosphate until proven otherwise"]
+  },
+  {
+    id: 6, category: "Infectious Disease", title: "Immigrant with Chronic Cough",
+    initial: { age: 28, sex: "Female", complaint: "Cough × 3 months, night sweats, 15-pound weight loss", imaging: "Chest X-ray", findings: "Right upper lobe cavitary lesion with surrounding consolidation. Tree-in-bud opacities." },
+    initialDx: [
+      { dx: "Lung cancer", likelihood: "Moderate", reason: "Cavitary lesion with weight loss" },
+      { dx: "Bacterial lung abscess", likelihood: "Moderate", reason: "Cavitary lesion could represent abscess" },
+      { dx: "Community-acquired pneumonia", likelihood: "Low-Moderate", reason: "Chronic course atypical" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Background", data: { "Origin": "Philippines (arrived 6 months ago)", "Status": "New immigrant (family visa)", "Prior screening": "Immigration CXR was 'normal'", "Occupation": "Home health aide" }, impact: "Philippines has one of highest TB burdens. Immigration CXR can miss early/latent disease." },
+      social: { title: "Social & Living", data: { "Housing": "Apartment with 6 family members, 2 BR", "Children": "3-year-old nephew in household", "Healthcare": "Delayed care due to cost", "Contacts": "Works with elderly patients daily" }, impact: "Crowded housing facilitates transmission. Young child contact is high-risk." },
+      medical: { title: "Medical History", data: { "BCG": "Received as infant in Philippines", "Prior TB": "Uncle treated 2 years ago in Manila", "HIV": "Unknown, never tested", "Diabetes": "None known" }, impact: "BCG does not protect against pulmonary TB. Known TB contact increases probability." }
+    },
+    revisedDx: [
+      { dx: "Pulmonary tuberculosis", likelihood: "Very High", reason: "Upper lobe cavity + endemic country + TB contact + classic symptoms", change: "↑ Previously not considered" },
+      { dx: "MDR-TB", likelihood: "Moderate", reason: "Philippines has rising MDR-TB rates", change: "↑ Previously not considered" },
+      { dx: "HIV with TB co-infection", likelihood: "Moderate", reason: "Young adult with TB—HIV testing mandatory", change: "↑ Previously not considered" },
+      { dx: "Lung cancer", likelihood: "Very Low", reason: "28-year-old non-smoker; TB much more likely", change: "↓ From Moderate" }
+    ],
+    actions: ["IMMEDIATE: Airborne isolation (N95, negative pressure)", "Three induced sputum for AFB smear and culture", "GeneXpert MTB/RIF for rapid diagnosis", "HIV testing mandatory", "Contact investigation for household and patients"],
+    teaching: ["Country of origin is vital diagnostic clue", "Upper lobe cavitary disease + endemic exposure = TB until proven otherwise", "ALWAYS test for HIV in new TB diagnosis"]
+  },
+  {
+    id: 7, category: "Pulmonary", title: "Shipyard Worker with Dyspnea",
+    initial: { age: 72, sex: "Male", complaint: "Progressive dyspnea on exertion × 2 years, dry cough", imaging: "Chest CT", findings: "Bilateral pleural plaques with calcification. Subpleural interstitial thickening. Rounded atelectasis." },
+    initialDx: [
+      { dx: "Idiopathic pulmonary fibrosis", likelihood: "High", reason: "Age, progressive dyspnea, interstitial changes" },
+      { dx: "Heart failure", likelihood: "Moderate", reason: "Dyspnea on exertion in elderly" },
+      { dx: "COPD", likelihood: "Low-Moderate", reason: "Chronic respiratory symptoms" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Background", data: { "Occupation": "Navy shipyard worker (1970-1995)", "Location": "Norfolk Naval Shipyard, VA", "Military": "Navy veteran", "Retirement": "25+ years since last exposure" }, impact: "Naval shipyards had intense asbestos exposure until 1980s. Disease manifests 20-40 years after exposure." },
+      work: { title: "Occupational History", data: { "Primary work": "Pipe insulation installation/removal", "Asbestos": "Daily exposure × 25 years", "PPE": "Minimal respiratory protection in 1970s", "Secondary": "Wife washed work clothes at home" }, impact: "Pipe insulators had highest asbestos exposure. Take-home exposure can cause disease in family." },
+      current: { title: "Additional History", data: { "Smoking": "30 pack-year, quit 1990", "Chest pain": "Dull right-sided discomfort", "Weight loss": "10 lbs over 6 months", "New symptom": "Worsening dyspnea last 3 months" }, impact: "Smoking + asbestos = multiplicative lung cancer risk. Acceleration suggests possible malignancy." }
+    },
+    revisedDx: [
+      { dx: "Asbestosis", likelihood: "Very High", reason: "Shipyard exposure + bilateral pleural plaques + interstitial disease + latency", change: "↑ Previously not considered" },
+      { dx: "Malignant mesothelioma", likelihood: "High", reason: "Asbestos exposure + pleural disease + symptom acceleration + weight loss", change: "↑ Previously not considered" },
+      { dx: "Asbestos-related lung cancer", likelihood: "Moderate-High", reason: "Asbestos + smoking = synergistic risk", change: "↑ Previously not considered" },
+      { dx: "Idiopathic pulmonary fibrosis", likelihood: "Low", reason: "Pleural plaques indicate asbestos etiology", change: "↓ From High" }
+    ],
+    actions: ["Full PFTs including DLCO", "PET-CT to evaluate for malignancy", "Thoracentesis if effusion", "Assist with VA benefits claim", "Screen wife for asbestos disease"],
+    teaching: ["Pleural plaques are pathognomonic for asbestos exposure", "Latency of 20-40 years means decades-old exposure relevant TODAY", "Asbestos + smoking = 50-90× lung cancer risk"]
+  },
+  {
+    id: 8, category: "Infectious Disease", title: "Traveler with Pneumonia",
+    initial: { age: 35, sex: "Female", complaint: "Cough, fever, fatigue, joint pain × 2 weeks. Not improving with azithromycin.", imaging: "Chest X-ray", findings: "Left lower lobe consolidation with ipsilateral hilar lymphadenopathy" },
+    initialDx: [
+      { dx: "Community-acquired pneumonia", likelihood: "High", reason: "Consolidation with outpatient treatment failure" },
+      { dx: "Atypical pneumonia", likelihood: "Moderate", reason: "Joint pain suggests Mycoplasma" },
+      { dx: "Viral pneumonia", likelihood: "Low-Moderate", reason: "Prolonged course" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Travel", data: { "Residence": "Chicago, IL", "Recent travel": "Phoenix, AZ 3 weeks ago", "Activities": "Hiked Camelback Mountain, visited construction site", "Ethnicity": "Filipino descent" }, impact: "Arizona is endemic for Coccidioides. Hiking and construction disturb soil. Filipino = higher dissemination risk." },
+      additional: { title: "Additional Symptoms", data: { "Rash": "Erythematous nodules on shins", "Joint pain": "Ankles and knees bilaterally", "Fatigue": "Profound, limiting activities", "Onset": "Flulike illness 5 days after returning" }, impact: "Erythema nodosum + arthralgias = 'desert rheumatism'—highly suggestive of cocci." },
+      risk: { title: "Risk Assessment", data: { "Immune status": "Healthy, no immunosuppression", "Pregnancy": "Not pregnant", "Diabetes": "None", "High-risk ethnicity": "Filipino (highest dissemination risk)" }, impact: "Filipinos have 10-175× increased disseminated coccidioidomycosis risk." }
+    },
+    revisedDx: [
+      { dx: "Pulmonary coccidioidomycosis (Valley Fever)", likelihood: "Very High", reason: "Arizona travel + hilar adenopathy + erythema nodosum + arthralgias", change: "↑ Previously not considered" },
+      { dx: "Disseminated coccidioidomycosis", likelihood: "Moderate", reason: "Filipino ethnicity increases risk; needs monitoring", change: "↑ Previously not considered" },
+      { dx: "Community-acquired pneumonia", likelihood: "Low", reason: "Travel history and EN point to fungal etiology", change: "↓ From High" }
+    ],
+    actions: ["Coccidioides serology (IgM/IgG)", "Complement fixation titers (prognostic)", "Stop unnecessary antibiotics", "Consider fluconazole given Filipino ethnicity"],
+    teaching: ["ALWAYS ask about travel to endemic areas: AZ, Central CA, NV, NM", "'Desert rheumatism' = erythema nodosum + arthralgias from endemic area", "Certain ethnicities have dramatically higher dissemination risk"]
+  },
+  {
+    id: 9, category: "Oncology", title: "Never-Smoker with Lung Mass",
+    initial: { age: 62, sex: "Female", complaint: "Incidental lung nodule on CT. Now mild cough × 1 month.", imaging: "Chest CT", findings: "2.5 cm spiculated mass in right upper lobe. No lymphadenopathy." },
+    initialDx: [
+      { dx: "Lung cancer", likelihood: "High", reason: "Spiculated mass highly concerning" },
+      { dx: "Granuloma", likelihood: "Low-Moderate", reason: "Less likely given spiculated morphology" },
+      { dx: "Metastatic disease", likelihood: "Low", reason: "No known primary" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Background", data: { "Smoking": "Never smoker (0 tobacco)", "Location": "Reading, PA (Berks County)", "Housing": "Same home × 40 years, built 1965", "Occupation": "Elementary school teacher" }, impact: "Pennsylvania has highest radon levels in US. Radon is #1 cause of lung cancer in never-smokers." },
+      home: { title: "Home Assessment", data: { "Basement": "Finished basement, home office × 30 years", "Radon testing": "Never performed", "Foundation": "Cracks in basement floor", "Ventilation": "No radon mitigation system" }, impact: "Radon seeps through foundation cracks. Basements have highest concentrations." },
+      additional: { title: "Other Factors", data: { "Secondhand smoke": "Husband smoked 20 years (quit 15 yrs ago)", "Family history": "Father had lung cancer (also never-smoker)", "Genetic": "No known EGFR/ALK status" }, impact: "Radon + secondhand smoke = synergistic. Family history in never-smoker suggests possible radon." }
+    },
+    revisedDx: [
+      { dx: "Radon-associated lung adenocarcinoma", likelihood: "Very High", reason: "Never-smoker + Pennsylvania + basement exposure + spiculated mass", change: "↑ Specified etiology" },
+      { dx: "Lung cancer (radon + secondhand smoke)", likelihood: "Very High", reason: "Synergistic risk factors", change: "↑ Combined risk" },
+      { dx: "EGFR-mutant adenocarcinoma", likelihood: "Moderate", reason: "Common in never-smokers; needs molecular testing", change: "↑ Specific consideration" }
+    ],
+    actions: ["PET-CT for staging", "CT-guided biopsy for tissue diagnosis", "Comprehensive molecular profiling", "Home radon testing IMMEDIATELY", "Radon mitigation if elevated", "Screen household members"],
+    teaching: ["Radon is #1 cause of lung cancer in never-smokers", "Pennsylvania, Iowa, Appalachian states have highest levels", "Never-smokers with lung cancer deserve environmental investigation"]
+  },
+  {
+    id: 10, category: "Pulmonary", title: "Stone Cutter with Respiratory Failure",
+    initial: { age: 45, sex: "Male", complaint: "Progressive dyspnea × 6 months, now requiring oxygen. Dry cough, weight loss.", imaging: "Chest CT", findings: "Upper lobe predominant nodular opacities. Eggshell calcification of hilar nodes. Progressive massive fibrosis." },
+    initialDx: [
+      { dx: "Sarcoidosis", likelihood: "Moderate", reason: "Bilateral hilar lymphadenopathy, nodular opacities" },
+      { dx: "Tuberculosis", likelihood: "Moderate", reason: "Upper lobe predominance, calcified nodes" },
+      { dx: "Metastatic malignancy", likelihood: "Low-Moderate", reason: "Multiple pulmonary nodules" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Background", data: { "Occupation": "Countertop fabricator × 12 years", "Material": "Engineered stone (quartz) cutting", "Location": "Small fabrication shop, LA area", "Origin": "Immigrated from Mexico 15 years ago" }, impact: "Engineered stone contains 90%+ crystalline silica. This is causing an epidemic of accelerated silicosis." },
+      work: { title: "Occupational Details", data: { "Wet cutting": "Dry cutting most of career", "PPE": "Paper dust masks only, no N95", "Ventilation": "Poor—small enclosed shop", "Hours": "60+ hours/week, 6 days/week" }, impact: "Dry cutting generates 10-100× more silica than wet cutting. Paper masks provide zero protection." },
+      broader: { title: "Broader Context", data: { "Coworkers": "2 already diagnosed with silicosis", "Industry knowledge": "Unaware of hazard when hired", "Immigration status": "Fear of job loss limits complaints", "Age of onset": "Symptoms in 30s-40s (accelerated form)" }, impact: "This is an epidemic. Young workers developing end-stage lung disease." }
+    },
+    revisedDx: [
+      { dx: "Accelerated silicosis", likelihood: "Very High", reason: "Engineered stone + eggshell calcifications + PMF + young age", change: "↑ Previously not considered" },
+      { dx: "Progressive massive fibrosis (PMF)", likelihood: "Very High", reason: "End-stage silicosis with large fibrotic masses", change: "↑ Previously not considered" },
+      { dx: "Silicosis with TB co-infection", likelihood: "Moderate", reason: "Silicosis increases TB risk 3-30×", change: "↑ Previously not considered" },
+      { dx: "Sarcoidosis", likelihood: "Very Low", reason: "Occupational history and eggshell calcifications diagnostic", change: "↓ From Moderate" }
+    ],
+    actions: ["Full PFTs (expect severe restriction)", "Rule out TB (sputum AFB × 3)", "Echo for pulmonary HTN", "Lung transplant evaluation", "IMMEDIATE removal from silica exposure", "Report to OSHA", "Screen all coworkers"],
+    teaching: ["Engineered stone silicosis is an EPIDEMIC", "'Eggshell' calcification of hilar nodes = pathognomonic", "No treatment reverses silicosis—only transplant for severe disease"]
+  },
+  {
+    id: 11, category: "Nephrology", title: "Agricultural Worker with Kidney Failure",
+    initial: { age: 38, sex: "Male", complaint: "Fatigue, nausea, decreased urine. Creatinine 8.2 mg/dL.", imaging: "Renal ultrasound", findings: "Small echogenic kidneys bilaterally (9 cm). No hydronephrosis." },
+    initialDx: [
+      { dx: "Diabetic nephropathy", likelihood: "Moderate", reason: "Common cause of CKD" },
+      { dx: "Hypertensive nephrosclerosis", likelihood: "Moderate", reason: "Small kidneys suggest chronic process" },
+      { dx: "Chronic glomerulonephritis", likelihood: "Low-Moderate", reason: "Age and bilateral involvement" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Background", data: { "Occupation": "Sugarcane cutter × 18 years", "Location": "Belle Glade, FL", "Origin": "Migrated from El Salvador age 20", "Healthcare": "No regular care until now" }, impact: "Mesoamerican nephropathy (CKDu) is epidemic among agricultural workers. Heat + dehydration + labor = kidney damage." },
+      work: { title: "Work Conditions", data: { "Hours": "5 AM - 3 PM, 6 days/week during harvest", "Heat": "Temperatures >95°F with high humidity", "Hydration": "Limited water, no shade breaks", "Physical demand": "Intense manual labor in direct sun" }, impact: "Repeated heat stress and dehydration cause tubular injury. Cumulative damage over years leads to CKD." },
+      medical: { title: "Medical Assessment", data: { "Diabetes": "None (A1c 5.4%)", "Hypertension": "Mild, recent onset", "Proteinuria": "Minimal (<500 mg/day)", "NSAIDs": "Frequent ibuprofen for muscle pain" }, impact: "No diabetes + minimal proteinuria + small kidneys = atypical CKD. This pattern defines CKDu." }
+    },
+    revisedDx: [
+      { dx: "Mesoamerican nephropathy (CKDu)", likelihood: "Very High", reason: "Agricultural worker + heat + no diabetes + minimal proteinuria + Central American origin", change: "↑ Previously not considered" },
+      { dx: "Heat stress nephropathy", likelihood: "Very High", reason: "Same entity—occupational heat exposure with tubulointerstitial injury", change: "↑ Previously not considered" },
+      { dx: "NSAID nephropathy (contributing)", likelihood: "Moderate", reason: "Chronic NSAID use accelerates progression", change: "↑ Previously not considered" },
+      { dx: "Diabetic nephropathy", likelihood: "Very Low", reason: "No diabetes, minimal proteinuria rules this out", change: "↓ From Moderate" }
+    ],
+    actions: ["Urgent nephrology for dialysis planning", "Fistula placement consultation", "Stop all NSAIDs immediately", "Transplant evaluation", "Screen coworkers", "Advocate for workplace heat safety"],
+    teaching: ["CKDu is epidemic among agricultural workers in hot climates", "Classic: CKD + no diabetes + minimal proteinuria in heat-exposed worker", "NSAIDs in dehydrated workers accelerate kidney damage"]
+  },
+  {
+    id: 12, category: "Infectious Disease", title: "Hotel Guest with Severe Pneumonia",
+    initial: { age: 67, sex: "Male", complaint: "High fever, cough, confusion, diarrhea × 4 days. Hypoxic on arrival.", imaging: "Chest X-ray", findings: "Multilobar consolidation, right > left. Bilateral patchy infiltrates." },
+    initialDx: [
+      { dx: "Severe community-acquired pneumonia", likelihood: "High", reason: "Multilobar consolidation with hypoxia" },
+      { dx: "Sepsis with multiorgan dysfunction", likelihood: "Moderate-High", reason: "Confusion suggests severe sepsis" },
+      { dx: "Aspiration pneumonia", likelihood: "Low-Moderate", reason: "Age and confusion could lead to aspiration" }
+    ],
+    factors: {
+      demographics: { title: "Demographics & Travel", data: { "Recent travel": "Las Vegas 5 days ago", "Hotel": "Large casino-hotel on Strip", "Activities": "Used hotel hot tub daily", "Smoking": "30 pack-year, current smoker" }, impact: "Hotels with hot tubs, fountains, cooling towers are high-risk for Legionella. Vegas has had outbreaks." },
+      clinical: { title: "Distinctive Symptoms", data: { "GI": "Watery diarrhea × 3 days", "Neuro": "Confusion, headache", "Labs": "Hyponatremia (Na 128), elevated LFTs, CK", "Response": "No improvement on ceftriaxone + azithro × 48h" }, impact: "Diarrhea + hyponatremia + elevated CK + confusion = classic Legionella. Often missed." },
+      risk: { title: "Host Risk Factors", data: { "Age": ">65 years (highest risk)", "Smoking": "Active smoker (major risk)", "Comorbidities": "COPD, diabetes", "Immunosuppression": "None" }, impact: "Elderly + smoker + chronic lung disease = high-risk for severe Legionnaires'." }
+    },
+    revisedDx: [
+      { dx: "Legionnaires' disease", likelihood: "Very High", reason: "Hotel hot tub + diarrhea + hyponatremia + confusion + elevated CK + smoker", change: "↑ Previously not considered" },
+      { dx: "Severe Legionella pneumonia", likelihood: "Very High", reason: "Classic extrapulmonary manifestations", change: "↑ Specified etiology" },
+      { dx: "Other atypical pneumonia", likelihood: "Low", reason: "Extrapulmonary features strongly favor Legionella", change: "↓ Less likely" }
+    ],
+    actions: ["Legionella urinary antigen STAT", "Legionella culture from sputum/BAL", "ADD fluoroquinolone (levofloxacin 750mg)", "Consider ICU admission", "Notify public health IMMEDIATELY", "Hotel investigation will be initiated"],
+    teaching: ["Legionella clues: GI symptoms + neuro + hyponatremia + elevated CK", "Water exposure history is CRITICAL: hotels, hot tubs, fountains", "Must report to public health—one case may indicate outbreak"]
+  }
+];
+
+const App = () => {
+  const [selectedCase, setSelectedCase] = useState(0);
+  const [revealed, setRevealed] = useState({});
+  const [showRevised, setShowRevised] = useState(false);
+  const [filter, setFilter] = useState('all');
+
+  const currentCase = cases[selectedCase];
+  const categories = ['all', ...new Set(cases.map(c => c.category))];
+  const filteredCases = filter === 'all' ? cases : cases.filter(c => c.category === filter);
+  const allRevealed = Object.keys(currentCase.factors).every(k => revealed[k]);
+
+  const toggle = (key) => setRevealed(prev => ({ ...prev, [key]: !prev[key] }));
+  const reset = () => { setRevealed({}); setShowRevised(false); };
+  const selectCase = (idx) => { setSelectedCase(idx); reset(); };
+
+  const getLikelihoodStyle = (l) => {
+    if (l.includes('Very High')) return { bg: '#7f1d1d', text: '#fecaca', border: '#dc2626' };
+    if (l.includes('High')) return { bg: '#991b1b', text: '#fecaca', border: '#f87171' };
+    if (l.includes('Moderate')) return { bg: '#92400e', text: '#fef3c7', border: '#fbbf24' };
+    return { bg: '#166534', text: '#dcfce7', border: '#34d399' };
+  };
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f172a, #1e293b)' }}>
+      <header style={{ background: 'rgba(30,41,59,0.9)', backdropFilter: 'blur(10px)', borderBottom: '1px solid #334155', padding: '1.5rem', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 700, background: 'linear-gradient(135deg, #22d3ee, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Environmental Differential Diagnosis Tool
+          </h1>
+          <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>Beyond "Correlate Clinically" — How Context Reshapes Diagnosis</p>
+        </div>
+      </header>
+
+      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '1.5rem' }}>
+        {/* Filters */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
+            {categories.map(cat => (
+              <button key={cat} onClick={() => setFilter(cat)} style={{ padding: '0.5rem 1rem', borderRadius: '9999px', border: 'none', background: filter === cat ? 'linear-gradient(135deg, #0891b2, #22d3ee)' : '#334155', color: filter === cat ? '#0f172a' : '#94a3b8', fontWeight: filter === cat ? 600 : 400, fontSize: '0.85rem', cursor: 'pointer', textTransform: 'capitalize' }}>
+                {cat === 'all' ? 'All Cases' : cat}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            {filteredCases.map((c) => {
+              const origIdx = cases.findIndex(oc => oc.id === c.id);
+              return (
+                <button key={c.id} onClick={() => selectCase(origIdx)} style={{ padding: '0.5rem 1rem', borderRadius: '0.5rem', border: selectedCase === origIdx ? '2px solid #22d3ee' : '1px solid #475569', background: selectedCase === origIdx ? 'rgba(34,211,238,0.1)' : 'transparent', color: selectedCase === origIdx ? '#22d3ee' : '#94a3b8', fontWeight: 500, fontSize: '0.8rem', cursor: 'pointer' }}>
+                  {c.id}. {c.title}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Main Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 450px), 1fr))', gap: '1.5rem' }}>
+          {/* Left: Initial Presentation */}
+          <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ background: 'linear-gradient(135deg, #1e293b, #334155)', borderRadius: '1rem', border: '1px solid #475569', overflow: 'hidden' }}>
+              <div style={{ padding: '1rem 1.25rem', background: 'rgba(34,211,238,0.1)', borderBottom: '1px solid #475569' }}>
+                <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 600, color: '#22d3ee' }}>What Radiology Typically Sees</h2>
+              </div>
+              <div style={{ padding: '1.25rem' }}>
+                <div style={{ background: '#0f172a', borderRadius: '0.75rem', padding: '1rem', marginBottom: '1rem', border: '1px solid #334155' }}>
+                  <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginBottom: '0.25rem' }}>REASON FOR EXAM</p>
+                  <p style={{ color: '#f1f5f9', fontWeight: 500 }}>{currentCase.initial.age} y/o {currentCase.initial.sex}</p>
+                  <p style={{ color: '#e2e8f0' }}>{currentCase.initial.complaint}</p>
+                </div>
+                <div style={{ background: '#0f172a', borderRadius: '0.75rem', padding: '1rem', marginBottom: '1rem', border: '1px solid #334155' }}>
+                  <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginBottom: '0.25rem' }}>IMAGING STUDY</p>
+                  <p style={{ color: '#f1f5f9' }}>{currentCase.initial.imaging}</p>
+                </div>
+                <div style={{ background: 'rgba(251,191,36,0.1)', borderRadius: '0.75rem', padding: '1rem', border: '1px solid rgba(251,191,36,0.3)' }}>
+                  <p style={{ color: '#fbbf24', fontSize: '0.8rem', marginBottom: '0.25rem' }}>KEY FINDINGS</p>
+                  <p style={{ color: '#fef3c7' }}>{currentCase.initial.findings}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Initial Differential */}
+            <div style={{ background: 'linear-gradient(135deg, #1e293b, #334155)', borderRadius: '1rem', border: '1px solid #475569', overflow: 'hidden' }}>
+              <div style={{ padding: '1rem 1.25rem', background: 'rgba(148,163,184,0.1)', borderBottom: '1px solid #475569' }}>
+                <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.125rem', fontWeight: 600, color: '#e2e8f0' }}>Initial Differential Diagnosis</h2>
+                <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Based on imaging alone</p>
+              </div>
+              <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {currentCase.initialDx.map((dx, idx) => {
+                  const s = getLikelihoodStyle(dx.likelihood);
+                  return (
+                    <div key={idx} style={{ background: '#0f172a', borderRadius: '0.75rem', padding: '1rem', borderLeft: `4px solid ${s.border}` }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        <span style={{ color: '#f1f5f9', fontWeight: 600 }}>{dx.dx}</span>
+                        <span style={{ background: s.bg, color: s.text, padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600 }}>{dx.likelihood}</span>
+                      </div>
+                      <p style={{ color: '#94a3b8', fontSize: '0.875rem' }}>{dx.reason}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Contextual Factors */}
+          <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ background: 'linear-gradient(135deg, #1e293b, #334155)', borderRadius: '1rem', border: '1px solid #475569', overflow: 'hidden' }}>
+              <div style={{ padding: '1rem 1.25rem', background: 'rgba(167,139,250,0.1)', borderBottom: '1px solid #475569' }}>
+                <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 600, color: '#a78bfa' }}>Reveal Contextual Data</h2>
+                <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Click each section to reveal EMR information</p>
+              </div>
+              <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {Object.entries(currentCase.factors).map(([key, factor]) => (
+                  <div key={key} style={{ background: revealed[key] ? 'rgba(167,139,250,0.1)' : '#0f172a', borderRadius: '0.75rem', border: revealed[key] ? '1px solid rgba(167,139,250,0.3)' : '1px solid #334155', overflow: 'hidden', transition: 'all 0.3s' }}>
+                    <button onClick={() => toggle(key)} style={{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'transparent', border: 'none', cursor: 'pointer', color: revealed[key] ? '#a78bfa' : '#e2e8f0' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 500 }}>
+                        {key.includes('demo') && <UserIcon />}
+                        {key.includes('home') && <HomeIcon />}
+                        {key.includes('work') && <BriefcaseIcon />}
+                        {key.includes('medical') && <AlertIcon />}
+                        {key.includes('additional') && <AlertIcon />}
+                        {key.includes('clinical') && <AlertIcon />}
+                        {key.includes('social') && <HomeIcon />}
+                        {key.includes('current') && <AlertIcon />}
+                        {key.includes('broader') && <AlertIcon />}
+                        {key.includes('risk') && <AlertIcon />}
+                        {factor.title}
+                      </span>
+                      {revealed[key] ? <ChevronDown /> : <ChevronRight />}
+                    </button>
+                    {revealed[key] && (
+                      <div className="slide-in" style={{ padding: '0 1rem 1rem 1rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                          {Object.entries(factor.data).map(([k, v]) => (
+                            <div key={k} style={{ background: '#0f172a', padding: '0.75rem', borderRadius: '0.5rem' }}>
+                              <p style={{ color: '#64748b', fontSize: '0.7rem', textTransform: 'uppercase', marginBottom: '0.25rem' }}>{k}</p>
+                              <p style={{ color: '#e2e8f0', fontSize: '0.85rem' }}>{v}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ background: 'rgba(251,191,36,0.1)', padding: '0.75rem', borderRadius: '0.5rem', borderLeft: '3px solid #fbbf24' }}>
+                          <p style={{ color: '#fef3c7', fontSize: '0.85rem' }}><strong>Clinical Impact:</strong> {factor.impact}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {allRevealed && !showRevised && (
+                <div style={{ padding: '0 1.25rem 1.25rem' }}>
+                  <button onClick={() => setShowRevised(true)} className="pulse" style={{ width: '100%', padding: '1rem', background: 'linear-gradient(135deg, #0891b2, #22d3ee)', border: 'none', borderRadius: '0.75rem', color: '#0f172a', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
+                    Reveal Revised Differential →
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Revised Differential */}
+            {showRevised && (
+              <div className="fade-in" style={{ background: 'linear-gradient(135deg, rgba(34,211,238,0.1), rgba(167,139,250,0.1))', borderRadius: '1rem', border: '2px solid #22d3ee', overflow: 'hidden' }}>
+                <div style={{ padding: '1rem 1.25rem', background: 'rgba(34,211,238,0.15)', borderBottom: '1px solid rgba(34,211,238,0.3)' }}>
+                  <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.25rem', fontWeight: 600, color: '#22d3ee' }}>Revised Differential Diagnosis</h2>
+                  <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>With environmental and social context</p>
+                </div>
+                <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {currentCase.revisedDx.map((dx, idx) => {
+                    const s = getLikelihoodStyle(dx.likelihood);
+                    return (
+                      <div key={idx} style={{ background: 'rgba(15,23,42,0.8)', borderRadius: '0.75rem', padding: '1rem', borderLeft: `4px solid ${s.border}` }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                          <span style={{ color: '#f1f5f9', fontWeight: 600 }}>{dx.dx}</span>
+                          <span style={{ background: s.bg, color: s.text, padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600 }}>{dx.likelihood}</span>
+                        </div>
+                        <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>{dx.reason}</p>
+                        <p style={{ color: dx.change.includes('↑') ? '#f87171' : '#34d399', fontSize: '0.8rem', fontWeight: 600 }}>{dx.change}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Actions & Teaching */}
+        {showRevised && (
+          <div className="fade-in" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 450px), 1fr))', gap: '1.5rem', marginTop: '1.5rem' }}>
+            <div style={{ background: 'linear-gradient(135deg, #1e293b, #334155)', borderRadius: '1rem', border: '1px solid #475569', overflow: 'hidden' }}>
+              <div style={{ padding: '1rem 1.25rem', background: 'rgba(52,211,153,0.1)', borderBottom: '1px solid #475569' }}>
+                <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.125rem', fontWeight: 600, color: '#34d399' }}>Clinical Actions</h2>
+              </div>
+              <div style={{ padding: '1.25rem' }}>
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {currentCase.actions.map((a, idx) => (
+                    <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', color: '#e2e8f0', fontSize: '0.9rem' }}>
+                      <span style={{ color: '#34d399', fontWeight: 700 }}>→</span>{a}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div style={{ background: 'linear-gradient(135deg, #1e293b, #334155)', borderRadius: '1rem', border: '1px solid #475569', overflow: 'hidden' }}>
+              <div style={{ padding: '1rem 1.25rem', background: 'rgba(244,114,182,0.1)', borderBottom: '1px solid #475569' }}>
+                <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '1.125rem', fontWeight: 600, color: '#f472b6' }}>Key Teaching Points</h2>
+              </div>
+              <div style={{ padding: '1.25rem' }}>
+                <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {currentCase.teaching.map((t, idx) => (
+                    <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', color: '#e2e8f0', fontSize: '0.9rem' }}>
+                      <span style={{ background: 'rgba(244,114,182,0.2)', color: '#f472b6', minWidth: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.75rem', flexShrink: 0 }}>{idx + 1}</span>
+                      {t}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Reset */}
+        {(Object.keys(revealed).length > 0 || showRevised) && (
+          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <button onClick={reset} style={{ padding: '0.75rem 2rem', background: 'transparent', border: '1px solid #475569', borderRadius: '0.5rem', color: '#94a3b8', cursor: 'pointer', fontSize: '0.9rem' }}>Reset Case</button>
+          </div>
+        )}
+      </main>
+
+      <footer style={{ marginTop: '3rem', padding: '2rem', borderTop: '1px solid #334155', textAlign: 'center' }}>
+        <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '0.5rem' }}>Environmental Differential Diagnosis Tool</p>
+        <p style={{ color: '#475569', fontSize: '0.75rem' }}>Teaching clinical reasoning beyond "Correlate Clinically"</p>
+        <p style={{ color: '#475569', fontSize: '0.75rem', marginTop: '0.5rem' }}>Lauren Fine, MD, FAAAAI — Nova Southeastern University</p>
+      </footer>
+    </div>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+</script>
+</body>
+</html>
