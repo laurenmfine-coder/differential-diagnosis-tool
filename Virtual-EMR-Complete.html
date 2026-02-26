@@ -175,17 +175,100 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary)
 .doc-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
 .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;background:var(--accent);color:#fff;border-radius:var(--radius);font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:1000;display:none;animation:fadeIn .2s ease}.toast.visible{display:block}
 @media(max-width:900px){.sidebar{width:56px;overflow:hidden}.sidebar-btn span{display:none}.sidebar-btn{justify-content:center;padding:10px 0}.demo-grid{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}}
+/* ═══ Interactive Feature Styles ═══ */
 
-/* Auth */
-.auth-error{background:var(--danger-light);color:var(--danger);padding:10px 14px;border-radius:var(--radius);font-size:12px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.btn-login-full{width:100%;padding:14px;border-radius:var(--radius);border:none;background:var(--primary);color:#fff;font-size:14px;font-weight:600;font-family:'IBM Plex Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
-.btn-login-full:hover{background:var(--primary-dark)}
-.btn-link{background:none;border:none;color:var(--primary);font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;text-decoration:underline}
-.login-hint{margin-top:20px;padding:10px 14px;background:var(--surface-alt);border-radius:var(--radius);font-size:11px;color:var(--text-muted);text-align:center;border:1px dashed var(--border)}
-.role-selector{display:flex;gap:8px}
-.role-btn{flex:1;padding:12px;border-radius:var(--radius);border:2px solid var(--border);background:var(--surface);font-size:13px;font-weight:600;font-family:'IBM Plex Sans',sans-serif;cursor:pointer;transition:all .15s;text-align:center}
-.role-btn:hover{border-color:var(--primary)}
-.role-btn.selected{border-color:var(--primary);background:var(--primary-light);color:var(--primary)}
+/* Assign/form inputs */
+.assign-input{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:'IBM Plex Sans',sans-serif;background:var(--surface);transition:border-color .15s}
+.assign-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+
+/* Badge variants */
+.badge-purple{background:#E1BEE7;color:#6A1B9A}
+
+/* Med recon */
+.med-recon-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:var(--radius);margin-bottom:12px}
+
+/* Order panel styles */
+.order-catalog-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border-light);font-size:12px}
+.order-catalog-item:hover{background:var(--surface-alt)}
+
+/* Submission card for grading */
+.submission-card{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;transition:all .15s}
+.submission-card:hover{border-color:var(--primary);background:var(--primary-light)}
+.submission-card.selected{border-color:var(--primary);background:var(--primary-light);box-shadow:inset 3px 0 0 var(--primary)}
+
+/* Warning/accent light backgrounds */
+:root{
+  --warning-light:rgba(255,152,0,.1);
+  --accent-light:rgba(0,150,136,.1);
+  --danger-light:rgba(239,83,80,.1);
+}
+
+/* Popover wider for order dialogs */
+.annotation-popover[style*="width: 360px"]{max-width:380px}
+
+/* Grade input */
+.grade-input{width:60px;padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:'IBM Plex Mono',monospace;text-align:center}
+.grade-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.comment-input{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:'IBM Plex Sans',sans-serif}
+.comment-input:focus{outline:none;border-color:var(--primary)}
+
+/* Overall textarea */
+.overall-textarea{width:100%;min-height:100px;padding:12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'IBM Plex Sans',sans-serif;line-height:1.6;resize:vertical}
+.overall-textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+
+/* Grade total bar */
+.grade-total-bar{margin-top:12px;padding:12px 16px;background:var(--primary-light);border-radius:var(--radius);display:flex;align-items:center}
+
+/* Score banner */
+.score-banner{display:flex;justify-content:space-between;align-items:center;padding:20px;background:linear-gradient(135deg,var(--primary-light),#e3f2fd);border-radius:var(--radius);margin-bottom:16px}
+.score-label{font-size:12px;color:var(--text-secondary);text-transform:uppercase;font-weight:600}
+.score-number{font-size:32px;font-weight:700;color:var(--primary);font-family:'IBM Plex Mono',monospace}
+
+/* Annotation toolbar */
+.annotation-toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface-alt);border-radius:var(--radius);margin-bottom:12px;font-size:12px;border:1px dashed var(--border)}
+
+/* Annotation popover */
+.annotation-popover{position:fixed;z-index:1000;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:16px;width:300px;display:none;max-width:calc(100vw - 20px)}
+.annotation-popover.visible{display:block}
+.annotation-popover-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.annotation-popover-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.annotation-popover-close{background:none;border:none;font-size:16px;cursor:pointer;color:var(--text-muted);padding:0 4px}
+.annotation-color-row{display:flex;gap:6px;margin-bottom:10px}
+.annotation-color-btn{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .15s}
+.annotation-color-btn:hover,.annotation-color-btn.selected{border-color:var(--text-primary);transform:scale(1.15)}
+.annotation-comment-input{width:100%;min-height:60px;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:'IBM Plex Sans',sans-serif;margin-bottom:8px;resize:vertical}
+.annotation-save-btn{width:100%;padding:8px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+
+/* Annotation highlights in text */
+.annotation-highlight{padding:1px 3px;border-radius:3px;position:relative;background:rgba(255,235,59,.35);cursor:help}
+.annotation-highlight.color-green{background:rgba(76,175,80,.25)}
+.annotation-highlight.color-orange{background:rgba(255,152,0,.3)}
+.annotation-highlight.color-red{background:rgba(239,83,80,.25)}
+.annotation-highlight.color-blue{background:rgba(66,165,245,.25)}
+.annotation-marker{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--primary);color:#fff;font-size:9px;font-weight:700;margin-left:2px;vertical-align:super}
+
+/* Annotation cards */
+.annotation-card{padding:10px 14px;border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:6px;font-size:12px}
+.annotation-card-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--primary);color:#fff;font-size:10px;font-weight:700;margin-right:6px}
+.annotation-card-quote{margin:6px 0;padding:4px 10px;border-left:3px solid var(--border);color:var(--text-secondary);font-style:italic;font-size:11px}
+.annotation-card-comment{margin-top:4px;line-height:1.5}
+.annotation-card-meta{margin-top:6px;font-size:10px;color:var(--text-muted)}
+
+/* Annotated text display */
+.annotated-text{padding:16px;background:var(--surface-alt);border-radius:var(--radius);font-size:13px;line-height:1.8;font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;border:1px solid var(--border-light);max-height:500px;overflow-y:auto}
+
+/* Remove button */
+.btn-remove{background:none;border:1px solid var(--danger);color:var(--danger);padding:3px 10px;border-radius:var(--radius-sm);font-size:10px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.btn-remove:hover{background:var(--danger);color:#fff}
+
+/* Sign out */
+.btn-signout{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.btn-signout:hover{background:rgba(255,255,255,.25)}
+
+
+/* Recording pulse */
+.recording-pulse{width:48px;height:48px;border-radius:50%;background:var(--danger);margin:0 auto;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.7}}
 
 </style>
 </head>
@@ -194,6 +277,288 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary)
 <div id="toast" class="toast"></div>
 <div id="annotationPopover" class="annotation-popover"></div>
 <script>
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIVE CLINICAL FEATURES
+// ═══════════════════════════════════════════════════════════════
+
+// ─── Smart Lab Catalog (orderable) ───
+const LAB_CATALOG = [
+  { id:"cmp", name:"Comprehensive Metabolic Panel (CMP)", category:"Chemistry", tat:"4 hrs" },
+  { id:"bmp", name:"Basic Metabolic Panel (BMP)", category:"Chemistry", tat:"2 hrs" },
+  { id:"cbc", name:"CBC with Differential", category:"Hematology", tat:"2 hrs" },
+  { id:"hba1c", name:"Hemoglobin A1c", category:"Chemistry", tat:"4 hrs" },
+  { id:"lipid", name:"Lipid Panel (Fasting)", category:"Chemistry", tat:"4 hrs" },
+  { id:"tsh", name:"TSH", category:"Chemistry", tat:"4 hrs" },
+  { id:"ft4", name:"Free T4", category:"Chemistry", tat:"4 hrs" },
+  { id:"ua", name:"Urinalysis with Micro", category:"Urinalysis", tat:"2 hrs" },
+  { id:"umalb", name:"Urine Microalbumin/Cr Ratio", category:"Urinalysis", tat:"4 hrs" },
+  { id:"vitd", name:"25-Hydroxyvitamin D", category:"Chemistry", tat:"24 hrs" },
+  { id:"iron", name:"Iron Studies (Fe, TIBC, Ferritin)", category:"Chemistry", tat:"4 hrs" },
+  { id:"b12", name:"Vitamin B12", category:"Chemistry", tat:"24 hrs" },
+  { id:"folate", name:"Folate", category:"Chemistry", tat:"24 hrs" },
+  { id:"crp", name:"C-Reactive Protein (CRP)", category:"Chemistry", tat:"4 hrs" },
+  { id:"esr", name:"ESR (Sed Rate)", category:"Hematology", tat:"2 hrs" },
+  { id:"bnp", name:"BNP (NT-proBNP)", category:"Chemistry", tat:"2 hrs" },
+  { id:"troponin", name:"Troponin I", category:"Chemistry", tat:"1 hr" },
+  { id:"hcg", name:"Serum hCG (Pregnancy)", category:"Chemistry", tat:"2 hrs" },
+  { id:"pt_inr", name:"PT/INR", category:"Coagulation", tat:"1 hr" },
+  { id:"ptt", name:"PTT", category:"Coagulation", tat:"1 hr" },
+  { id:"hepatitis", name:"Hepatitis Panel (A/B/C)", category:"Serology", tat:"24 hrs" },
+  { id:"hiv", name:"HIV 1/2 Ag/Ab", category:"Serology", tat:"24 hrs" },
+  { id:"psa", name:"PSA (Prostate Specific Antigen)", category:"Chemistry", tat:"24 hrs" },
+  { id:"uricacid", name:"Uric Acid", category:"Chemistry", tat:"4 hrs" },
+  { id:"magnesium", name:"Magnesium", category:"Chemistry", tat:"4 hrs" },
+  { id:"phosphorus", name:"Phosphorus", category:"Chemistry", tat:"4 hrs" },
+  { id:"prealbumin", name:"Prealbumin", category:"Chemistry", tat:"24 hrs" },
+  { id:"cortisol", name:"Cortisol (AM)", category:"Chemistry", tat:"24 hrs" },
+  { id:"bloodculture", name:"Blood Culture x2", category:"Microbiology", tat:"48-72 hrs" },
+  { id:"uculture", name:"Urine Culture", category:"Microbiology", tat:"48-72 hrs" },
+];
+
+const IMG_CATALOG = [
+  { id:"cxr", name:"Chest X-Ray PA/Lateral", category:"Radiograph", tat:"1 hr" },
+  { id:"abdomxr", name:"Abdominal X-Ray (KUB)", category:"Radiograph", tat:"1 hr" },
+  { id:"cthead", name:"CT Head without Contrast", category:"CT", tat:"2 hrs" },
+  { id:"ctchest", name:"CT Chest with Contrast", category:"CT", tat:"4 hrs" },
+  { id:"ctabdomen", name:"CT Abdomen/Pelvis with Contrast", category:"CT", tat:"4 hrs" },
+  { id:"cta_pe", name:"CTA Chest (PE Protocol)", category:"CT", tat:"2 hrs" },
+  { id:"mribrain", name:"MRI Brain with/without Contrast", category:"MRI", tat:"24 hrs" },
+  { id:"mrilspine", name:"MRI Lumbar Spine without Contrast", category:"MRI", tat:"24 hrs" },
+  { id:"echo", name:"Echocardiogram (TTE)", category:"Ultrasound", tat:"24 hrs" },
+  { id:"us_abdomen", name:"Ultrasound Abdomen", category:"Ultrasound", tat:"4 hrs" },
+  { id:"us_thyroid", name:"Ultrasound Thyroid", category:"Ultrasound", tat:"24 hrs" },
+  { id:"us_renal", name:"Ultrasound Renal/Bladder", category:"Ultrasound", tat:"4 hrs" },
+  { id:"mammo", name:"Mammogram Bilateral Screening", category:"Mammography", tat:"24 hrs" },
+  { id:"dexa", name:"DEXA Bone Density", category:"DEXA", tat:"24 hrs" },
+  { id:"ekg", name:"12-Lead EKG", category:"Cardiology", tat:"15 min" },
+  { id:"xr_knee", name:"X-Ray Knee (3 views)", category:"Radiograph", tat:"1 hr" },
+  { id:"xr_shoulder", name:"X-Ray Shoulder (3 views)", category:"Radiograph", tat:"1 hr" },
+  { id:"xr_ankle", name:"X-Ray Ankle (3 views)", category:"Radiograph", tat:"1 hr" },
+  { id:"doppler_le", name:"Venous Duplex Lower Extremities", category:"Ultrasound", tat:"4 hrs" },
+  { id:"carotid_us", name:"Carotid Duplex Ultrasound", category:"Ultrasound", tat:"24 hrs" },
+];
+
+// ─── Case-specific results (clinically appropriate for Maria Santos) ───
+const CASE_SPECIFIC_LAB_RESULTS = {
+  cmp: {group:"COMPREHENSIVE METABOLIC PANEL",results:[
+    {test:"Glucose",value:"152",unit:"mg/dL",range:"70-100",flag:"H"},
+    {test:"BUN",value:"19",unit:"mg/dL",range:"7-20",flag:""},
+    {test:"Creatinine",value:"0.9",unit:"mg/dL",range:"0.6-1.2",flag:""},
+    {test:"eGFR",value:"80",unit:"mL/min/1.73m²",range:">60",flag:""},
+    {test:"Sodium",value:"139",unit:"mEq/L",range:"136-145",flag:""},
+    {test:"Potassium",value:"4.3",unit:"mEq/L",range:"3.5-5.0",flag:""},
+    {test:"Chloride",value:"101",unit:"mEq/L",range:"98-106",flag:""},
+    {test:"CO2",value:"25",unit:"mEq/L",range:"23-29",flag:""},
+    {test:"Calcium",value:"9.5",unit:"mg/dL",range:"8.5-10.5",flag:""},
+    {test:"Total Protein",value:"7.0",unit:"g/dL",range:"6.0-8.3",flag:""},
+    {test:"Albumin",value:"4.1",unit:"g/dL",range:"3.5-5.5",flag:""},
+    {test:"Bilirubin",value:"0.7",unit:"mg/dL",range:"0.1-1.2",flag:""},
+    {test:"Alk Phos",value:"72",unit:"U/L",range:"44-147",flag:""},
+    {test:"ALT",value:"34",unit:"U/L",range:"7-56",flag:""},
+    {test:"AST",value:"29",unit:"U/L",range:"10-40",flag:""},
+  ]},
+  bmp: {group:"BASIC METABOLIC PANEL",results:[
+    {test:"Glucose",value:"154",unit:"mg/dL",range:"70-100",flag:"H"},
+    {test:"BUN",value:"17",unit:"mg/dL",range:"7-20",flag:""},
+    {test:"Creatinine",value:"0.9",unit:"mg/dL",range:"0.6-1.2",flag:""},
+    {test:"Sodium",value:"140",unit:"mEq/L",range:"136-145",flag:""},
+    {test:"Potassium",value:"4.1",unit:"mEq/L",range:"3.5-5.0",flag:""},
+    {test:"Chloride",value:"103",unit:"mEq/L",range:"98-106",flag:""},
+    {test:"CO2",value:"24",unit:"mEq/L",range:"23-29",flag:""},
+    {test:"Calcium",value:"9.3",unit:"mg/dL",range:"8.5-10.5",flag:""},
+  ]},
+  hba1c: {group:"HEMOGLOBIN A1c",results:[
+    {test:"HbA1c",value:"7.9",unit:"%",range:"<5.7 normal",flag:"H"},
+    {test:"Est. Avg Glucose",value:"180",unit:"mg/dL",range:"—",flag:""},
+  ]},
+  lipid: {group:"LIPID PANEL, FASTING",results:[
+    {test:"Total Cholesterol",value:"220",unit:"mg/dL",range:"<200",flag:"H"},
+    {test:"LDL (calc)",value:"134",unit:"mg/dL",range:"<100",flag:"H"},
+    {test:"HDL",value:"47",unit:"mg/dL",range:">50 (F)",flag:"L"},
+    {test:"Triglycerides",value:"195",unit:"mg/dL",range:"<150",flag:"H"},
+    {test:"VLDL (calc)",value:"39",unit:"mg/dL",range:"5-40",flag:""},
+  ]},
+  cbc: {group:"CBC WITH DIFFERENTIAL",results:[
+    {test:"WBC",value:"7.4",unit:"x10³/µL",range:"4.5-11.0",flag:""},
+    {test:"RBC",value:"4.4",unit:"x10⁶/µL",range:"4.0-5.5",flag:""},
+    {test:"Hemoglobin",value:"12.9",unit:"g/dL",range:"12.0-16.0",flag:""},
+    {test:"Hematocrit",value:"38.8",unit:"%",range:"36-46",flag:""},
+    {test:"MCV",value:"88.2",unit:"fL",range:"80-100",flag:""},
+    {test:"Platelet Count",value:"252",unit:"x10³/µL",range:"150-400",flag:""},
+    {test:"Neutrophils",value:"56",unit:"%",range:"40-70",flag:""},
+    {test:"Lymphocytes",value:"32",unit:"%",range:"20-40",flag:""},
+  ]},
+  tsh: {group:"THYROID",results:[{test:"TSH",value:"2.6",unit:"mIU/L",range:"0.4-4.0",flag:""}]},
+  ft4: {group:"THYROID",results:[{test:"Free T4",value:"1.2",unit:"ng/dL",range:"0.8-1.8",flag:""}]},
+  umalb: {group:"URINE MICROALBUMIN",results:[
+    {test:"Urine Microalbumin",value:"45",unit:"mg/L",range:"<30",flag:"H"},
+    {test:"Urine Creatinine",value:"108",unit:"mg/dL",range:"20-275",flag:""},
+    {test:"Alb/Cr Ratio",value:"42",unit:"mg/g Cr",range:"<30",flag:"H"},
+  ]},
+  vitd: {group:"VITAMIN D",results:[{test:"25-OH Vitamin D",value:"32",unit:"ng/mL",range:"30-100",flag:""}]},
+};
+
+const CASE_SPECIFIC_IMG_RESULTS = {
+  ekg: {findings:"Normal sinus rhythm at 80 bpm. Normal axis. Normal intervals (PR 160ms, QRS 88ms, QTc 420ms). No ST-T wave changes. No LVH criteria met.",impression:"1. Normal sinus rhythm.\n2. Normal EKG."},
+  cxr: {findings:"Heart: Normal size. Lungs: Clear bilaterally. No effusion or pneumothorax. Bones: Mild thoracic spondylosis.",impression:"Normal chest radiograph."},
+  echo: {findings:"LV: Normal size and systolic function. EF 60%. No wall motion abnormalities. Diastolic function: Grade 1 (impaired relaxation — age-appropriate). RV: Normal. Valves: Trace MR, trace TR. No pericardial effusion.",impression:"1. Normal LV size and systolic function, EF 60%.\n2. Grade 1 diastolic dysfunction (age-appropriate).\n3. Trace mitral and tricuspid regurgitation — physiologic."},
+  us_renal: {findings:"Right kidney: 10.8 cm, normal echogenicity, no hydronephrosis, no mass or calculus. Left kidney: 10.6 cm, normal echogenicity, no hydronephrosis, no mass or calculus. Bladder: Normal. No free fluid.",impression:"Normal renal ultrasound bilaterally."},
+  us_thyroid: {findings:"Right lobe: 4.2 x 1.5 x 1.4 cm. Homogeneous. No nodules. Left lobe: 4.0 x 1.4 x 1.3 cm. Homogeneous. No nodules. Isthmus: 3mm, normal. No cervical lymphadenopathy.",impression:"Normal thyroid ultrasound. No nodules."},
+  cthead: {findings:"No acute intracranial hemorrhage. No mass effect or midline shift. Gray-white differentiation preserved. No infarct. Ventricles symmetric. Mild maxillary sinus mucosal thickening.",impression:"1. Negative CT head.\n2. Mild maxillary sinus disease."},
+};
+
+// ─── Vaccine Catalog ───
+const VACCINE_CATALOG = [
+  "Influenza (Quadrivalent)","Influenza (High-Dose, 65+)","COVID-19 (Pfizer Updated)","COVID-19 (Moderna Updated)",
+  "Tdap","Td","Pneumovax 23 (PPSV23)","Prevnar 20 (PCV20)","Shingrix","Hepatitis A","Hepatitis B",
+  "Heplisav-B","MMR","Varicella","IPV (Polio)","Meningococcal ACWY","Meningococcal B","HPV (Gardasil 9)",
+  "Rabies","Yellow Fever","Typhoid","Japanese Encephalitis",
+];
+
+// ─── Referral Types ───
+const REFERRAL_TYPES = [
+  "Allergy/Immunology","Cardiology","Dermatology","Endocrinology","Gastroenterology",
+  "Hematology/Oncology","Infectious Disease","Nephrology","Neurology","OB/GYN",
+  "Ophthalmology","Orthopedics","Otolaryngology (ENT)","Psychiatry","Pulmonology",
+  "Rheumatology","Urology","Physical Therapy","Occupational Therapy","Speech Therapy",
+  "Nutrition/Dietetics","Social Work","Pain Management","Sleep Medicine","Palliative Care",
+];
+
+// ─── CDS Alerts Engine ───
+function generateAlerts(meds, allergies, problems, vitals) {
+  const alerts = [];
+  const medNames = meds.map(m => m.name.toLowerCase());
+  const allergenNames = allergies.map(a => a.allergen.toLowerCase());
+  const problemNames = problems.map(p => p.problem.toLowerCase());
+
+  // Drug-allergy checks
+  meds.forEach(m => {
+    const mn = m.name.toLowerCase();
+    if ((mn.includes("amoxicillin") || mn.includes("ampicillin") || mn.includes("penicillin")) && allergenNames.includes("penicillin")) {
+      alerts.push({type:"danger",title:"Drug-Allergy Interaction",msg:""+m.name+" — Patient has documented Penicillin allergy (Rash, urticaria). Consider cross-reactivity risk."});
+    }
+    if ((mn.includes("sulfamethoxazole") || mn.includes("bactrim") || mn.includes("septra")) && allergenNames.includes("sulfa drugs")) {
+      alerts.push({type:"danger",title:"Drug-Allergy Interaction",msg:""+m.name+" — Patient allergic to Sulfa Drugs."});
+    }
+  });
+
+  // ACE-I + K monitoring
+  if (medNames.some(m => m.includes("lisinopril") || m.includes("enalapril") || m.includes("ramipril"))) {
+    alerts.push({type:"info",title:"Monitoring Reminder",msg:"Patient on ACE inhibitor — monitor potassium and renal function periodically."});
+  }
+
+  // Metformin + renal
+  if (medNames.some(m => m.includes("metformin"))) {
+    alerts.push({type:"info",title:"Monitoring Reminder",msg:"Metformin — verify eGFR >30. Current eGFR 82 (adequate). Contraindicated if eGFR <30."});
+  }
+
+  // Statin + diabetes
+  if (medNames.some(m => m.includes("atorvastatin") || m.includes("rosuvastatin") || m.includes("simvastatin")) && problemNames.some(p => p.includes("diabetes"))) {
+    alerts.push({type:"info",title:"Guideline Reminder",msg:"High-intensity statin recommended for diabetic patients age 40-75 with LDL >70. Current: atorvastatin 40mg."});
+  }
+
+  // BP check
+  if (vitals.length && parseInt(vitals[0].bp) >= 140) {
+    alerts.push({type:"warning",title:"Elevated Blood Pressure",msg:"Most recent BP "+vitals[0].bp+" exceeds 140/90 target. Consider medication adjustment."});
+  }
+
+  // Overdue screenings
+  alerts.push({type:"warning",title:"Overdue: Colonoscopy",msg:"Last colonoscopy 2019 with tubular adenomas. Surveillance due per guidelines (3-5 year interval)."});
+  alerts.push({type:"info",title:"Immunization Due",msg:"Pneumovax 23 (PPSV23) — recommended for adults with diabetes. Not yet administered."});
+
+  return alerts;
+}
+
+// ─── Generate normal results for non-case-specific orders ───
+function generateNormalLabResult(labId) {
+  const catalog = LAB_CATALOG.find(l => l.id === labId);
+  if (!catalog) return null;
+
+  const normalResults = {
+    ua: {group:"URINALYSIS WITH MICROSCOPY",results:[
+      {test:"Color",value:"Yellow",unit:"",range:"Yellow",flag:""},{test:"Appearance",value:"Clear",unit:"",range:"Clear",flag:""},
+      {test:"Specific Gravity",value:"1.020",unit:"",range:"1.005-1.030",flag:""},{test:"pH",value:"6.0",unit:"",range:"5.0-8.0",flag:""},
+      {test:"Protein",value:"Negative",unit:"",range:"Negative",flag:""},{test:"Glucose",value:"Negative",unit:"",range:"Negative",flag:""},
+      {test:"Ketones",value:"Negative",unit:"",range:"Negative",flag:""},{test:"Blood",value:"Negative",unit:"",range:"Negative",flag:""},
+      {test:"Leukocyte Esterase",value:"Negative",unit:"",range:"Negative",flag:""},{test:"Nitrite",value:"Negative",unit:"",range:"Negative",flag:""},
+      {test:"WBC",value:"0-2",unit:"/HPF",range:"0-5",flag:""},{test:"RBC",value:"0-1",unit:"/HPF",range:"0-3",flag:""},
+      {test:"Bacteria",value:"None",unit:"",range:"None",flag:""},
+    ]},
+    iron: {group:"IRON STUDIES",results:[
+      {test:"Serum Iron",value:"85",unit:"µg/dL",range:"60-170",flag:""},{test:"TIBC",value:"320",unit:"µg/dL",range:"250-370",flag:""},
+      {test:"Transferrin Saturation",value:"27",unit:"%",range:"20-50",flag:""},{test:"Ferritin",value:"65",unit:"ng/mL",range:"12-150",flag:""},
+    ]},
+    b12: {group:"VITAMIN B12",results:[{test:"Vitamin B12",value:"480",unit:"pg/mL",range:"200-900",flag:""}]},
+    folate: {group:"FOLATE",results:[{test:"Folate",value:"12.5",unit:"ng/mL",range:">3.0",flag:""}]},
+    crp: {group:"C-REACTIVE PROTEIN",results:[{test:"CRP",value:"2.8",unit:"mg/L",range:"<3.0",flag:""}]},
+    esr: {group:"ESR",results:[{test:"ESR",value:"18",unit:"mm/hr",range:"0-30 (F)",flag:""}]},
+    bnp: {group:"BNP",results:[{test:"NT-proBNP",value:"85",unit:"pg/mL",range:"<125",flag:""}]},
+    troponin: {group:"TROPONIN",results:[{test:"Troponin I",value:"<0.01",unit:"ng/mL",range:"<0.04",flag:""}]},
+    hcg: {group:"SERUM hCG",results:[{test:"hCG, Quantitative",value:"<1",unit:"mIU/mL",range:"<5 (not pregnant)",flag:""}]},
+    pt_inr: {group:"COAGULATION",results:[{test:"PT",value:"12.5",unit:"sec",range:"11-14",flag:""},{test:"INR",value:"1.0",unit:"ratio",range:"0.8-1.2",flag:""}]},
+    ptt: {group:"COAGULATION",results:[{test:"PTT",value:"28",unit:"sec",range:"25-35",flag:""}]},
+    hepatitis: {group:"HEPATITIS PANEL",results:[
+      {test:"Hep A IgM Ab",value:"Nonreactive",unit:"",range:"Nonreactive",flag:""},
+      {test:"Hep B Surface Ag",value:"Nonreactive",unit:"",range:"Nonreactive",flag:""},
+      {test:"Hep B Surface Ab",value:"Reactive",unit:"",range:"—",flag:""},
+      {test:"Hep B Core Ab",value:"Nonreactive",unit:"",range:"Nonreactive",flag:""},
+      {test:"Hep C Ab",value:"Nonreactive",unit:"",range:"Nonreactive",flag:""},
+    ]},
+    hiv: {group:"HIV SCREENING",results:[{test:"HIV 1/2 Ag/Ab (4th gen)",value:"Nonreactive",unit:"",range:"Nonreactive",flag:""}]},
+    psa: {group:"PSA",results:[{test:"PSA, Total",value:"N/A",unit:"",range:"—",flag:"",note:"Not applicable — patient is female"}]},
+    uricacid: {group:"URIC ACID",results:[{test:"Uric Acid",value:"5.2",unit:"mg/dL",range:"2.5-7.0",flag:""}]},
+    magnesium: {group:"MAGNESIUM",results:[{test:"Magnesium",value:"2.0",unit:"mg/dL",range:"1.7-2.2",flag:""}]},
+    phosphorus: {group:"PHOSPHORUS",results:[{test:"Phosphorus",value:"3.5",unit:"mg/dL",range:"2.5-4.5",flag:""}]},
+    prealbumin: {group:"PREALBUMIN",results:[{test:"Prealbumin",value:"22",unit:"mg/dL",range:"20-40",flag:""}]},
+    cortisol: {group:"CORTISOL",results:[{test:"Cortisol (AM)",value:"14.2",unit:"µg/dL",range:"6-23 (AM)",flag:""}]},
+    bloodculture: {group:"BLOOD CULTURE",results:[{test:"Blood Culture x2",value:"No growth",unit:"",range:"No growth at 5 days",flag:""}]},
+    uculture: {group:"URINE CULTURE",results:[{test:"Urine Culture",value:"No growth",unit:"",range:"<10,000 CFU/mL",flag:""}]},
+  };
+
+  return normalResults[labId] || {group:catalog.name.toUpperCase(),results:[{test:catalog.name,value:"Within normal limits",unit:"",range:"—",flag:""}]};
+}
+
+function generateNormalImgResult(imgId) {
+  const catalog = IMG_CATALOG.find(i => i.id === imgId);
+  if (!catalog) return null;
+
+  const normalResults = {
+    abdomxr: {findings:"Bowel gas pattern is normal and nonobstructive. No free air. No radiopaque calculi. Psoas margins preserved. Osseous structures unremarkable.",impression:"Normal KUB. No obstruction or free air."},
+    ctchest: {findings:"Lungs: Clear. No nodule, mass, or consolidation. Airways patent. Mediastinum: No lymphadenopathy. Heart normal size. No pericardial effusion. Pleura: No effusion. Bones: Degenerative changes.",impression:"No acute cardiopulmonary abnormality."},
+    ctabdomen: {findings:"Liver, gallbladder, pancreas, spleen, adrenals: Unremarkable. Kidneys: Normal bilaterally, no hydronephrosis. Bowel: Normal caliber, no obstruction. No free fluid or lymphadenopathy. Bladder: Normal.",impression:"Normal CT abdomen and pelvis."},
+    cta_pe: {findings:"Pulmonary arteries: No filling defect to suggest pulmonary embolism. Heart: Normal size. Lungs: Clear. No pleural effusion.",impression:"Negative for pulmonary embolism."},
+    mribrain: {findings:"Brain parenchyma: Normal signal intensity. No acute infarct on diffusion. No mass or enhancement. Ventricles normal. No extra-axial collection. Mild small vessel ischemic changes (age-appropriate).",impression:"1. No acute intracranial abnormality.\n2. Mild nonspecific white matter changes — age-appropriate."},
+    mrilspine: {findings:"Vertebral body heights maintained. Alignment normal. Mild disc desiccation L4-L5, L5-S1. Mild facet arthropathy. No disc herniation. No spinal stenosis. Conus at L1. Cauda equina normal.",impression:"Mild degenerative changes L4-S1. No stenosis or herniation."},
+    us_abdomen: {findings:"Liver: Normal size and echogenicity. No focal lesion. Gallbladder: No stones, wall thickening, or pericholecystic fluid. CBD: 4mm (normal). Pancreas: Unremarkable. Spleen: Normal. Kidneys: Normal bilaterally.",impression:"Normal abdominal ultrasound."},
+    mammo: {findings:"Heterogeneously dense tissue (ACR C). No suspicious masses, calcifications, or architectural distortion. Stable from prior.",impression:"BIRADS 1 — Negative. Annual screening in 12 months."},
+    dexa: {findings:"L-spine T-score: -1.3 (osteopenia). Femoral neck T-score: -0.8 (normal). Total hip T-score: -0.4 (normal).",impression:"Osteopenia lumbar spine. Below treatment threshold. Repeat 2 years."},
+    xr_knee: {findings:"Alignment normal. Joint spaces preserved. No fracture. Mild osteophyte formation medial compartment. No effusion.",impression:"Mild degenerative changes. No acute abnormality."},
+    xr_shoulder: {findings:"No fracture or dislocation. Glenohumeral and acromioclavicular joints normal. No calcification. Soft tissues unremarkable.",impression:"Normal shoulder radiograph."},
+    xr_ankle: {findings:"No fracture. Ankle mortise intact. No effusion. Soft tissues unremarkable.",impression:"Normal ankle radiograph."},
+    doppler_le: {findings:"Bilateral lower extremity deep veins (CFV, SFV, popliteal, posterior tibial, peroneal) all patent with normal compressibility and spontaneous flow. No DVT.",impression:"No deep vein thrombosis bilaterally."},
+    carotid_us: {findings:"Right ICA: <40% stenosis. Left ICA: <40% stenosis. Flow velocities normal bilaterally. No plaque of hemodynamic significance. Vertebral arteries: Antegrade flow bilaterally.",impression:"No hemodynamically significant carotid stenosis."},
+  };
+
+  return normalResults[imgId] || {findings:"Study performed and reviewed. All evaluated structures within normal limits. No acute abnormality identified.",impression:"Normal study. No acute findings."};
+}
+
+// ─── Med Reconciliation Status Labels ───
+const MED_RECON_STATUS = ["Active","Verified","Hold","Discontinued","New","Dose Changed"];
+
+// Export for use in main app
+if(typeof window!=='undefined'){
+  window.LAB_CATALOG=LAB_CATALOG;
+  window.IMG_CATALOG=IMG_CATALOG;
+  window.CASE_SPECIFIC_LAB_RESULTS=CASE_SPECIFIC_LAB_RESULTS;
+  window.CASE_SPECIFIC_IMG_RESULTS=CASE_SPECIFIC_IMG_RESULTS;
+  window.VACCINE_CATALOG=VACCINE_CATALOG;
+  window.REFERRAL_TYPES=REFERRAL_TYPES;
+  window.generateAlerts=generateAlerts;
+  window.generateNormalLabResult=generateNormalLabResult;
+  window.generateNormalImgResult=generateNormalImgResult;
+  window.MED_RECON_STATUS=MED_RECON_STATUS;
+}
+
 // ═══════════════════════════════════════════════════════════════
 // USER DATABASE & AUTH SYSTEM
 // ═══════════════════════════════════════════════════════════════
@@ -590,6 +955,1625 @@ const session=db("session");
 if(session){const u=getUser(session.username);if(u){S.currentUser=u;loadUserData()}}
 render();
 document.addEventListener("mousedown",e=>{const p=document.getElementById("annotationPopover");if(p&&p.classList.contains("visible")&&!p.contains(e.target))hideAnnotationPopover()});
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIVE UI RENDERERS (student clinical actions)
+// ═══════════════════════════════════════════════════════════════
+
+// ─── State extensions for interactive features ───
+function initInteractiveState(){
+  if(!S.studentMeds) S.studentMeds=null; // null=use defaults, array=student modified
+  if(!S.studentAllergies) S.studentAllergies=null;
+  if(!S.studentProblems) S.studentProblems=null;
+  if(!S.studentVitals) S.studentVitals=null;
+  if(!S.studentImmunizations) S.studentImmunizations=null;
+  if(!S.labOrders) S.labOrders=[];
+  if(!S.imgOrders) S.imgOrders=[];
+  if(!S.referralOrders) S.referralOrders=[];
+  if(!S.medReconStatus) S.medReconStatus={};
+  if(!S.showOrderPanel) S.showOrderPanel=false;
+  if(!S.orderSearchTerm) S.orderSearchTerm="";
+}
+
+function loadInteractiveData(){
+  if(!S.currentUser||S.currentUser.role!=="student")return;
+  const u=S.currentUser.username;
+  const w=S.encounterWeek;
+  S.studentMeds=db("student-meds-"+u+"-"+w);
+  S.studentAllergies=db("student-allergies-"+u+"-"+w);
+  S.studentProblems=db("student-problems-"+u+"-"+w);
+  S.studentVitals=db("student-vitals-"+u+"-"+w);
+  S.studentImmunizations=db("student-imm-"+u+"-"+w);
+  S.labOrders=db("lab-orders-"+u+"-"+w)||[];
+  S.imgOrders=db("img-orders-"+u+"-"+w)||[];
+  S.referralOrders=db("referrals-"+u+"-"+w)||[];
+  S.medReconStatus=db("med-recon-"+u+"-"+w)||{};
+}
+
+function saveStudentData(key,val){
+  const u=S.currentUser.username;
+  const w=S.encounterWeek;
+  dbSet(key+"-"+u+"-"+w,val);
+}
+
+function getActiveMeds(){return S.studentMeds||[...MEDICATIONS]}
+function getActiveAllergies(){return S.studentAllergies||[...ALLERGIES]}
+function getActiveProblems(){return S.studentProblems||[...PROBLEMS]}
+function getActiveImmunizations(){return S.studentImmunizations||[...IMMUNIZATIONS]}
+function getCurrentVitals(){return S.studentVitals||null}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIVE MEDICATIONS
+// ═══════════════════════════════════════════════════════════════
+function renderMedicationsInteractive(){
+  const meds=getActiveMeds();
+  const isStudent=S.currentUser&&S.currentUser.role==="student";
+  
+  // Med Reconciliation banner
+  let reconHTML="";
+  if(isStudent){
+    const allVerified=meds.every((_,i)=>S.medReconStatus[i]);
+    reconHTML='<div style="padding:12px 16px;background:'+(allVerified?"var(--accent-light)":"var(--warning-light)")+';border-radius:var(--radius);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;font-weight:600;color:'+(allVerified?"var(--accent)":"var(--warning)")+'">'+I.clipboard+' Medication Reconciliation: '+(allVerified?"✓ Complete":"In Progress — verify each medication")+'</span></div><span style="font-size:11px;color:var(--text-muted)">'+Object.keys(S.medReconStatus).length+'/'+meds.length+' reviewed</span></div>';
+  }
+
+  const rows=meds.map((m,i)=>{
+    const reconStatus=S.medReconStatus[i]||"";
+    const reconBadge=reconStatus?badge(reconStatus,reconStatus==="Discontinued"?"badge-danger":reconStatus==="Hold"?"badge-warning":reconStatus==="Verified"?"badge-accent":"badge-primary"):"";
+    let actions="";
+    if(isStudent){
+      actions='<td><select class="week-select" style="font-size:11px;padding:2px 6px" onchange="setMedReconStatus('+i+',this.value)"><option value="">— Review —</option>'+MED_RECON_STATUS.map(s=>'<option '+(reconStatus===s?"selected":"")+'>'+s+'</option>').join("")+'</select><button class="btn-remove" style="margin-left:4px" onclick="deleteMed('+i+')">✕</button></td>';
+    }
+    return'<tr style="'+(reconStatus==="Discontinued"?"opacity:0.5;text-decoration:line-through":"")+'"><td class="td-bold">'+esc(m.name)+'</td><td class="td-muted">'+esc(m.sig)+'</td><td class="td-muted">'+esc(m.prescriber)+'</td><td>'+badge(m.status,m.status==="PRN"?"badge-warning":"badge-accent")+' '+reconBadge+'</td>'+actions+'</tr>';
+  });
+
+  const headers=["Medication","Sig","Prescriber","Status"];
+  if(isStudent)headers.push("Action");
+
+  let addForm="";
+  if(isStudent){
+    addForm='<div style="margin-top:16px;padding:16px;background:var(--surface-alt);border-radius:var(--radius);border:1px dashed var(--border)"><div style="font-size:12px;font-weight:600;margin-bottom:10px">'+I.pill+' Add Medication</div><div style="display:grid;grid-template-columns:1.5fr 2fr 1fr auto;gap:8px;align-items:end"><div><label class="demo-label">Medication + Dose</label><input id="newMedName" class="assign-input" style="padding:8px 10px" placeholder="e.g. Amlodipine 5mg"></div><div><label class="demo-label">Sig (Instructions)</label><input id="newMedSig" class="assign-input" style="padding:8px 10px" placeholder="e.g. Take 1 tablet PO daily"></div><div><label class="demo-label">Status</label><select id="newMedStatus" class="week-select" style="width:100%;padding:8px"><option>Active</option><option>PRN</option></select></div><button class="btn-submit" style="padding:8px 16px" onclick="addMedication()">Add</button></div></div>';
+  }
+
+  return reconHTML+sectionCard("Medications"+(isStudent?" — Interactive":""),I.pill,tableHTML(headers,rows)+addForm);
+}
+
+function addMedication(){
+  const name=document.getElementById("newMedName").value.trim();
+  const sig=document.getElementById("newMedSig").value.trim();
+  const status=document.getElementById("newMedStatus").value;
+  if(!name){showToast("Enter medication name");return}
+  const meds=getActiveMeds();
+  meds.push({name,sig:sig||"As directed",prescriber:"Student",start:"Today",refills:"—",status});
+  S.studentMeds=meds;
+  saveStudentData("student-meds",meds);
+  showToast("✓ "+name+" added");render();
+}
+
+function deleteMed(idx){
+  const meds=getActiveMeds();
+  const name=meds[idx].name;
+  meds.splice(idx,1);
+  S.studentMeds=meds;
+  // Adjust recon statuses
+  const newRecon={};
+  Object.entries(S.medReconStatus).forEach(([k,v])=>{
+    const ki=parseInt(k);
+    if(ki<idx)newRecon[ki]=v;
+    else if(ki>idx)newRecon[ki-1]=v;
+  });
+  S.medReconStatus=newRecon;
+  saveStudentData("student-meds",meds);
+  saveStudentData("med-recon",S.medReconStatus);
+  showToast(name+" removed");render();
+}
+
+function setMedReconStatus(idx,status){
+  S.medReconStatus[idx]=status;
+  saveStudentData("med-recon",S.medReconStatus);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIVE ALLERGIES
+// ═══════════════════════════════════════════════════════════════
+function renderAllergiesInteractive(){
+  const allergies=getActiveAllergies();
+  const isStudent=S.currentUser&&S.currentUser.role==="student";
+
+  const rows=allergies.map((a,i)=>{
+    let actions="";
+    if(isStudent)actions='<td><button class="btn-remove" onclick="deleteAllergy('+i+')">Remove</button></td>';
+    return'<tr><td class="td-bold">'+esc(a.allergen)+'</td><td>'+badge(a.type)+'</td><td class="td-muted">'+esc(a.reaction)+'</td><td>'+badge(a.severity,a.severity==="Severe"?"badge-danger":"badge-accent")+'</td><td class="td-muted">'+esc(a.verified)+'</td>'+actions+'</tr>';
+  });
+
+  const headers=["Allergen","Type","Reaction","Severity","Verified"];
+  if(isStudent)headers.push("");
+
+  let addForm="";
+  if(isStudent){
+    addForm='<div style="margin-top:16px;padding:16px;background:var(--surface-alt);border-radius:var(--radius);border:1px dashed var(--border)"><div style="font-size:12px;font-weight:600;margin-bottom:10px">'+I.alert+' Add Allergy</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:end"><div><label class="demo-label">Allergen</label><input id="newAllergen" class="assign-input" style="padding:8px 10px" placeholder="e.g. Codeine"></div><div><label class="demo-label">Type</label><select id="newAllergyType" class="week-select" style="width:100%;padding:8px"><option>Drug</option><option>Food</option><option>Environmental</option><option>Contact</option></select></div><div><label class="demo-label">Reaction</label><input id="newAllergyRx" class="assign-input" style="padding:8px 10px" placeholder="e.g. Nausea, rash"></div><div><label class="demo-label">Severity</label><select id="newAllergySev" class="week-select" style="width:100%;padding:8px"><option>Mild</option><option>Moderate</option><option>Severe</option></select></div><button class="btn-submit" style="padding:8px 16px" onclick="addAllergy()">Add</button></div></div>';
+  }
+
+  return sectionCard("Allergies"+(isStudent?" — Interactive":""),I.alert,'<div class="allergy-alert-bar">'+I.alert+'<span>'+allergies.length+' documented allergies</span></div>'+tableHTML(headers,rows)+addForm);
+}
+
+function addAllergy(){
+  const allergen=document.getElementById("newAllergen").value.trim();
+  if(!allergen){showToast("Enter allergen name");return}
+  const allergies=getActiveAllergies();
+  allergies.push({allergen,type:document.getElementById("newAllergyType").value,reaction:document.getElementById("newAllergyRx").value.trim()||"Unknown",severity:document.getElementById("newAllergySev").value,verified:"No — per student"});
+  S.studentAllergies=allergies;
+  saveStudentData("student-allergies",allergies);
+  showToast("✓ Allergy added");render();
+}
+
+function deleteAllergy(idx){
+  const allergies=getActiveAllergies();allergies.splice(idx,1);
+  S.studentAllergies=allergies;saveStudentData("student-allergies",allergies);
+  showToast("Allergy removed");render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIVE PROBLEMS
+// ═══════════════════════════════════════════════════════════════
+function renderProblemsInteractive(){
+  const problems=getActiveProblems();
+  const isStudent=S.currentUser&&S.currentUser.role==="student";
+
+  const rows=problems.map((p,i)=>{
+    let actions="";
+    if(isStudent)actions='<td><button class="btn-remove" style="margin-right:4px" onclick="resolveProblem('+i+')">Resolve</button><button class="btn-remove" onclick="deleteProblem('+i+')">✕</button></td>';
+    return'<tr style="'+(p.status==="Resolved"?"opacity:0.5":"")+'"><td class="td-bold">'+esc(p.problem)+'</td><td>'+badge(p.icd)+'</td><td class="td-muted">'+esc(p.onset)+'</td><td>'+badge(p.status,p.status==="Resolved"?"badge-warning":"badge-accent")+'</td><td class="td-muted">'+esc(p.notes)+'</td>'+actions+'</tr>';
+  });
+
+  const headers=["Problem","ICD-10","Onset","Status","Notes"];
+  if(isStudent)headers.push("");
+
+  let addForm="";
+  if(isStudent){
+    addForm='<div style="margin-top:16px;padding:16px;background:var(--surface-alt);border-radius:var(--radius);border:1px dashed var(--border)"><div style="font-size:12px;font-weight:600;margin-bottom:10px">'+I.clipboard+' Add Problem</div><div style="display:grid;grid-template-columns:2fr 1fr 1fr 2fr auto;gap:8px;align-items:end"><div><label class="demo-label">Problem</label><input id="newProblem" class="assign-input" style="padding:8px 10px" placeholder="e.g. Iron deficiency anemia"></div><div><label class="demo-label">ICD-10</label><input id="newProbIcd" class="assign-input" style="padding:8px 10px" placeholder="e.g. D50.9"></div><div><label class="demo-label">Onset</label><input id="newProbOnset" class="assign-input" style="padding:8px 10px" placeholder="e.g. 2025"></div><div><label class="demo-label">Notes</label><input id="newProbNotes" class="assign-input" style="padding:8px 10px" placeholder="Clinical notes"></div><button class="btn-submit" style="padding:8px 16px" onclick="addProblem()">Add</button></div></div>';
+  }
+
+  return sectionCard("Problem List"+(isStudent?" — Interactive":""),I.clipboard,tableHTML(headers,rows)+addForm);
+}
+
+function addProblem(){
+  const problem=document.getElementById("newProblem").value.trim();
+  if(!problem){showToast("Enter problem name");return}
+  const problems=getActiveProblems();
+  problems.push({problem,icd:document.getElementById("newProbIcd").value.trim()||"—",onset:document.getElementById("newProbOnset").value.trim()||"New",status:"Active",notes:document.getElementById("newProbNotes").value.trim()});
+  S.studentProblems=problems;saveStudentData("student-problems",problems);
+  showToast("✓ Problem added");render();
+}
+
+function resolveProblem(idx){
+  const problems=getActiveProblems();problems[idx].status="Resolved";
+  S.studentProblems=problems;saveStudentData("student-problems",problems);render();
+}
+
+function deleteProblem(idx){
+  const problems=getActiveProblems();problems.splice(idx,1);
+  S.studentProblems=problems;saveStudentData("student-problems",problems);render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CLINICAL ORDERS (Labs + Imaging)
+// ═══════════════════════════════════════════════════════════════
+function renderOrders(){
+  // Pending & completed orders
+  let pendingLabs=S.labOrders.filter(o=>!o.resulted);
+  let completedLabs=S.labOrders.filter(o=>o.resulted);
+  let pendingImgs=S.imgOrders.filter(o=>!o.resulted);
+  let completedImgs=S.imgOrders.filter(o=>o.resulted);
+
+  // Order buttons
+  let html='<div style="display:flex;gap:12px;margin-bottom:16px"><button class="btn-submit" onclick="showLabOrderDialog()">'+I.flask+' Order Labs</button><button class="btn-submit" style="background:var(--accent)" onclick="showImgOrderDialog()">'+I.image+' Order Imaging</button><button class="btn-submit" style="background:#6A1B9A" onclick="showReferralDialog()">'+I.people+' Referral</button></div>';
+
+  // Pending orders
+  if(pendingLabs.length||pendingImgs.length){
+    let pRows=[...pendingLabs.map((o,i)=>'<tr><td>'+badge("Lab")+'</td><td class="td-bold">'+esc(o.name)+'</td><td class="td-muted">'+esc(o.orderedAt)+'</td><td>'+badge("Pending","badge-warning")+'</td><td><button class="btn-submit" style="padding:4px 12px;font-size:11px" onclick="resultLabOrder('+i+')">View Results</button> <button class="btn-remove" onclick="cancelLabOrder('+i+')">Cancel</button></td></tr>'),...pendingImgs.map((o,i)=>'<tr><td>'+badge("Imaging","badge-purple")+'</td><td class="td-bold">'+esc(o.name)+'</td><td class="td-muted">'+esc(o.orderedAt)+'</td><td>'+badge("Pending","badge-warning")+'</td><td><button class="btn-submit" style="padding:4px 12px;font-size:11px" onclick="resultImgOrder('+i+')">View Results</button> <button class="btn-remove" onclick="cancelImgOrder('+i+')">Cancel</button></td></tr>')];
+    html+=sectionCard("Pending Orders ("+pRows.length+")",I.calendar,tableHTML(["Type","Study","Ordered","Status",""],pRows));
+  }
+
+  // Completed orders
+  if(completedLabs.length||completedImgs.length){
+    let cRows=[...completedLabs.map((o,idx)=>{
+      const isOpen=S.expanded["olr-"+idx];
+      let detail="";
+      if(isOpen&&o.resultData){
+        detail='<div class="expand-body open" style="margin-top:8px"><div class="lab-report" style="margin-top:8px"><div class="lab-group-header">'+esc(o.resultData.group)+'</div>';
+        o.resultData.results.forEach(r=>{
+          detail+='<div class="lab-row '+(r.flag==="H"?"flagged-h":r.flag==="L"?"flagged-l":"")+'"><span class="lab-test-name">'+esc(r.test)+'</span><span class="lab-value '+(r.flag==="H"?"high":r.flag==="L"?"low":"")+'">'+esc(r.value)+'</span><span class="lab-unit">'+esc(r.unit)+'</span><span class="lab-range">'+esc(r.range)+'</span><span class="lab-flag '+(r.flag==="H"?"high":"low")+'">'+(r.flag?r.flag==="H"?"HIGH ↑":"LOW ↓":"")+'</span></div>';
+        });
+        detail+='</div></div>';
+      }
+      return'<tr onclick="toggleExpand(\'olr-'+idx+'\')" style="cursor:pointer"><td>'+badge("Lab")+'</td><td class="td-bold">'+esc(o.name)+'</td><td class="td-muted">'+esc(o.resultedAt||o.orderedAt)+'</td><td>'+badge("Final","badge-accent")+'</td><td>'+(o.resultData&&o.resultData.results.some(r=>r.flag)?badge("Abnormal","badge-danger"):"")+'</td></tr>'+(isOpen?'<tr><td colspan="5" style="padding:0 12px 12px">'+detail+'</td></tr>':"");
+    }),...completedImgs.map((o,idx)=>{
+      const isOpen=S.expanded["oir-"+idx];
+      let detail="";
+      if(isOpen&&o.resultData){
+        detail='<div class="expand-body open" style="margin-top:8px"><div class="imaging-report" style="margin-top:8px"><div class="imaging-report-body"><div class="imaging-section"><div class="imaging-section-label">Findings</div><div class="imaging-section-text" style="white-space:pre-line">'+esc(o.resultData.findings)+'</div></div><div class="imaging-impression"><div class="imaging-impression-label">Impression</div><div class="imaging-section-text" style="white-space:pre-line;font-weight:500">'+esc(o.resultData.impression)+'</div></div></div></div></div>';
+      }
+      return'<tr onclick="toggleExpand(\'oir-'+idx+'\')" style="cursor:pointer"><td>'+badge("Imaging","badge-purple")+'</td><td class="td-bold">'+esc(o.name)+'</td><td class="td-muted">'+esc(o.resultedAt||o.orderedAt)+'</td><td>'+badge("Final","badge-accent")+'</td><td></td></tr>'+(isOpen?'<tr><td colspan="5" style="padding:0 12px 12px">'+detail+'</td></tr>':"");
+    })];
+    html+=sectionCard("Completed Results ("+cRows.length+")",I.check,tableHTML(["Type","Study","Date","Status","Flags"],cRows));
+  }
+
+  // Referrals
+  if(S.referralOrders.length){
+    const rRows=S.referralOrders.map((r,i)=>'<tr><td class="td-bold">'+esc(r.specialty)+'</td><td class="td-muted">'+esc(r.reason)+'</td><td class="td-muted">'+esc(r.urgency)+'</td><td class="td-muted">'+esc(r.orderedAt)+'</td><td><button class="btn-remove" onclick="deleteReferral('+i+')">Cancel</button></td></tr>');
+    html+=sectionCard("Referral Orders",I.people,tableHTML(["Specialty","Reason","Urgency","Ordered",""],rRows));
+  }
+
+  // CDS Alerts
+  const alerts=generateAlerts(getActiveMeds(),getActiveAllergies(),getActiveProblems(),VITALS);
+  if(alerts.length){
+    let alertHTML=alerts.map(a=>{
+      const cls=a.type==="danger"?"badge-danger":a.type==="warning"?"badge-warning":"badge-primary";
+      const bg=a.type==="danger"?"var(--danger-light)":a.type==="warning"?"var(--warning-light)":"var(--primary-light)";
+      return'<div style="padding:10px 14px;background:'+bg+';border-radius:var(--radius);margin-bottom:8px"><div style="font-size:11px;font-weight:700;margin-bottom:2px">'+badge(a.type.toUpperCase(),cls)+' '+esc(a.title)+'</div><div style="font-size:12px;line-height:1.5">'+esc(a.msg)+'</div></div>';
+    }).join("");
+    html+=sectionCard("Clinical Decision Support ("+alerts.length+")",I.alert,alertHTML);
+  }
+
+  if(!S.labOrders.length&&!S.imgOrders.length&&!S.referralOrders.length){
+    html+='<div class="empty-state">No orders placed yet. Use the buttons above to order labs, imaging, or referrals.</div>';
+  }
+
+  return html;
+}
+
+function showLabOrderDialog(){
+  const pop=document.getElementById("annotationPopover");
+  const grouped={};
+  LAB_CATALOG.forEach(l=>{if(!grouped[l.category])grouped[l.category]=[];grouped[l.category].push(l)});
+  let listHTML="";
+  Object.entries(grouped).forEach(([cat,labs])=>{
+    listHTML+='<div style="font-size:11px;font-weight:700;color:var(--primary-dark);text-transform:uppercase;padding:6px 0;margin-top:8px;border-bottom:1px solid var(--border-light)">'+esc(cat)+'</div>';
+    labs.forEach(l=>{
+      const already=S.labOrders.some(o=>o.id===l.id);
+      listHTML+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border-light)"><div><span style="font-size:12px;font-weight:500">'+esc(l.name)+'</span><span style="font-size:10px;color:var(--text-muted);margin-left:8px">TAT: '+esc(l.tat)+'</span></div>'+(already?'<span style="font-size:10px;color:var(--accent)">✓ Ordered</span>':'<button class="btn-submit" style="padding:3px 10px;font-size:10px" onclick="orderLab(\''+l.id+'\')">Order</button>')+'</div>';
+    });
+  });
+  pop.innerHTML='<div class="annotation-popover-header"><span class="annotation-popover-title">'+I.flask+' Order Laboratory Tests</span><button class="annotation-popover-close" onclick="hideAnnotationPopover()">✕</button></div><div style="max-height:400px;overflow-y:auto">'+listHTML+'</div>';
+  pop.style.top="100px";pop.style.left=Math.max(10,(window.innerWidth-340)/2)+"px";pop.style.width="360px";pop.classList.add("visible");
+}
+
+function showImgOrderDialog(){
+  const pop=document.getElementById("annotationPopover");
+  const grouped={};
+  IMG_CATALOG.forEach(i=>{if(!grouped[i.category])grouped[i.category]=[];grouped[i.category].push(i)});
+  let listHTML="";
+  Object.entries(grouped).forEach(([cat,imgs])=>{
+    listHTML+='<div style="font-size:11px;font-weight:700;color:var(--primary-dark);text-transform:uppercase;padding:6px 0;margin-top:8px;border-bottom:1px solid var(--border-light)">'+esc(cat)+'</div>';
+    imgs.forEach(im=>{
+      const already=S.imgOrders.some(o=>o.id===im.id);
+      listHTML+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border-light)"><div><span style="font-size:12px;font-weight:500">'+esc(im.name)+'</span><span style="font-size:10px;color:var(--text-muted);margin-left:8px">'+esc(im.tat)+'</span></div>'+(already?'<span style="font-size:10px;color:var(--accent)">✓ Ordered</span>':'<button class="btn-submit" style="padding:3px 10px;font-size:10px;background:var(--accent)" onclick="orderImg(\''+im.id+'\')">Order</button>')+'</div>';
+    });
+  });
+  pop.innerHTML='<div class="annotation-popover-header"><span class="annotation-popover-title">'+I.image+' Order Imaging</span><button class="annotation-popover-close" onclick="hideAnnotationPopover()">✕</button></div><div style="max-height:400px;overflow-y:auto">'+listHTML+'</div>';
+  pop.style.top="100px";pop.style.left=Math.max(10,(window.innerWidth-340)/2)+"px";pop.style.width="360px";pop.classList.add("visible");
+}
+
+function showReferralDialog(){
+  const pop=document.getElementById("annotationPopover");
+  let listHTML='<div style="margin-bottom:10px"><label class="demo-label">Specialty</label><select id="refSpecialty" class="week-select" style="width:100%;padding:8px">'+REFERRAL_TYPES.map(r=>'<option>'+r+'</option>').join("")+'</select></div><div style="margin-bottom:10px"><label class="demo-label">Reason for Referral</label><textarea id="refReason" class="annotation-comment-input" style="min-height:50px" placeholder="Clinical indication for referral..."></textarea></div><div style="margin-bottom:10px"><label class="demo-label">Urgency</label><select id="refUrgency" class="week-select" style="width:100%;padding:8px"><option>Routine</option><option>Urgent</option><option>STAT</option></select></div><button class="btn-submit" style="width:100%" onclick="placeReferral()">Place Referral</button>';
+  pop.innerHTML='<div class="annotation-popover-header"><span class="annotation-popover-title">'+I.people+' Referral Order</span><button class="annotation-popover-close" onclick="hideAnnotationPopover()">✕</button></div>'+listHTML;
+  pop.style.top="100px";pop.style.left=Math.max(10,(window.innerWidth-340)/2)+"px";pop.style.width="340px";pop.classList.add("visible");
+}
+
+function orderLab(id){
+  const cat=LAB_CATALOG.find(l=>l.id===id);if(!cat)return;
+  S.labOrders.push({id,name:cat.name,orderedAt:new Date().toLocaleString(),resulted:false,resultData:null});
+  saveStudentData("lab-orders",S.labOrders);
+  showToast("✓ "+cat.name+" ordered");render();
+  hideAnnotationPopover();
+}
+
+function resultLabOrder(idx){
+  const order=S.labOrders.filter(o=>!o.resulted)[idx];
+  if(!order)return;
+  // Find the actual index in full array
+  let actualIdx=-1,pending=0;
+  for(let i=0;i<S.labOrders.length;i++){if(!S.labOrders[i].resulted){if(pending===idx){actualIdx=i;break}pending++}}
+  if(actualIdx===-1)return;
+  // Get case-specific or normal result
+  const result=CASE_SPECIFIC_LAB_RESULTS[order.id]||generateNormalLabResult(order.id);
+  S.labOrders[actualIdx].resulted=true;
+  S.labOrders[actualIdx].resultData=result;
+  S.labOrders[actualIdx].resultedAt=new Date().toLocaleString();
+  saveStudentData("lab-orders",S.labOrders);
+  showToast("✓ Results available for "+order.name);render();
+}
+
+function cancelLabOrder(idx){
+  let actualIdx=-1,pending=0;
+  for(let i=0;i<S.labOrders.length;i++){if(!S.labOrders[i].resulted){if(pending===idx){actualIdx=i;break}pending++}}
+  if(actualIdx===-1)return;
+  S.labOrders.splice(actualIdx,1);
+  saveStudentData("lab-orders",S.labOrders);showToast("Order cancelled");render();
+}
+
+function orderImg(id){
+  const cat=IMG_CATALOG.find(i=>i.id===id);if(!cat)return;
+  S.imgOrders.push({id,name:cat.name,orderedAt:new Date().toLocaleString(),resulted:false,resultData:null});
+  saveStudentData("img-orders",S.imgOrders);
+  showToast("✓ "+cat.name+" ordered");render();
+  hideAnnotationPopover();
+}
+
+function resultImgOrder(idx){
+  const order=S.imgOrders.filter(o=>!o.resulted)[idx];if(!order)return;
+  let actualIdx=-1,pending=0;
+  for(let i=0;i<S.imgOrders.length;i++){if(!S.imgOrders[i].resulted){if(pending===idx){actualIdx=i;break}pending++}}
+  if(actualIdx===-1)return;
+  const result=CASE_SPECIFIC_IMG_RESULTS[order.id]||generateNormalImgResult(order.id);
+  S.imgOrders[actualIdx].resulted=true;
+  S.imgOrders[actualIdx].resultData=result;
+  S.imgOrders[actualIdx].resultedAt=new Date().toLocaleString();
+  saveStudentData("img-orders",S.imgOrders);
+  showToast("✓ Results available");render();
+}
+
+function cancelImgOrder(idx){
+  let actualIdx=-1,pending=0;
+  for(let i=0;i<S.imgOrders.length;i++){if(!S.imgOrders[i].resulted){if(pending===idx){actualIdx=i;break}pending++}}
+  if(actualIdx===-1)return;
+  S.imgOrders.splice(actualIdx,1);
+  saveStudentData("img-orders",S.imgOrders);showToast("Order cancelled");render();
+}
+
+function placeReferral(){
+  const specialty=document.getElementById("refSpecialty").value;
+  const reason=document.getElementById("refReason").value.trim();
+  const urgency=document.getElementById("refUrgency").value;
+  if(!reason){showToast("Enter reason for referral");return}
+  S.referralOrders.push({specialty,reason,urgency,orderedAt:new Date().toLocaleString()});
+  saveStudentData("referrals",S.referralOrders);
+  hideAnnotationPopover();showToast("✓ Referral to "+specialty+" placed");render();
+}
+
+function deleteReferral(idx){
+  S.referralOrders.splice(idx,1);
+  saveStudentData("referrals",S.referralOrders);render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIVE IMMUNIZATIONS
+// ═══════════════════════════════════════════════════════════════
+function renderImmunizationsInteractive(){
+  const imms=getActiveImmunizations();
+  const isStudent=S.currentUser&&S.currentUser.role==="student";
+
+  const rows=imms.map((im,i)=>{
+    let actions="";
+    if(isStudent)actions='<td><button class="btn-remove" onclick="deleteImmunization('+i+')">Remove</button></td>';
+    return'<tr><td style="font-weight:500">'+esc(im.vaccine)+'</td><td class="td-muted">'+esc(im.date)+'</td><td class="td-muted">'+esc(im.site)+'</td><td class="td-mono td-muted" style="font-size:12px">'+esc(im.lot)+'</td>'+actions+'</tr>';
+  });
+
+  const headers=["Vaccine","Date","Site","Lot"];
+  if(isStudent)headers.push("");
+
+  let addForm="";
+  if(isStudent){
+    addForm='<div style="margin-top:16px;padding:16px;background:var(--surface-alt);border-radius:var(--radius);border:1px dashed var(--border)"><div style="font-size:12px;font-weight:600;margin-bottom:10px">'+I.syringe+' Record Immunization</div><div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:8px;align-items:end"><div><label class="demo-label">Vaccine</label><select id="newVaccine" class="week-select" style="width:100%;padding:8px">'+VACCINE_CATALOG.map(v=>'<option>'+v+'</option>').join("")+'</select></div><div><label class="demo-label">Date</label><input id="newVaccDate" type="date" class="assign-input" style="padding:8px 10px" value="'+new Date().toISOString().split("T")[0]+'"></div><div><label class="demo-label">Site</label><select id="newVaccSite" class="week-select" style="width:100%;padding:8px"><option>Left deltoid IM</option><option>Right deltoid IM</option><option>Left thigh IM</option><option>Right thigh IM</option><option>Oral</option><option>Intranasal</option><option>Subcutaneous</option></select></div><div><label class="demo-label">Lot #</label><input id="newVaccLot" class="assign-input" style="padding:8px 10px" placeholder="Lot number"></div><button class="btn-submit" style="padding:8px 16px" onclick="addImmunization()">Record</button></div></div>';
+  }
+
+  return sectionCard("Immunizations"+(isStudent?" — Interactive":""),I.syringe,tableHTML(headers,rows)+addForm);
+}
+
+function addImmunization(){
+  const vaccine=document.getElementById("newVaccine").value;
+  const date=document.getElementById("newVaccDate").value;
+  const site=document.getElementById("newVaccSite").value;
+  const lot=document.getElementById("newVaccLot").value.trim()||"—";
+  const imms=getActiveImmunizations();
+  imms.push({vaccine,date:new Date(date).toLocaleDateString(),site,lot,mfr:"—"});
+  S.studentImmunizations=imms;saveStudentData("student-imm",imms);
+  showToast("✓ "+vaccine+" recorded");render();
+}
+
+function deleteImmunization(idx){
+  const imms=getActiveImmunizations();imms.splice(idx,1);
+  S.studentImmunizations=imms;saveStudentData("student-imm",imms);render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENCOUNTER VITALS ENTRY
+// ═══════════════════════════════════════════════════════════════
+function renderVitalsInteractive(){
+  const isStudent=S.currentUser&&S.currentUser.role==="student";
+  const cv=getCurrentVitals();
+
+  // Existing vitals table
+  let vitalsTable=sectionCard("Vitals Trend",I.activity,tableHTML(["Date","Setting","BP","HR","RR","Temp","SpO₂","Wt","BMI"],VITALS.map(v=>'<tr><td style="font-weight:500">'+esc(v.date)+'</td><td>'+badge(v.setting)+'</td><td class="td-mono" style="'+(parseInt(v.bp)>=140?"color:var(--flag-high);font-weight:600":"")+'">'+esc(v.bp)+'</td><td class="td-mono">'+v.hr+'</td><td class="td-mono">'+v.rr+'</td><td class="td-mono">'+esc(v.temp)+'</td><td class="td-mono">'+esc(v.spo2)+'</td><td class="td-mono">'+esc(v.wt)+'</td><td class="td-mono">'+v.bmi+'</td></tr>')));
+
+  let entryForm="";
+  if(isStudent){
+    const vals=cv||{};
+    entryForm=sectionCard("Record Today's Encounter Vitals",I.activity,
+      (cv?'<div style="padding:8px 14px;background:var(--accent-light);border-radius:var(--radius);margin-bottom:12px;font-size:12px;font-weight:600;color:var(--accent)">✓ Vitals recorded for this encounter</div>':'')+
+      '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px"><div><label class="demo-label">Blood Pressure</label><input id="vBP" class="assign-input" style="padding:8px" placeholder="e.g. 138/86" value="'+esc(vals.bp||"")+'"></div><div><label class="demo-label">Heart Rate</label><input id="vHR" class="assign-input" style="padding:8px" placeholder="e.g. 78" value="'+esc(vals.hr||"")+'"></div><div><label class="demo-label">Resp Rate</label><input id="vRR" class="assign-input" style="padding:8px" placeholder="e.g. 16" value="'+esc(vals.rr||"")+'"></div><div><label class="demo-label">Temperature</label><input id="vTemp" class="assign-input" style="padding:8px" placeholder="e.g. 98.6°F" value="'+esc(vals.temp||"")+'"></div><div><label class="demo-label">SpO₂</label><input id="vSpo2" class="assign-input" style="padding:8px" placeholder="e.g. 98%" value="'+esc(vals.spo2||"")+'"></div></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px"><div><label class="demo-label">Weight</label><input id="vWt" class="assign-input" style="padding:8px" placeholder="e.g. 187 lbs" value="'+esc(vals.wt||"")+'"></div><div><label class="demo-label">Height</label><input id="vHt" class="assign-input" style="padding:8px" placeholder="e.g. 5\'4&quot;" value="'+esc(vals.ht||"")+'"></div><div><label class="demo-label">BMI</label><input id="vBMI" class="assign-input" style="padding:8px" placeholder="Auto or manual" value="'+esc(vals.bmi||"")+'"></div></div><div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn-submit" onclick="saveEncounterVitals()">'+I.check+' Save Vitals</button></div>');
+  }
+
+  return entryForm+vitalsTable;
+}
+
+function saveEncounterVitals(){
+  const vitals={
+    bp:document.getElementById("vBP").value.trim(),
+    hr:document.getElementById("vHR").value.trim(),
+    rr:document.getElementById("vRR").value.trim(),
+    temp:document.getElementById("vTemp").value.trim(),
+    spo2:document.getElementById("vSpo2").value.trim(),
+    wt:document.getElementById("vWt").value.trim(),
+    ht:document.getElementById("vHt").value.trim(),
+    bmi:document.getElementById("vBMI").value.trim(),
+    recordedAt:new Date().toLocaleString(),
+  };
+  S.studentVitals=vitals;
+  saveStudentData("student-vitals",vitals);
+  showToast("✓ Encounter vitals saved");render();
+}
+
+// Make functions globally available
+if(typeof window!=='undefined'){
+  window.initInteractiveState=initInteractiveState;
+  window.loadInteractiveData=loadInteractiveData;
+  window.renderMedicationsInteractive=renderMedicationsInteractive;
+  window.renderAllergiesInteractive=renderAllergiesInteractive;
+  window.renderProblemsInteractive=renderProblemsInteractive;
+  window.renderOrders=renderOrders;
+  window.renderImmunizationsInteractive=renderImmunizationsInteractive;
+  window.renderVitalsInteractive=renderVitalsInteractive;
+  window.addMedication=addMedication;window.deleteMed=deleteMed;window.setMedReconStatus=setMedReconStatus;
+  window.addAllergy=addAllergy;window.deleteAllergy=deleteAllergy;
+  window.addProblem=addProblem;window.resolveProblem=resolveProblem;window.deleteProblem=deleteProblem;
+  window.showLabOrderDialog=showLabOrderDialog;window.showImgOrderDialog=showImgOrderDialog;window.showReferralDialog=showReferralDialog;
+  window.orderLab=orderLab;window.resultLabOrder=resultLabOrder;window.cancelLabOrder=cancelLabOrder;
+  window.orderImg=orderImg;window.resultImgOrder=resultImgOrder;window.cancelImgOrder=cancelImgOrder;
+  window.placeReferral=placeReferral;window.deleteReferral=deleteReferral;
+  window.addImmunization=addImmunization;window.deleteImmunization=deleteImmunization;
+  window.saveEncounterVitals=saveEncounterVitals;
+  window.getActiveMeds=getActiveMeds;window.getActiveAllergies=getActiveAllergies;
+  window.getActiveProblems=getActiveProblems;window.getActiveImmunizations=getActiveImmunizations;
+  window.getCurrentVitals=getCurrentVitals;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DOCUMENTATION ANALYSIS ENGINE
+// Analyzes student notes against known case data
+// ═══════════════════════════════════════════════════════════════
+
+const DOC_RUBRIC = [
+  {id:"doc_cc",label:"Chief Complaint",max:5,category:"Content",criteria:[
+    "Clear, concise presenting concern","In patient's own words or paraphrased","Includes relevant context (age, sex, reason for visit)","Not overly long or too vague"
+  ]},
+  {id:"doc_hpi",label:"HPI Quality & Organization",max:15,category:"Content",criteria:[
+    "OLDCARTS/OPQRST framework evident","Timeline/chronology clear","Pertinent positives documented","Pertinent negatives documented","Associated symptoms explored","Impact on daily life noted","No misplaced ROS content in HPI","Reads as a coherent narrative, not a list"
+  ]},
+  {id:"doc_pmh",label:"PMH / PSH Completeness",max:5,category:"Content",criteria:[
+    "All active problems listed","Surgical history documented or 'denies'","Hospitalizations noted","Relevant resolved conditions mentioned"
+  ]},
+  {id:"doc_meds",label:"Medication Reconciliation",max:10,category:"Accuracy",criteria:[
+    "All current medications listed","Correct spelling of medication names","Doses included for each medication","Route included","Frequency specified","PRN medications noted with indication","OTC medications included","Supplements included"
+  ]},
+  {id:"doc_allergies",label:"Allergies",max:5,category:"Accuracy",criteria:[
+    "All known allergies listed","Reaction type specified for each","Severity noted","Drug vs food vs environmental categorized"
+  ]},
+  {id:"doc_fhsh",label:"Family & Social History",max:5,category:"Content",criteria:[
+    "Relevant FH conditions with age of onset","Pertinent negative FH documented","Occupation/living situation","Substance use (tobacco, alcohol, drugs)","Exercise and diet","Relevant psychosocial factors"
+  ]},
+  {id:"doc_ros",label:"Review of Systems",max:10,category:"Organization",criteria:[
+    "Organized by organ system","Pertinent positives with detail","Pertinent negatives per system","Constitutional symptoms addressed","Doesn't duplicate HPI content","At least 10 systems reviewed","Uses standard system categories"
+  ]},
+  {id:"doc_pe",label:"Physical Examination",max:15,category:"Quality",criteria:[
+    "Organized by system (General → specific)","Specific findings documented (not 'normal' or 'WNL')","'Bilateral' noted where appropriate","Vital signs referenced","Pertinent positives described in detail","Pertinent negatives documented","No use of 'WNL', 'normal', or 'within normal limits'","Heart: rhythm, rate, murmurs stated","Lungs: effort, sounds, adventitious sounds","Abdomen: inspection, auscultation, palpation, organomegaly","Neuro/Psych if relevant to case","Skin findings documented"
+  ]},
+  {id:"doc_assess",label:"Assessment & Differential",max:15,category:"Clinical Reasoning",criteria:[
+    "Concise summary statement","Problems numbered and prioritized","DDx listed for key problems","DDx supported by history findings","DDx supported by exam findings","Most likely diagnosis identified with reasoning","Dangerous 'cannot miss' diagnoses considered","Clinical reasoning explicitly stated"
+  ]},
+  {id:"doc_plan",label:"Plan",max:10,category:"Clinical Reasoning",criteria:[
+    "Organized by problem","Diagnostic workup appropriate","Therapeutics evidence-based","Cost containment awareness","Not over-testing (unnecessary studies avoided)","Not under-testing (necessary studies included)","Follow-up timeline specified","Patient education/counseling mentioned","Referrals appropriate when indicated"
+  ]},
+  {id:"doc_org",label:"Overall Organization & Professionalism",max:5,category:"Organization",criteria:[
+    "Logical flow from CC through Plan","Consistent formatting","Proper medical terminology","Legible and well-structured","No contradictions between sections"
+  ]}
+];
+
+const ORAL_RUBRIC = [
+  {id:"oral_opening",label:"Opening & Chief Complaint",max:5,category:"Delivery",criteria:[
+    "Identifies patient (age, sex, relevant context)","States CC clearly and concisely","Sets the stage for the presentation","Appropriate length (not too brief or verbose)"
+  ]},
+  {id:"oral_hpi",label:"HPI Delivery",max:15,category:"Content",criteria:[
+    "Chronological/logical narrative flow","OLDCARTS elements covered","Pertinent positives woven in naturally","Pertinent negatives stated","Associated symptoms mentioned","Not reading a list — tells a clinical story","Appropriate detail level","Timeline clear"
+  ]},
+  {id:"oral_pmhma",label:"PMH / Meds / Allergies",max:10,category:"Content",criteria:[
+    "Relevant PMH presented (not exhaustive if not relevant)","Key medications with doses","Allergies with reaction type","Surgical history if relevant","Presented efficiently without unnecessary detail"
+  ]},
+  {id:"oral_ros",label:"ROS Presentation",max:5,category:"Organization",criteria:[
+    "Pertinent positives highlighted","Pertinent negatives by system","Does not repeat HPI content","Appropriate brevity"
+  ]},
+  {id:"oral_pe",label:"Physical Exam Reporting",max:10,category:"Content",criteria:[
+    "Key vital signs stated","Organized by system","Pertinent positive findings emphasized","Pertinent negative findings stated","Specific language (avoids 'normal', 'WNL')","Bilateral noted where appropriate"
+  ]},
+  {id:"oral_summary",label:"Summary Statement",max:15,category:"Clinical Reasoning",criteria:[
+    "Concise (1-3 sentences)","Includes key identifying info","Captures the clinical problem","Frames the diagnostic question","Includes 2-3 key supporting findings","Semantic qualifiers used appropriately","Does not simply restate the HPI"
+  ]},
+  {id:"oral_assess",label:"Assessment & Differential",max:15,category:"Clinical Reasoning",criteria:[
+    "Most likely diagnosis stated with confidence","DDx presented in order of likelihood","Each DDx supported with specific findings","Findings for AND against each DDx cited","Pathophysiology referenced where helpful","Dangerous diagnoses considered","Acknowledges uncertainty appropriately"
+  ]},
+  {id:"oral_reasoning",label:"Clinical Reasoning Quality",max:15,category:"Clinical Reasoning",criteria:[
+    "Links symptoms to pathophysiology","Uses illness scripts / pattern recognition","Hypothesis-driven approach evident","Considers pre-test probability","Distinguishes features between DDx diagnoses","Avoids premature closure","Integrates history, exam, and data"
+  ]},
+  {id:"oral_plan",label:"Plan Presentation",max:5,category:"Content",criteria:[
+    "Organized by problem or priority","Diagnostic workup justified","Therapeutics appropriate","Disposition/follow-up stated"
+  ]},
+  {id:"oral_comm",label:"Communication & Professionalism",max:5,category:"Delivery",criteria:[
+    "Clear and audible speech","Appropriate pace (not rushing)","Medical terminology used correctly","Confident delivery","Responds well to questions if prompted"
+  ]}
+];
+
+// ─── TEXT ANALYSIS HELPERS ───
+function textContains(text, terms) {
+  if (!text) return false;
+  const t = text.toLowerCase();
+  return terms.some(term => t.includes(term.toLowerCase()));
+}
+
+function textContainsAll(text, terms) {
+  if (!text) return false;
+  const t = text.toLowerCase();
+  return terms.every(term => t.includes(term.toLowerCase()));
+}
+
+function countMatches(text, terms) {
+  if (!text) return 0;
+  const t = text.toLowerCase();
+  return terms.filter(term => t.includes(term.toLowerCase())).length;
+}
+
+function findMissing(text, terms) {
+  if (!text) return terms;
+  const t = text.toLowerCase();
+  return terms.filter(term => !t.includes(term.toLowerCase()));
+}
+
+// ─── CASE-SPECIFIC EXPECTED CONTENT ───
+const EXPECTED = {
+  cc_terms: ["follow-up","follow up","hypertension","diabetes","HTN","DM","anxiety","routine"],
+  hpi_terms: ["headache","dizziness","blood sugar","glucose","fasting","compliance","adherence","sertraline","stress","sleep","140","180","standing","orthostatic"],
+  hpi_pertinent_pos: ["headaches","dizziness when standing","fasting glucose 140-180","stress at work","worry about finances"],
+  hpi_pertinent_neg: ["denies chest pain","denies palpitations","denies SOB","denies vision changes","denies polyuria","no chest pain","no palpitations"],
+  problems_expected: ["hypertension","HTN","diabetes","DM2","type 2","hyperlipidemia","obesity","migraine","anxiety","GAD","vitamin D","allergic rhinitis"],
+  meds_expected: [
+    {name:"lisinopril",dose:"20",freq:"daily"},
+    {name:"metformin",dose:"1000",freq:"twice daily|BID|bid"},
+    {name:"atorvastatin",dose:"40",freq:"daily|bedtime|qhs"},
+    {name:"sertraline",dose:"50",freq:"daily"},
+    {name:"cetirizine",dose:"10",freq:"daily|PRN|prn"},
+    {name:"sumatriptan",dose:"50",freq:"PRN|prn|onset"},
+    {name:"vitamin D",altNames:["cholecalciferol","D3"],dose:"2000",freq:"daily"},
+    {name:"ibuprofen",dose:"400",freq:"PRN|prn|q6h"},
+  ],
+  allergies_expected: ["penicillin","sulfa","shellfish","dust mite","latex"],
+  allergy_reactions: {penicillin:"rash|urticaria|hives",sulfa:"nausea|rash",shellfish:"swelling|throat|anaphylaxis",latex:"dermatitis|contact"},
+  fh_terms: ["mother","father","diabetes","DM","CAD","MI","heart","hypertension","HTN","CVA","stroke","hypothyroid","depression","breast cancer"],
+  sh_terms: ["married","admin","law firm","never smoked","non-smoker","no tobacco","social","wine","1-2","denies drugs","walks","sedentary","stress","work"],
+  ros_systems: ["constitutional","HEENT","head","eye","cardiovascular","cardiac","CV","respiratory","pulmonary","GI","gastrointestinal","GU","genitourinary","musculoskeletal","MSK","neurologic","neuro","psychiatric","psych","skin","dermatologic","endocrine"],
+  pe_systems: {
+    general: ["well-appearing","NAD","no acute distress","obese"],
+    heent: ["PERRL","EOMI","TM","oropharynx","pupil"],
+    neck: ["supple","lymphadenopathy","LAD","thyromegaly","thyroid"],
+    cv: ["RRR","regular rate","rhythm","murmur","gallop","rub"],
+    lungs: ["CTA","clear","auscultation","wheezes","crackles","rhonchi"],
+    abdomen: ["soft","tender","distend","bowel sounds","hepatosplenomegaly","hepatomegaly","splenomegaly"],
+    extremities: ["edema","pulses","cyanosis","clubbing"],
+    neuro: ["alert","oriented","cranial nerve","CN","sensation","motor","strength"],
+    skin: ["acanthosis","rash","lesion"],
+    psych: ["affect","mood","pleasant","appropriate"],
+  },
+  pe_bad_terms: ["WNL","wnl","within normal limits","normal","unremarkable","benign","nonfocal","non-focal","grossly normal"],
+  assessment_problems: ["hypertension","HTN","blood pressure","diabetes","DM2","A1c","hyperlipidemia","cholesterol","LDL","obesity","BMI","anxiety","GAD","orthostatic","dizziness"],
+  ddx_terms: ["differential","ddx","DD","consider","rule out","versus","vs"],
+  plan_appropriate: ["lisinopril","increase","BP","blood pressure","recheck","metformin","A1c","GLP-1","semaglutide","statin","atorvastatin","diet","exercise","weight","sertraline","PHQ","counseling","follow up","follow-up","return","colonoscopy","referral","nutrition"],
+  plan_overtesting: ["MRI brain","CT chest","echocardiogram","cardiac catheterization","stress test"],
+};
+
+// ═══════════════════════════════════════════════════════════════
+// DOCUMENTATION ANALYZER
+// ═══════════════════════════════════════════════════════════════
+function analyzeDocumentation(fields) {
+  const results = {};
+  const allText = Object.values(fields).join(" ");
+  
+  // ─── CC Analysis ───
+  const cc = fields.cc || "";
+  let ccScore = 0, ccFeedback = [], ccStrengths = [];
+  if (cc.trim().length > 0) {
+    ccScore += 2;
+    if (cc.length < 200) { ccScore += 1; ccStrengths.push("Concise and focused"); }
+    else ccFeedback.push("CC is overly long — aim for 1-2 sentences");
+    if (textContains(cc, ["57","year","female","woman"])) { ccScore += 1; ccStrengths.push("Includes patient identifiers"); }
+    else ccFeedback.push("Include age/sex in CC for context");
+    if (textContains(cc, EXPECTED.cc_terms)) { ccScore += 1; ccStrengths.push("Reason for visit clearly stated"); }
+    else ccFeedback.push("Specify the reason for visit (follow-up HTN, DM, anxiety)");
+  } else { ccFeedback.push("Chief complaint is empty — this is essential"); }
+  results.doc_cc = { score: Math.min(ccScore, 5), max: 5, feedback: ccFeedback, strengths: ccStrengths };
+
+  // ─── HPI Analysis ───
+  const hpi = fields.hpi || "";
+  let hpiScore = 0, hpiFeedback = [], hpiStrengths = [];
+  if (hpi.trim().length > 0) {
+    // OLDCARTS check
+    const oldcarts = { onset: textContains(hpi, ["onset","started","began","since","x","for"]), location: textContains(hpi, ["right","left","bilateral","frontal","temporal","head"]), duration: textContains(hpi, ["days","weeks","months","years","x","episode"]), character: textContains(hpi, ["throbbing","dull","sharp","constant","intermittent","aching"]), aggravating: textContains(hpi, ["worse","worsened","aggravat","trigger","exacerbat"]), relieving: textContains(hpi, ["relief","improve","better","resolve","help"]), timing: textContains(hpi, ["daily","weekly","monthly","frequency","often","times per"]), severity: textContains(hpi, ["/10","severity","mild","moderate","severe","rated"]) };
+    const oldcartsCount = Object.values(oldcarts).filter(Boolean).length;
+    if (oldcartsCount >= 5) { hpiScore += 3; hpiStrengths.push("Good OLDCARTS framework coverage (" + oldcartsCount + "/8)"); }
+    else if (oldcartsCount >= 3) { hpiScore += 2; hpiFeedback.push("Partial OLDCARTS coverage (" + oldcartsCount + "/8) — consider adding: " + Object.entries(oldcarts).filter(([,v]) => !v).map(([k]) => k).join(", ")); }
+    else { hpiScore += 1; hpiFeedback.push("Minimal OLDCARTS elements — HPI needs more structured history taking"); }
+
+    // Pertinent positives
+    const ppCount = countMatches(hpi, EXPECTED.hpi_pertinent_pos);
+    if (ppCount >= 3) { hpiScore += 3; hpiStrengths.push("Good pertinent positives (" + ppCount + " key findings)"); }
+    else if (ppCount >= 1) { hpiScore += 1; hpiFeedback.push("Include more pertinent positives: " + findMissing(hpi, EXPECTED.hpi_pertinent_pos).slice(0, 3).join(", ")); }
+    else hpiFeedback.push("Missing pertinent positives — document key symptoms the patient IS experiencing");
+
+    // Pertinent negatives
+    const pnCount = countMatches(hpi, EXPECTED.hpi_pertinent_neg);
+    if (pnCount >= 3) { hpiScore += 3; hpiStrengths.push("Excellent pertinent negatives documented"); }
+    else if (pnCount >= 1) { hpiScore += 1; hpiFeedback.push("More pertinent negatives needed (chest pain, SOB, vision changes, palpitations for this case)"); }
+    else hpiFeedback.push("No pertinent negatives — always document what the patient denies");
+
+    // Narrative quality
+    if (hpi.length > 200) { hpiScore += 2; hpiStrengths.push("Detailed narrative"); }
+    else hpiFeedback.push("HPI could use more detail — expand the clinical narrative");
+
+    // Check for misplaced content
+    const ros = fields.ros || "";
+    if (ros && textContains(ros, ["headache","dizziness","blood sugar","glucose"])) {
+      hpiScore -= 1;
+      hpiFeedback.push("⚠ Some HPI content appears in the ROS — symptoms directly related to the chief complaint belong in the HPI, not the ROS");
+    }
+
+    // Narrative vs list
+    if (hpi.split("\n").length > 10 && !textContains(hpi, [". ",", ","and ","but ","however","although"])) {
+      hpiFeedback.push("HPI reads like a list — aim for a coherent narrative paragraph");
+    } else {
+      hpiStrengths.push("Written as a narrative");
+    }
+  } else { hpiFeedback.push("HPI is empty — this is the most critical section of the note"); }
+  results.doc_hpi = { score: Math.min(Math.max(hpiScore, 0), 15), max: 15, feedback: hpiFeedback, strengths: hpiStrengths };
+
+  // ─── PMH/PSH Analysis ───
+  const pmh = (fields.pmh || "") + " " + (fields.psh || "");
+  let pmhScore = 0, pmhFeedback = [], pmhStrengths = [];
+  if (pmh.trim().length > 10) {
+    const problemsFound = countMatches(pmh, EXPECTED.problems_expected);
+    const missing = findMissing(pmh, ["hypertension","diabetes","hyperlipidemia","obesity","migraine","anxiety","vitamin D"]);
+    if (problemsFound >= 6) { pmhScore += 4; pmhStrengths.push("Comprehensive problem list (" + problemsFound + " conditions documented)"); }
+    else if (problemsFound >= 3) { pmhScore += 2; pmhFeedback.push("Missing conditions: " + missing.slice(0, 4).join(", ")); }
+    else { pmhScore += 1; pmhFeedback.push("Incomplete PMH — document all active conditions from the chart"); }
+    
+    if (textContains(pmh, ["surgical","surgery","surger","procedure","appendectomy","cholecystectomy","C-section","no prior","denies surg"])) {
+      pmhScore += 1; pmhStrengths.push("Surgical history addressed");
+    } else pmhFeedback.push("Surgical history not documented — include PSH or 'denies prior surgeries'");
+  } else pmhFeedback.push("PMH section is too brief or empty");
+  results.doc_pmh = { score: Math.min(pmhScore, 5), max: 5, feedback: pmhFeedback, strengths: pmhStrengths };
+
+  // ─── Medications Analysis ───
+  const meds = fields.meds || "";
+  let medScore = 0, medFeedback = [], medStrengths = [];
+  if (meds.trim().length > 10) {
+    let medsFound = 0, dosesFound = 0, freqFound = 0, spellingIssues = [];
+    EXPECTED.meds_expected.forEach(m => {
+      const nameFound = textContains(meds, [m.name, ...(m.altNames || [])]);
+      if (nameFound) {
+        medsFound++;
+        if (textContains(meds, [m.dose])) dosesFound++;
+        else medFeedback.push("Missing dose for " + m.name);
+        const freqTerms = m.freq.split("|");
+        if (textContains(meds, freqTerms)) freqFound++;
+        else medFeedback.push("Missing frequency for " + m.name);
+      }
+    });
+    
+    if (medsFound >= 7) { medScore += 4; medStrengths.push("All/most medications documented (" + medsFound + "/8)"); }
+    else if (medsFound >= 4) { medScore += 2; medFeedback.push("Missing medications: check chart for complete list (" + medsFound + "/8 found)"); }
+    else { medScore += 1; medFeedback.push("Incomplete medication list — only " + medsFound + "/8 found"); }
+    
+    if (dosesFound >= 6) { medScore += 3; medStrengths.push("Doses documented for most medications"); }
+    else if (dosesFound >= 3) { medScore += 1; medFeedback.push("Some medications missing doses"); }
+    else medFeedback.push("Most medications missing doses — always include dose");
+    
+    if (freqFound >= 6) { medScore += 3; medStrengths.push("Frequencies documented"); }
+    else if (freqFound >= 3) { medScore += 1; medFeedback.push("Some medications missing frequency"); }
+    else medFeedback.push("Frequencies missing — include for each medication");
+    
+    // Check for common misspellings
+    const commonMisspellings = [["lisinopril","lysinopril","lisiopril","lisinipril"],["metformin","metaformin","metphormin"],["atorvastatin","atorvistatin","atorvastin"],["sertraline","sertralene","sertriline"],["sumatriptan","sumatriptin","sumitriptan"]];
+    commonMisspellings.forEach(variants => {
+      const correct = variants[0];
+      variants.slice(1).forEach(wrong => {
+        if (textContains(meds, [wrong]) && !textContains(meds, [correct])) {
+          medFeedback.push("Spelling: '" + wrong + "' should be '" + correct + "'");
+          medScore -= 1;
+        }
+      });
+    });
+  } else medFeedback.push("Medication section is empty or minimal — complete medication reconciliation is essential");
+  results.doc_meds = { score: Math.min(Math.max(medScore, 0), 10), max: 10, feedback: medFeedback, strengths: medStrengths };
+
+  // ─── Allergies Analysis ───
+  const allg = fields.allergies || "";
+  let allgScore = 0, allgFeedback = [], allgStrengths = [];
+  if (allg.trim().length > 5) {
+    const allergiesFound = countMatches(allg, EXPECTED.allergies_expected);
+    if (allergiesFound >= 4) { allgScore += 3; allgStrengths.push("All major allergies documented"); }
+    else if (allergiesFound >= 2) { allgScore += 1; allgFeedback.push("Missing allergies — patient has 5 documented"); }
+    else allgFeedback.push("Incomplete allergy list — check chart for all documented allergies");
+    
+    let reactionsDocumented = 0;
+    Object.entries(EXPECTED.allergy_reactions).forEach(([allergen, rxTerms]) => {
+      if (textContains(allg, [allergen]) && textContains(allg, rxTerms.split("|"))) reactionsDocumented++;
+    });
+    if (reactionsDocumented >= 3) { allgScore += 2; allgStrengths.push("Reaction types documented"); }
+    else if (reactionsDocumented >= 1) { allgScore += 1; allgFeedback.push("Include reaction type for each allergy"); }
+    else allgFeedback.push("Reaction types missing — always document the specific reaction");
+  } else allgFeedback.push("Allergies section empty — critical for patient safety");
+  results.doc_allergies = { score: Math.min(allgScore, 5), max: 5, feedback: allgFeedback, strengths: allgStrengths };
+
+  // ─── FH/SH Analysis ───
+  const fhsh = (fields.fhx || "") + " " + (fields.shx || "");
+  let fhshScore = 0, fhshFeedback = [], fhshStrengths = [];
+  const fhCount = countMatches(fhsh, EXPECTED.fh_terms);
+  const shCount = countMatches(fhsh, EXPECTED.sh_terms);
+  if (fhCount >= 5) { fhshScore += 2; fhshStrengths.push("Relevant family history documented"); }
+  else if (fhCount >= 2) { fhshScore += 1; fhshFeedback.push("Family history incomplete — include conditions and age of onset for first-degree relatives"); }
+  else fhshFeedback.push("Family history missing or minimal");
+  if (shCount >= 5) { fhshScore += 3; fhshStrengths.push("Comprehensive social history"); }
+  else if (shCount >= 2) { fhshScore += 1; fhshFeedback.push("Social history needs more detail (occupation, substances, exercise, diet, stress)"); }
+  else fhshFeedback.push("Social history missing or minimal");
+  results.doc_fhsh = { score: Math.min(fhshScore, 5), max: 5, feedback: fhshFeedback, strengths: fhshStrengths };
+
+  // ─── ROS Analysis ───
+  const ros = fields.ros || "";
+  let rosScore = 0, rosFeedback = [], rosStrengths = [];
+  if (ros.trim().length > 20) {
+    const systemsCovered = countMatches(ros, EXPECTED.ros_systems);
+    if (systemsCovered >= 10) { rosScore += 5; rosStrengths.push("Comprehensive multi-system review (" + systemsCovered + " systems)"); }
+    else if (systemsCovered >= 6) { rosScore += 3; rosStrengths.push(systemsCovered + " systems reviewed"); rosFeedback.push("Consider reviewing additional systems for completeness"); }
+    else { rosScore += 1; rosFeedback.push("Only " + systemsCovered + " systems reviewed — aim for 10+"); }
+    
+    if (textContains(ros, ["denies","negative","no ","absent"])) { rosScore += 2; rosStrengths.push("Pertinent negatives documented"); }
+    else rosFeedback.push("Include pertinent negatives per system");
+    
+    if (textContains(ros, ["positive","endorses","reports","complains","notes"])) { rosScore += 2; rosStrengths.push("Pertinent positives noted"); }
+    else rosFeedback.push("Document pertinent positives in the ROS");
+    
+    // Check for misplaced HPI content
+    if (textContains(ros, ["headache 3 day","persistent headache","blood sugar","fasting glucose"])) {
+      rosScore -= 2;
+      rosFeedback.push("⚠ Chief complaint symptoms in ROS — these belong in the HPI. ROS should capture symptoms NOT already discussed in HPI");
+    }
+  } else rosFeedback.push("ROS is empty or too brief — document pertinent positives and negatives by organ system");
+  results.doc_ros = { score: Math.min(Math.max(rosScore, 0), 10), max: 10, feedback: rosFeedback, strengths: rosStrengths };
+
+  // ─── Physical Exam Analysis ───
+  const pe = fields.pe || "";
+  let peScore = 0, peFeedback = [], peStrengths = [];
+  if (pe.trim().length > 30) {
+    // System coverage
+    let systemsCovered = 0;
+    Object.entries(EXPECTED.pe_systems).forEach(([system, terms]) => {
+      if (textContains(pe, terms)) systemsCovered++;
+    });
+    if (systemsCovered >= 8) { peScore += 5; peStrengths.push("Comprehensive exam (" + systemsCovered + "/10 systems)"); }
+    else if (systemsCovered >= 5) { peScore += 3; peStrengths.push(systemsCovered + "/10 systems examined"); peFeedback.push("Consider documenting additional systems"); }
+    else { peScore += 1; peFeedback.push("Only " + systemsCovered + "/10 systems — exam needs more detail"); }
+    
+    // WNL/normal check — THIS IS CRITICAL
+    const badTermsUsed = EXPECTED.pe_bad_terms.filter(t => pe.toLowerCase().includes(t.toLowerCase()));
+    if (badTermsUsed.length === 0) { peScore += 4; peStrengths.push("Excellent — no vague terms like 'normal' or 'WNL' used"); }
+    else {
+      peScore += 1;
+      peFeedback.push("⚠ Non-specific terms used: " + badTermsUsed.map(t => '"' + t + '"').join(", ") + " — replace with specific findings (e.g., 'RRR, no murmurs/gallops/rubs' instead of 'CV: normal')");
+    }
+    
+    // Bilateral check
+    if (textContains(pe, ["bilateral","bilaterally","both","right and left","b/l"])) { peScore += 2; peStrengths.push("'Bilateral' appropriately noted"); }
+    else peFeedback.push("Include 'bilateral' where appropriate (pulses, breath sounds, extremities)");
+    
+    // Specific findings
+    if (textContains(pe, ["acanthosis","acanthosis nigricans"])) { peScore += 2; peStrengths.push("Key finding: acanthosis nigricans documented"); }
+    else peFeedback.push("Did you note the acanthosis nigricans? This is a pertinent positive for this patient");
+    
+    // Detail level
+    if (pe.length > 400) { peScore += 2; peStrengths.push("Detailed exam documentation"); }
+    else if (pe.length > 200) { peScore += 1; }
+    else peFeedback.push("Physical exam could be more detailed — document specific findings for each system");
+  } else peFeedback.push("Physical exam section is too brief or empty");
+  results.doc_pe = { score: Math.min(Math.max(peScore, 0), 15), max: 15, feedback: peFeedback, strengths: peStrengths };
+
+  // ─── Assessment Analysis ───
+  const assess = fields.assess || "";
+  let assessScore = 0, assessFeedback = [], assessStrengths = [];
+  if (assess.trim().length > 20) {
+    // Problem identification
+    const problemsAddressed = countMatches(assess, EXPECTED.assessment_problems);
+    if (problemsAddressed >= 5) { assessScore += 4; assessStrengths.push("Key problems identified (" + problemsAddressed + " addressed)"); }
+    else if (problemsAddressed >= 3) { assessScore += 2; assessFeedback.push("Some problems not addressed in assessment"); }
+    else { assessScore += 1; assessFeedback.push("Assessment needs more problems identified"); }
+    
+    // Numbered/organized
+    if (textContains(assess, ["1.","1)","#1","Problem 1","1:"])) { assessScore += 2; assessStrengths.push("Problems numbered and organized"); }
+    else assessFeedback.push("Number your problems for clarity");
+    
+    // DDx
+    if (textContains(assess, EXPECTED.ddx_terms)) { assessScore += 3; assessStrengths.push("Differential diagnosis considered"); }
+    else assessFeedback.push("Include a differential diagnosis — even for known conditions, consider alternative explanations");
+    
+    // Clinical reasoning
+    if (textContains(assess, ["because","given","consistent with","supported by","evidenced by","suggests","concerning for","likely","due to"])) {
+      assessScore += 3; assessStrengths.push("Clinical reasoning articulated");
+    } else assessFeedback.push("Explicitly state your clinical reasoning — WHY is this your assessment?");
+    
+    // Summary statement
+    if (textContains(assess, ["summary","in summary","this is a","year old","presenting"])) {
+      assessScore += 3; assessStrengths.push("Summary statement included");
+    } else assessFeedback.push("Begin assessment with a concise summary statement (1-3 sentences capturing the key clinical picture)");
+  } else assessFeedback.push("Assessment section is too brief or empty — this is a critical reasoning section");
+  results.doc_assess = { score: Math.min(Math.max(assessScore, 0), 15), max: 15, feedback: assessFeedback, strengths: assessStrengths };
+
+  // ─── Plan Analysis ───
+  const plan = fields.plan || "";
+  let planScore = 0, planFeedback = [], planStrengths = [];
+  if (plan.trim().length > 20) {
+    const planItems = countMatches(plan, EXPECTED.plan_appropriate);
+    if (planItems >= 6) { planScore += 4; planStrengths.push("Comprehensive plan with multiple appropriate interventions"); }
+    else if (planItems >= 3) { planScore += 2; planFeedback.push("Plan could address more problems"); }
+    else { planScore += 1; planFeedback.push("Plan needs more specific interventions"); }
+    
+    // Organized by problem
+    if (textContains(plan, ["1.","1)","#1","HTN:","DM:","Diabetes:","Hypertension:"])) {
+      planScore += 2; planStrengths.push("Organized by problem");
+    } else planFeedback.push("Organize plan by problem for clarity");
+    
+    // Over-testing check
+    const overtests = countMatches(plan, EXPECTED.plan_overtesting);
+    if (overtests === 0) { planScore += 2; planStrengths.push("Appropriate test utilization — no unnecessary advanced imaging"); }
+    else planFeedback.push("⚠ Consider if " + findMissing("", EXPECTED.plan_overtesting.filter(t => textContains(plan, [t]))).join(", ") + " is truly indicated — practice cost-conscious care");
+    
+    // Follow-up
+    if (textContains(plan, ["follow up","follow-up","return","RTC","recheck","weeks","months"])) {
+      planScore += 1; planStrengths.push("Follow-up plan included");
+    } else planFeedback.push("Include follow-up timeline");
+    
+    // Patient education
+    if (textContains(plan, ["counsel","education","discuss","lifestyle","diet","exercise","patient education"])) {
+      planScore += 1; planStrengths.push("Patient education/counseling mentioned");
+    } else planFeedback.push("Include patient education and counseling in your plan");
+  } else planFeedback.push("Plan section is too brief or empty");
+  results.doc_plan = { score: Math.min(Math.max(planScore, 0), 10), max: 10, feedback: planFeedback, strengths: planStrengths };
+
+  // ─── Organization ───
+  let orgScore = 0, orgFeedback = [], orgStrengths = [];
+  const sectionsFilled = NOTE_SECTIONS.filter(s => fields[s.id] && fields[s.id].trim().length > 10).length;
+  if (sectionsFilled >= 10) { orgScore += 3; orgStrengths.push("All major sections completed"); }
+  else if (sectionsFilled >= 7) { orgScore += 2; orgFeedback.push("Some sections incomplete"); }
+  else { orgScore += 1; orgFeedback.push("Multiple sections incomplete — aim for completeness"); }
+  
+  if (allText.length > 1500) { orgScore += 1; orgStrengths.push("Sufficient detail throughout"); }
+  else orgFeedback.push("Overall documentation could be more detailed");
+  
+  orgScore += 1; // Base point for attempting
+  results.doc_org = { score: Math.min(orgScore, 5), max: 5, feedback: orgFeedback, strengths: orgStrengths };
+
+  // Calculate totals
+  let totalScore = 0, totalMax = 0;
+  DOC_RUBRIC.forEach(r => {
+    if (results[r.id]) { totalScore += results[r.id].score; totalMax += results[r.id].max; }
+  });
+  results._total = { score: totalScore, max: totalMax };
+  results._timestamp = new Date().toISOString();
+  results._type = "documentation";
+
+  return results;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ORAL PRESENTATION ANALYZER
+// ═══════════════════════════════════════════════════════════════
+function analyzeOralPresentation(transcript) {
+  const results = {};
+  const t = transcript || "";
+  if (t.trim().length < 50) {
+    ORAL_RUBRIC.forEach(r => { results[r.id] = { score: 0, max: r.max, feedback: ["Insufficient content to analyze"], strengths: [] }; });
+    results._total = { score: 0, max: ORAL_RUBRIC.reduce((a, b) => a + b.max, 0) };
+    results._timestamp = new Date().toISOString();
+    results._type = "oral";
+    return results;
+  }
+
+  // Opening (similar to CC analysis)
+  let s = 0, fb = [], st = [];
+  if (textContains(t.substring(0, 300), ["57","year","female","woman"])) { s += 2; st.push("Patient identified"); }
+  else fb.push("Begin with patient identifiers (age, sex)");
+  if (textContains(t.substring(0, 500), EXPECTED.cc_terms)) { s += 2; st.push("Chief complaint stated"); }
+  else fb.push("State the chief complaint early in presentation");
+  s += 1;
+  results.oral_opening = { score: Math.min(s, 5), max: 5, feedback: fb, strengths: st };
+
+  // HPI delivery
+  s = 0; fb = []; st = [];
+  const hpiTerms = countMatches(t, EXPECTED.hpi_terms);
+  if (hpiTerms >= 6) { s += 5; st.push("Rich HPI content (" + hpiTerms + " key elements)"); }
+  else if (hpiTerms >= 3) { s += 3; fb.push("Include more HPI detail"); }
+  else { s += 1; fb.push("HPI content is sparse"); }
+  
+  const ppCount = countMatches(t, EXPECTED.hpi_pertinent_pos);
+  if (ppCount >= 3) { s += 3; st.push("Pertinent positives presented"); }
+  else fb.push("More pertinent positives needed");
+  
+  const pnCount = countMatches(t, EXPECTED.hpi_pertinent_neg);
+  if (pnCount >= 2) { s += 3; st.push("Pertinent negatives stated"); }
+  else fb.push("State pertinent negatives clearly");
+  
+  if (t.length > 500) { s += 2; st.push("Adequate detail"); }
+  else fb.push("Presentation needs more detail");
+  s += 2;
+  results.oral_hpi = { score: Math.min(s, 15), max: 15, feedback: fb, strengths: st };
+
+  // PMH/Meds/Allergies
+  s = 0; fb = []; st = [];
+  const probMentioned = countMatches(t, EXPECTED.problems_expected);
+  if (probMentioned >= 4) { s += 3; st.push("Relevant PMH presented"); }
+  else fb.push("Mention key past medical conditions");
+  const medsMentioned = EXPECTED.meds_expected.filter(m => textContains(t, [m.name, ...(m.altNames || [])])).length;
+  if (medsMentioned >= 5) { s += 3; st.push("Key medications mentioned (" + medsMentioned + ")"); }
+  else if (medsMentioned >= 2) { s += 1; fb.push("Include more medications with doses"); }
+  else fb.push("Medications not well covered");
+  const allergiesMentioned = countMatches(t, EXPECTED.allergies_expected);
+  if (allergiesMentioned >= 3) { s += 2; st.push("Allergies presented"); }
+  else fb.push("Mention key allergies");
+  s += 2;
+  results.oral_pmhma = { score: Math.min(s, 10), max: 10, feedback: fb, strengths: st };
+
+  // ROS
+  s = 0; fb = []; st = [];
+  const rosSystems = countMatches(t, EXPECTED.ros_systems);
+  if (rosSystems >= 5) { s += 3; st.push("Multiple systems reviewed"); }
+  else if (rosSystems >= 2) { s += 1; fb.push("Cover more systems in ROS"); }
+  else fb.push("ROS coverage minimal");
+  s += 2;
+  results.oral_ros = { score: Math.min(s, 5), max: 5, feedback: fb, strengths: st };
+
+  // PE reporting
+  s = 0; fb = []; st = [];
+  let peSystems = 0;
+  Object.entries(EXPECTED.pe_systems).forEach(([sys, terms]) => { if (textContains(t, terms)) peSystems++; });
+  if (peSystems >= 6) { s += 4; st.push("Thorough PE reported (" + peSystems + " systems)"); }
+  else if (peSystems >= 3) { s += 2; fb.push("Report more PE systems"); }
+  else fb.push("PE reporting needs more detail");
+  const badPE = EXPECTED.pe_bad_terms.filter(bt => t.toLowerCase().includes(bt.toLowerCase()));
+  if (badPE.length === 0) { s += 3; st.push("Specific findings used (no vague terms)"); }
+  else { s += 1; fb.push("Avoid vague terms: " + badPE.join(", ")); }
+  s += 3;
+  results.oral_pe = { score: Math.min(s, 10), max: 10, feedback: fb, strengths: st };
+
+  // Summary statement
+  s = 0; fb = []; st = [];
+  if (textContains(t, ["in summary","to summarize","summary","this is a","overall"])) { s += 5; st.push("Summary statement present"); }
+  else { s += 1; fb.push("Include a concise 1-3 sentence summary statement before your differential"); }
+  if (textContains(t, ["57","year","female"]) && textContains(t, ["presenting","presents","comes in","here for"])) {
+    s += 3; st.push("Key identifiers in summary");
+  }
+  if (textContains(t, ["most likely","most consistent","concerning for","suggestive of","suspicious for"])) {
+    s += 4; st.push("Frames the diagnostic question");
+  } else fb.push("Frame the diagnostic question in your summary");
+  s += 3;
+  results.oral_summary = { score: Math.min(s, 15), max: 15, feedback: fb, strengths: st };
+
+  // Assessment & DDx
+  s = 0; fb = []; st = [];
+  if (textContains(t, EXPECTED.ddx_terms)) { s += 4; st.push("Differential diagnosis presented"); }
+  else fb.push("Present a differential diagnosis");
+  if (textContains(t, EXPECTED.assessment_problems.slice(0, 6))) { s += 3; st.push("Key problems addressed"); }
+  else fb.push("Address the main clinical problems");
+  if (textContains(t, ["because","given","consistent","supported","suggests","likely","due to"])) {
+    s += 4; st.push("Reasoning articulated for each diagnosis");
+  } else fb.push("Support each DDx with specific findings");
+  s += 4;
+  results.oral_assess = { score: Math.min(s, 15), max: 15, feedback: fb, strengths: st };
+
+  // Clinical reasoning
+  s = 0; fb = []; st = [];
+  if (textContains(t, ["pathophysiology","mechanism","illness script","pattern","probability","pre-test"])) {
+    s += 4; st.push("Sophisticated reasoning evident");
+  }
+  if (textContains(t, ["for","against","argues for","argues against","supports","weighs against","makes less likely","makes more likely"])) {
+    s += 4; st.push("Weighs evidence for and against diagnoses");
+  } else fb.push("Discuss findings FOR and AGAINST each diagnosis");
+  if (textContains(t, ["cannot miss","must not miss","dangerous","red flag","worst case"])) {
+    s += 3; st.push("Considers dangerous diagnoses");
+  } else fb.push("Consider 'cannot miss' diagnoses");
+  s += 4;
+  results.oral_reasoning = { score: Math.min(s, 15), max: 15, feedback: fb, strengths: st };
+
+  // Plan
+  s = 0; fb = []; st = [];
+  const planTerms = countMatches(t, EXPECTED.plan_appropriate);
+  if (planTerms >= 4) { s += 3; st.push("Appropriate plan discussed"); }
+  else if (planTerms >= 2) { s += 1; fb.push("Expand plan discussion"); }
+  else fb.push("Plan not well articulated");
+  s += 2;
+  results.oral_plan = { score: Math.min(s, 5), max: 5, feedback: fb, strengths: st };
+
+  // Communication
+  s = 3; fb = []; st = ["Presentation completed"];
+  if (t.length > 800) { s += 1; st.push("Sufficient length"); }
+  else fb.push("Presentation may be too brief");
+  s += 1;
+  results.oral_comm = { score: Math.min(s, 5), max: 5, feedback: fb, strengths: st };
+
+  let totalScore = 0, totalMax = 0;
+  ORAL_RUBRIC.forEach(r => {
+    if (results[r.id]) { totalScore += results[r.id].score; totalMax += results[r.id].max; }
+  });
+  results._total = { score: totalScore, max: totalMax };
+  results._timestamp = new Date().toISOString();
+  results._type = "oral";
+
+  return results;
+}
+
+// Export
+if (typeof window !== 'undefined') {
+  window.DOC_RUBRIC = DOC_RUBRIC;
+  window.ORAL_RUBRIC = ORAL_RUBRIC;
+  window.analyzeDocumentation = analyzeDocumentation;
+  window.analyzeOralPresentation = analyzeOralPresentation;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ASSESSMENT UI - Oral Presentation Trainer + Automated Feedback
+// ═══════════════════════════════════════════════════════════════
+
+// ─── State ───
+let isRecording = false;
+let recognition = null;
+let oralTranscript = "";
+let interimTranscript = "";
+let recordingStartTime = null;
+let recordingDuration = 0;
+let durationTimer = null;
+
+// ─── Speech Recognition Setup ───
+function initSpeechRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.continuous = true;
+  r.interimResults = true;
+  r.lang = 'en-US';
+  r.maxAlternatives = 1;
+  
+  r.onresult = function(e) {
+    let interim = "";
+    let final = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) final += t + " ";
+      else interim = t;
+    }
+    if (final) oralTranscript += final;
+    interimTranscript = interim;
+    updateTranscriptDisplay();
+  };
+  
+  r.onerror = function(e) {
+    if (e.error === 'no-speech') return; // Ignore no-speech
+    console.error('Speech recognition error:', e.error);
+    if (e.error === 'not-allowed') {
+      showToast("Microphone access denied — check browser permissions");
+      stopRecording();
+    }
+  };
+  
+  r.onend = function() {
+    // Auto-restart if still recording
+    if (isRecording) {
+      try { r.start(); } catch(e) {}
+    }
+  };
+  
+  return r;
+}
+
+function updateTranscriptDisplay() {
+  const el = document.getElementById("liveTranscript");
+  if (!el) return;
+  el.innerHTML = esc(oralTranscript) + (interimTranscript ? '<span style="color:var(--text-muted);font-style:italic">' + esc(interimTranscript) + '</span>' : '');
+  el.scrollTop = el.scrollHeight;
+  
+  const wc = document.getElementById("oralWordCount");
+  if (wc) {
+    const words = oralTranscript.split(/\s+/).filter(Boolean).length;
+    wc.textContent = words + " words";
+  }
+}
+
+function formatDuration(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return m + ":" + (s < 10 ? "0" : "") + s;
+}
+
+function startRecording() {
+  if (!recognition) recognition = initSpeechRecognition();
+  if (!recognition) {
+    showToast("Speech recognition not supported in this browser — try Chrome");
+    return;
+  }
+  oralTranscript = "";
+  interimTranscript = "";
+  isRecording = true;
+  recordingStartTime = Date.now();
+  recordingDuration = 0;
+  
+  durationTimer = setInterval(() => {
+    recordingDuration = Math.floor((Date.now() - recordingStartTime) / 1000);
+    const el = document.getElementById("recordingTimer");
+    if (el) el.textContent = formatDuration(recordingDuration);
+  }, 1000);
+  
+  try { recognition.start(); } catch(e) {}
+  render();
+}
+
+function stopRecording() {
+  isRecording = false;
+  if (recognition) { try { recognition.stop(); } catch(e) {} }
+  if (durationTimer) { clearInterval(durationTimer); durationTimer = null; }
+  render();
+}
+
+function saveOralPresentation() {
+  if (!oralTranscript.trim()) { showToast("No transcript to save"); return; }
+  const data = {
+    transcript: oralTranscript.trim(),
+    duration: recordingDuration,
+    timestamp: new Date().toISOString(),
+    wordCount: oralTranscript.split(/\s+/).filter(Boolean).length,
+  };
+  saveStudentData("oral-presentation", data);
+  showToast("✓ Oral presentation saved");
+  render();
+}
+
+function runOralAnalysis() {
+  const saved = db("oral-presentation-" + S.currentUser.username + "-" + S.encounterWeek);
+  if (!saved || !saved.transcript) { showToast("Record a presentation first"); return; }
+  const analysis = analyzeOralPresentation(saved.transcript);
+  saveStudentData("oral-analysis", analysis);
+  showToast("✓ Oral presentation analyzed");
+  render();
+}
+
+function runDocAnalysis() {
+  if (!S.submitted) { showToast("Submit documentation first"); return; }
+  const analysis = analyzeDocumentation(S.noteFields);
+  saveStudentData("doc-analysis", analysis);
+  showToast("✓ Documentation analyzed");
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER: Oral Presentation Tab
+// ═══════════════════════════════════════════════════════════════
+function renderOralPresentation() {
+  const saved = db("oral-presentation-" + S.currentUser.username + "-" + S.encounterWeek);
+  const analysis = db("oral-analysis-" + S.currentUser.username + "-" + S.encounterWeek);
+  const facultyValidation = db("oral-validation-" + S.currentUser.username + "-" + S.encounterWeek);
+  
+  let html = "";
+  
+  // Recording interface
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    html += sectionCard("Oral Presentation Trainer", I.activity,
+      '<div class="empty-state"><p style="color:var(--warning)">⚠ Speech recognition requires <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong>.</p><p>You can also type/paste your presentation below for analysis.</p></div>' +
+      '<textarea id="manualTranscript" class="overall-textarea" style="min-height:200px" placeholder="Type or paste your oral presentation transcript here...">' + esc(oralTranscript || (saved ? saved.transcript : "")) + '</textarea>' +
+      '<div style="margin-top:12px;display:flex;gap:12px;justify-content:flex-end"><button class="btn-submit" onclick="oralTranscript=document.getElementById(\'manualTranscript\').value;saveOralPresentation()">Save Transcript</button></div>'
+    );
+  } else if (isRecording) {
+    html += sectionCard("🔴 Recording Oral Presentation", I.activity,
+      '<div style="text-align:center;padding:20px"><div class="recording-pulse"></div><div style="font-size:24px;font-weight:700;color:var(--danger);margin:16px 0" id="recordingTimer">' + formatDuration(recordingDuration) + '</div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px">Speak clearly — present the case as you would to an attending</div><button class="btn-submit" style="background:var(--danger);padding:12px 32px;font-size:14px" onclick="stopRecording()">⏹ Stop Recording</button></div>' +
+      '<div style="margin-top:16px"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px">Live Transcription <span id="oralWordCount" style="font-weight:400"></span></div><div id="liveTranscript" class="annotated-text" style="min-height:150px;max-height:300px;font-family:\'IBM Plex Sans\',sans-serif;font-size:13px;line-height:1.8">' + esc(oralTranscript) + '</div></div>'
+    );
+  } else {
+    const hasSaved = saved && saved.transcript;
+    html += sectionCard("Oral Presentation Trainer — " + S.encounterWeek, I.activity,
+      '<div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px">Present the case of <strong>' + esc(PATIENT.name) + '</strong> as you would to an attending physician. The system will transcribe, analyze, and provide structured feedback on your presentation.</div>' +
+      (hasSaved ? '<div style="padding:10px 14px;background:var(--accent-light);border-radius:var(--radius);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:600;color:var(--accent)">✓ Presentation saved — ' + saved.wordCount + ' words, ' + formatDuration(saved.duration) + '</span><span style="font-size:11px;color:var(--text-muted)">' + new Date(saved.timestamp).toLocaleString() + '</span></div>' : '') +
+      '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn-submit" style="padding:12px 24px;font-size:14px" onclick="startRecording()">🎙 ' + (hasSaved ? 'Re-record' : 'Start Recording') + '</button>' +
+      (hasSaved ? '<button class="btn-submit" style="background:var(--accent);padding:12px 24px" onclick="runOralAnalysis()">' + I.star + ' Analyze Presentation</button>' : '') + '</div>' +
+      (hasSaved ? '<div style="margin-top:16px"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px">Saved Transcript</div><div class="annotated-text" style="font-family:\'IBM Plex Sans\',sans-serif;font-size:13px;line-height:1.8">' + esc(saved.transcript) + '</div></div>' : '') +
+      '<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-light)"><div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Or type/paste your presentation:</div><textarea id="manualTranscript" class="overall-textarea" style="min-height:120px" placeholder="Type or paste your oral presentation transcript here...">' + esc(saved ? saved.transcript : "") + '</textarea><div style="margin-top:8px;display:flex;justify-content:flex-end"><button class="btn-submit" style="padding:8px 16px;font-size:12px;background:var(--text-secondary)" onclick="oralTranscript=document.getElementById(\'manualTranscript\').value;saveOralPresentation()">Save Typed Transcript</button></div></div>'
+    );
+  }
+  
+  // Analysis results
+  if (analysis) {
+    html += renderAnalysisResults(analysis, ORAL_RUBRIC, "Oral Presentation", facultyValidation);
+  }
+  
+  // Oral rubric reference
+  html += renderRubricReference(ORAL_RUBRIC, "Oral Presentation Rubric");
+  
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER: Automated Doc Feedback Tab
+// ═══════════════════════════════════════════════════════════════
+function renderAutoFeedback() {
+  const analysis = db("doc-analysis-" + S.currentUser.username + "-" + S.encounterWeek);
+  const facultyValidation = db("doc-validation-" + S.currentUser.username + "-" + S.encounterWeek);
+  
+  let html = "";
+  
+  if (!S.submitted) {
+    html += sectionCard("Documentation Assessment — " + S.encounterWeek, I.star,
+      '<div class="empty-state">' + I.fileText + '<p>Submit your documentation first to receive automated feedback.</p></div>');
+  } else {
+    html += sectionCard("Documentation Assessment — " + S.encounterWeek, I.star,
+      '<div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px">Get detailed automated feedback on your clinical documentation before faculty review.</div>' +
+      '<button class="btn-submit" style="padding:12px 24px" onclick="runDocAnalysis()">' + I.star + ' ' + (analysis ? 'Re-analyze' : 'Analyze My Documentation') + '</button>'
+    );
+  }
+  
+  if (analysis) {
+    html += renderAnalysisResults(analysis, DOC_RUBRIC, "Documentation", facultyValidation);
+  }
+  
+  html += renderRubricReference(DOC_RUBRIC, "Documentation Rubric");
+  
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SHARED: Analysis Results Display
+// ═══════════════════════════════════════════════════════════════
+function renderAnalysisResults(analysis, rubric, title, validation) {
+  const total = analysis._total || { score: 0, max: 100 };
+  const pct = Math.round((total.score / total.max) * 100);
+  const grade = pct >= 90 ? "A" : pct >= 80 ? "B" : pct >= 70 ? "C" : pct >= 60 ? "D" : "F";
+  const gradeColor = pct >= 80 ? "var(--accent)" : pct >= 70 ? "var(--primary)" : pct >= 60 ? "var(--warning)" : "var(--danger)";
+  
+  const hasValidation = validation && validation.validated;
+  
+  let html = '<div class="score-banner" style="margin-top:20px"><div><div class="score-label">' + (hasValidation ? '✓ Faculty-Validated' : 'Automated') + ' Score</div><div class="score-number" style="color:' + gradeColor + '">' + total.score + ' / ' + total.max + ' <span style="font-size:20px">(' + grade + ')</span></div></div><div style="text-align:right"><div style="font-size:12px;color:var(--text-secondary)">' + title + ' Assessment</div><div style="font-size:11px;color:var(--text-muted)">' + new Date(analysis._timestamp).toLocaleString() + '</div>' + (hasValidation ? '<div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:4px">Validated by ' + esc(validation.validatedBy) + '</div>' : '') + '</div></div>';
+  
+  // Criterion-by-criterion
+  rubric.forEach(r => {
+    const res = analysis[r.id];
+    if (!res) return;
+    const valData = hasValidation && validation.scores && validation.scores[r.id] !== undefined ? validation.scores[r.id] : null;
+    const displayScore = valData !== null ? valData : res.score;
+    const valComment = hasValidation && validation.comments && validation.comments[r.id] ? validation.comments[r.id] : null;
+    const scorePct = Math.round((displayScore / res.max) * 100);
+    const barColor = scorePct >= 80 ? "var(--accent)" : scorePct >= 60 ? "var(--primary)" : scorePct >= 40 ? "var(--warning)" : "var(--danger)";
+    
+    html += '<div style="margin-top:12px;padding:14px;border:1px solid var(--border-light);border-radius:var(--radius)">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:13px;font-weight:600">' + esc(r.label) + ' ' + badge(r.category) + '</div><div style="font-size:14px;font-weight:700;color:' + barColor + ';font-family:\'IBM Plex Mono\',monospace">' + displayScore + '/' + res.max;
+    if (valData !== null && valData !== res.score) html += ' <span style="font-size:10px;color:var(--text-muted);text-decoration:line-through">(auto: ' + res.score + ')</span>';
+    html += '</div></div>';
+    html += '<div style="height:4px;background:var(--border-light);border-radius:2px;margin-bottom:10px"><div style="height:4px;border-radius:2px;background:' + barColor + ';width:' + scorePct + '%;transition:width .3s"></div></div>';
+    
+    if (res.strengths && res.strengths.length) {
+      html += '<div style="margin-bottom:6px">' + res.strengths.map(s => '<div style="font-size:11px;color:var(--accent);margin-bottom:2px;display:flex;align-items:flex-start;gap:6px"><span style="flex-shrink:0">✓</span> ' + esc(s) + '</div>').join("") + '</div>';
+    }
+    if (res.feedback && res.feedback.length) {
+      html += '<div>' + res.feedback.map(f => {
+        const isWarning = f.startsWith("⚠");
+        return '<div style="font-size:11px;color:' + (isWarning ? 'var(--warning)' : 'var(--text-secondary)') + ';margin-bottom:2px;display:flex;align-items:flex-start;gap:6px"><span style="flex-shrink:0">' + (isWarning ? '' : '→') + '</span> ' + esc(f) + '</div>';
+      }).join("") + '</div>';
+    }
+    if (valComment) {
+      html += '<div style="margin-top:8px;padding:8px 12px;background:var(--primary-light);border-radius:var(--radius-sm);border-left:3px solid var(--primary)"><div style="font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;margin-bottom:2px">Faculty Comment</div><div style="font-size:11px;line-height:1.5">' + esc(valComment) + '</div></div>';
+    }
+    html += '</div>';
+  });
+  
+  // Faculty overall comment
+  if (hasValidation && validation.overallComment) {
+    html += '<div style="margin-top:16px;padding:16px;background:var(--surface-alt);border-radius:var(--radius);border-left:3px solid var(--primary)"><div style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;margin-bottom:6px">Faculty Overall Comments</div><div style="font-size:13px;line-height:1.7;white-space:pre-line">' + esc(validation.overallComment) + '</div></div>';
+  }
+  
+  return html;
+}
+
+function renderRubricReference(rubric, title) {
+  const rows = rubric.map(r =>
+    '<tr><td style="font-weight:500">' + esc(r.label) + '</td><td class="td-mono">' + r.max + '</td><td>' + badge(r.category) + '</td><td class="td-muted" style="font-size:11px">' + r.criteria.slice(0, 4).join(" · ") + (r.criteria.length > 4 ? " ..." : "") + '</td></tr>'
+  );
+  const totalPts = rubric.reduce((a, b) => a + b.max, 0);
+  return sectionCard(title + " (" + totalPts + " pts)", I.clipboard,
+    '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Reference rubric — ' + totalPts + ' points total</div>' +
+    tableHTML(["Criterion", "Pts", "Category", "Key Expectations"], rows)
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FACULTY VALIDATION INTERFACE
+// ═══════════════════════════════════════════════════════════════
+function renderFacultyValidation() {
+  if (S.selectedSubmission === null) return "";
+  const sub = S.allSubmissions[S.selectedSubmission];
+  
+  // Check for automated analyses
+  const docAnalysis = db("doc-analysis-" + sub.studentName + "-" + sub.week);
+  const oralAnalysis = db("oral-analysis-" + sub.studentName + "-" + sub.week);
+  const oralSaved = db("oral-presentation-" + sub.studentName + "-" + sub.week);
+  
+  if (!docAnalysis && !oralAnalysis) return "";
+  
+  let html = '<div style="margin-top:24px;padding-top:20px;border-top:2px solid var(--primary)">';
+  html += '<div style="font-size:16px;font-weight:700;color:var(--primary);margin-bottom:16px">' + I.check + ' Faculty Validation Panel</div>';
+  html += '<div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px">Review and adjust the automated scores. Your changes override the AI grading.</div>';
+  
+  // Doc validation
+  if (docAnalysis) {
+    const existing = db("doc-validation-" + sub.studentName + "-" + sub.week) || {};
+    html += '<div style="margin-bottom:24px"><div style="font-size:14px;font-weight:600;margin-bottom:12px">' + I.fileText + ' Documentation Assessment ' + badge("Auto Score: " + docAnalysis._total.score + "/" + docAnalysis._total.max) + '</div>';
+    html += '<div style="overflow-x:auto">' + tableHTML(["Criterion", "Auto", "Your Score", "Faculty Comment"],
+      DOC_RUBRIC.map(r => {
+        const auto = docAnalysis[r.id];
+        if (!auto) return "";
+        const curScore = existing.scores && existing.scores[r.id] !== undefined ? existing.scores[r.id] : auto.score;
+        const curComment = existing.comments && existing.comments[r.id] ? existing.comments[r.id] : "";
+        return '<tr><td style="font-weight:500;font-size:12px">' + esc(r.label) + '<div style="font-size:10px;color:var(--text-muted);margin-top:2px">' + (auto.strengths.length ? '✓ ' + auto.strengths[0] : '') + (auto.feedback.length ? '<br>→ ' + auto.feedback[0] : '') + '</div></td><td class="td-mono" style="color:var(--text-muted)">' + auto.score + '/' + auto.max + '</td><td><input type="number" class="grade-input" min="0" max="' + auto.max + '" value="' + curScore + '" data-rubric="doc" data-id="' + r.id + '" onchange="updateValidationScore(\'doc\',\'' + r.id + '\',this.value)"></td><td><input type="text" class="comment-input" value="' + esc(curComment) + '" placeholder="Optional comment..." data-rubric="doc" data-id="' + r.id + '" onchange="updateValidationComment(\'doc\',\'' + r.id + '\',this.value)"></td></tr>';
+      })
+    ) + '</div>';
+    html += '<div style="margin-top:12px"><textarea class="overall-textarea" id="docValOverall" placeholder="Overall faculty comments on documentation..." style="min-height:80px">' + esc(existing.overallComment || "") + '</textarea></div>';
+    html += '<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn-submit" onclick="saveValidation(\'doc\')">✓ Validate Documentation Scores</button></div></div>';
+  }
+  
+  // Oral validation
+  if (oralAnalysis) {
+    const existing = db("oral-validation-" + sub.studentName + "-" + sub.week) || {};
+    html += '<div style="margin-bottom:24px"><div style="font-size:14px;font-weight:600;margin-bottom:12px">' + I.activity + ' Oral Presentation Assessment ' + badge("Auto Score: " + oralAnalysis._total.score + "/" + oralAnalysis._total.max) + '</div>';
+    
+    // Show transcript for faculty reference
+    if (oralSaved) {
+      html += '<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px">Student\'s Oral Presentation Transcript (' + oralSaved.wordCount + ' words, ' + formatDuration(oralSaved.duration) + ')</div><div class="annotated-text" style="max-height:250px;font-family:\'IBM Plex Sans\',sans-serif;font-size:12px">' + esc(oralSaved.transcript) + '</div></div>';
+    }
+    
+    html += '<div style="overflow-x:auto">' + tableHTML(["Criterion", "Auto", "Your Score", "Faculty Comment"],
+      ORAL_RUBRIC.map(r => {
+        const auto = oralAnalysis[r.id];
+        if (!auto) return "";
+        const curScore = existing.scores && existing.scores[r.id] !== undefined ? existing.scores[r.id] : auto.score;
+        const curComment = existing.comments && existing.comments[r.id] ? existing.comments[r.id] : "";
+        return '<tr><td style="font-weight:500;font-size:12px">' + esc(r.label) + '<div style="font-size:10px;color:var(--text-muted);margin-top:2px">' + (auto.strengths.length ? '✓ ' + auto.strengths[0] : '') + (auto.feedback.length ? '<br>→ ' + auto.feedback[0] : '') + '</div></td><td class="td-mono" style="color:var(--text-muted)">' + auto.score + '/' + auto.max + '</td><td><input type="number" class="grade-input" min="0" max="' + auto.max + '" value="' + curScore + '" data-rubric="oral" data-id="' + r.id + '" onchange="updateValidationScore(\'oral\',\'' + r.id + '\',this.value)"></td><td><input type="text" class="comment-input" value="' + esc(curComment) + '" placeholder="Optional comment..." onchange="updateValidationComment(\'oral\',\'' + r.id + '\',this.value)"></td></tr>';
+      })
+    ) + '</div>';
+    html += '<div style="margin-top:12px"><textarea class="overall-textarea" id="oralValOverall" placeholder="Overall faculty comments on oral presentation..." style="min-height:80px">' + esc(existing.overallComment || "") + '</textarea></div>';
+    html += '<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn-submit" style="background:var(--accent)" onclick="saveValidation(\'oral\')">✓ Validate Oral Presentation Scores</button></div></div>';
+  }
+  
+  html += '</div>';
+  return html;
+}
+
+// Validation state management (temporary until save)
+let validationEdits = { doc: { scores: {}, comments: {} }, oral: { scores: {}, comments: {} } };
+
+function updateValidationScore(type, id, val) {
+  validationEdits[type].scores[id] = parseInt(val) || 0;
+}
+
+function updateValidationComment(type, id, val) {
+  validationEdits[type].comments[id] = val;
+}
+
+function saveValidation(type) {
+  if (S.selectedSubmission === null) return;
+  const sub = S.allSubmissions[S.selectedSubmission];
+  const analysis = db((type === "doc" ? "doc-analysis-" : "oral-analysis-") + sub.studentName + "-" + sub.week);
+  if (!analysis) return;
+  
+  // Merge: start with auto scores, overlay faculty edits
+  const rubric = type === "doc" ? DOC_RUBRIC : ORAL_RUBRIC;
+  const existing = db((type === "doc" ? "doc-validation-" : "oral-validation-") + sub.studentName + "-" + sub.week) || {};
+  
+  const scores = {};
+  const comments = {};
+  
+  // Collect from DOM inputs
+  rubric.forEach(r => {
+    const scoreInput = document.querySelector('input[data-rubric="' + type + '"][data-id="' + r.id + '"].grade-input');
+    const commentInput = document.querySelector('input[data-rubric="' + type + '"][data-id="' + r.id + '"].comment-input');
+    if (scoreInput) scores[r.id] = parseInt(scoreInput.value) || 0;
+    if (commentInput && commentInput.value.trim()) comments[r.id] = commentInput.value.trim();
+  });
+  
+  const overallEl = document.getElementById(type + "ValOverall");
+  const overallComment = overallEl ? overallEl.value.trim() : "";
+  
+  const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+  const totalMax = rubric.reduce((a, b) => a + b.max, 0);
+  
+  const validation = {
+    validated: true,
+    validatedBy: S.currentUser.displayName,
+    scores,
+    comments,
+    overallComment,
+    totalScore,
+    totalMax,
+    timestamp: new Date().toISOString(),
+  };
+  
+  dbSet((type === "doc" ? "doc-validation-" : "oral-validation-") + sub.studentName + "-" + sub.week, validation);
+  showToast("✓ " + (type === "doc" ? "Documentation" : "Oral presentation") + " scores validated and shared with student");
+  render();
+}
+
+// Export
+if (typeof window !== 'undefined') {
+  window.renderOralPresentation = renderOralPresentation;
+  window.renderAutoFeedback = renderAutoFeedback;
+  window.renderFacultyValidation = renderFacultyValidation;
+  window.startRecording = startRecording;
+  window.stopRecording = stopRecording;
+  window.saveOralPresentation = saveOralPresentation;
+  window.runOralAnalysis = runOralAnalysis;
+  window.runDocAnalysis = runDocAnalysis;
+  window.updateValidationScore = updateValidationScore;
+  window.updateValidationComment = updateValidationComment;
+  window.saveValidation = saveValidation;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTEGRATION PATCH V2 - Wire ALL features into main app
+// ═══════════════════════════════════════════════════════════════
+
+// Patch loadUserData
+const _origLoadUserData = loadUserData;
+loadUserData = function(){
+  _origLoadUserData();
+  initInteractiveState();
+  loadInteractiveData();
+};
+
+// Patch render to include all new tabs
+const _origRender = render;
+render = function(){
+  const app=document.getElementById("app");
+  if(!S.currentUser){app.innerHTML=renderAuth();return}
+  const role=S.currentUser.role;
+  
+  const tabs=[
+    {id:"demographics",label:"Patient Info",icon:I.user},
+    {id:"problems",label:"Problems",icon:I.clipboard},
+    {id:"visits",label:"Visit History",icon:I.calendar},
+    {id:"medications",label:"Medications",icon:I.pill},
+    {id:"allergies",label:"Allergies",icon:I.alert},
+    {id:"labs",label:"Labs",icon:I.flask},
+    {id:"imaging",label:"Imaging",icon:I.image},
+    {id:"vitals",label:"Vitals",icon:I.activity},
+    {id:"immunizations",label:"Immunizations",icon:I.syringe},
+    {id:"history",label:"FH / SH",icon:I.home},
+  ];
+  
+  if(role==="student"){
+    tabs.push({id:"orders",label:"Orders & CDS",icon:I.send});
+    tabs.push({id:"documentation",label:"Documentation",icon:I.fileText});
+    tabs.push({id:"oral",label:"Oral Presentation",icon:I.activity});
+    tabs.push({id:"autofeedback",label:"Doc Assessment",icon:I.star});
+    tabs.push({id:"feedback",label:"Faculty Feedback",icon:I.check});
+  }
+  if(role==="faculty"||role==="admin"){
+    tabs.push({id:"grading",label:"Grading",icon:I.check});
+  }
+  if(role==="admin"){
+    tabs.push({id:"admin",label:"Admin Panel",icon:I.settings});
+  }
+
+  const fn = {};
+  fn.demographics = renderDemographics;
+  fn.visits = renderVisits;
+  fn.history = renderHistory;
+  fn.documentation = renderDocumentation;
+  fn.feedback = renderFeedback;
+  fn.grading = function(){ return renderGrading() + renderFacultyValidation(); };
+  fn.admin = renderAdmin;
+  fn.oral = renderOralPresentation;
+  fn.autofeedback = renderAutoFeedback;
+  
+  if(role==="student"){
+    fn.problems = renderProblemsInteractive;
+    fn.medications = renderMedicationsInteractive;
+    fn.allergies = renderAllergiesInteractive;
+    fn.vitals = renderVitalsInteractive;
+    fn.immunizations = renderImmunizationsInteractive;
+    fn.labs = renderLabsInteractive;
+    fn.imaging = renderImagingInteractive;
+    fn.orders = renderOrders;
+  } else {
+    fn.problems = renderProblems;
+    fn.medications = renderMedications;
+    fn.allergies = renderAllergies;
+    fn.vitals = renderVitals;
+    fn.immunizations = renderImmunizations;
+    fn.labs = renderLabs;
+    fn.imaging = renderImaging;
+  }
+
+  const sb=tabs.map(t=>'<button class="sidebar-btn '+(S.activeTab===t.id?"active":"")+'" onclick="switchTab(\''+t.id+'\')">'+t.icon+'<span>'+t.label+'</span></button>').join("");
+  const ct=(fn[S.activeTab]||renderDemographics)();
+  const em=role==="admin"?"🔑":role==="faculty"?"👨‍⚕️":"🎓";
+  const roleBadge=role==="admin"?"badge-danger":role==="faculty"?"badge-purple":"badge-primary";
+
+  app.innerHTML='<div class="app-container"><div class="header-bar"><div class="header-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg><span class="header-logo-text">Virtual EMR</span><span class="header-logo-sub">SP Encounter System</span></div><div class="header-user"><span class="header-user-name">'+em+' '+esc(S.currentUser.displayName)+'</span>'+badge(role,roleBadge)+'<button class="btn-signout" onclick="doSignOut()">Sign Out</button></div></div><div class="patient-banner"><div style="display:flex;align-items:center"><div class="patient-avatar">MS</div><div class="patient-info"><div class="patient-name">'+esc(PATIENT.name)+'</div><div class="patient-meta">DOB: '+PATIENT.dob+' · '+PATIENT.sex+' · MRN: '+PATIENT.mrn+'</div></div></div><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">'+badge("Allergy: Penicillin, Sulfa, Shellfish","badge-danger")+'<span style="color:var(--danger);display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600">'+I.alert+' Severe Allergy Alert</span></div></div><div class="content-layout"><div class="sidebar">'+sb+'</div><div class="main-content">'+ct+'</div></div></div>';
+};
+
+// Labs/Imaging interactive tabs
+function renderLabsInteractive(){
+  let html = renderLabs();
+  const completedStudentLabs = S.labOrders.filter(o=>o.resulted);
+  if(completedStudentLabs.length){
+    html += '<div style="margin-top:24px;padding-top:16px;border-top:2px dashed var(--border)"><div style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:12px">'+I.flask+' Your Ordered Lab Results</div>';
+    completedStudentLabs.forEach((o,idx)=>{
+      if(!o.resultData)return;
+      const isOpen=S.expanded["slab-"+idx];
+      const abn=o.resultData.results.filter(r=>r.flag).length;
+      html+=sectionCard("","",
+        '<div class="expandable-header" onclick="toggleExpand(\'slab-'+idx+'\')"><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-size:14px;font-weight:600">'+esc(o.name)+'</span><span class="td-muted">'+esc(o.resultedAt)+'</span>'+badge("Student Order","badge-primary")+badge("Final","badge-accent")+(abn?badge(abn+" abnormal","badge-danger"):"")+'</div><span class="expand-icon '+(isOpen?"open":"")+'">'+I.chevDown+'</span></div>'+
+        (isOpen?'<div class="expand-body open" style="margin-top:12px"><div class="lab-report"><div class="lab-report-header"><div class="lab-report-title">LABORATORY REPORT</div><div class="lab-report-meta"><span><strong>Patient:</strong> '+esc(PATIENT.name)+' ('+PATIENT.mrn+')</span><span><strong>Ordered By:</strong> Student</span><span><strong>Status:</strong> Final</span></div></div><div class="lab-report-body"><div class="lab-row lab-row-header"><span>Test Name</span><span>Result</span><span>Units</span><span>Reference Range</span><span>Flag</span></div><div class="lab-group-header">'+esc(o.resultData.group)+'</div>'+o.resultData.results.map(r=>'<div class="lab-row '+(r.flag==="H"?"flagged-h":r.flag==="L"?"flagged-l":"")+'"><span class="lab-test-name">'+esc(r.test)+'</span><span class="lab-value '+(r.flag==="H"?"high":r.flag==="L"?"low":"")+'">'+esc(r.value)+'</span><span class="lab-unit">'+esc(r.unit)+'</span><span class="lab-range">'+esc(r.range)+'</span><span class="lab-flag '+(r.flag==="H"?"high":"low")+'">'+(r.flag?r.flag==="H"?"HIGH ↑":"LOW ↓":"")+'</span></div>').join("")+'</div></div></div>':"")
+      );
+    });
+    html+='</div>';
+  }
+  return html;
+}
+
+function renderImagingInteractive(){
+  let html = renderImaging();
+  const completedStudentImgs = S.imgOrders.filter(o=>o.resulted);
+  if(completedStudentImgs.length){
+    html += '<div style="margin-top:24px;padding-top:16px;border-top:2px dashed var(--border)"><div style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:12px">'+I.image+' Your Ordered Imaging Results</div>';
+    completedStudentImgs.forEach((o,idx)=>{
+      if(!o.resultData)return;
+      const isOpen=S.expanded["simg-"+idx];
+      html+=sectionCard("","",
+        '<div class="expandable-header" onclick="toggleExpand(\'simg-'+idx+'\')"><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-size:14px;font-weight:600">'+esc(o.name)+'</span><span class="td-muted">'+esc(o.resultedAt)+'</span>'+badge("Student Order","badge-primary")+badge("Final","badge-accent")+'</div><span class="expand-icon '+(isOpen?"open":"")+'">'+I.chevDown+'</span></div>'+
+        (isOpen?'<div class="expand-body open" style="margin-top:12px"><div class="imaging-report"><div class="imaging-report-header"><div class="imaging-report-title">'+esc(o.name.toUpperCase())+'</div></div><div class="imaging-report-body"><div class="imaging-section"><div class="imaging-section-label">Findings</div><div class="imaging-section-text" style="white-space:pre-line">'+esc(o.resultData.findings)+'</div></div><div class="imaging-impression"><div class="imaging-impression-label">Impression</div><div class="imaging-section-text" style="white-space:pre-line;font-weight:500">'+esc(o.resultData.impression)+'</div></div></div></div></div>':"")
+      );
+    });
+    html+='</div>';
+  }
+  return html;
+}
+
+// Patch changeWeek
+const _origChangeWeek = changeWeek;
+changeWeek = function(w){S.encounterWeek=w;loadUserData();render()};
+
+// Patch submitDoc to include clinical actions
+const _origSubmitDoc = submitDoc;
+submitDoc = function(){
+  const hasContent=Object.values(S.noteFields).some(v=>v&&v.trim());
+  if(!hasContent){showToast("Please write in at least one section before submitting");return}
+  const sub={week:S.encounterWeek,fields:{...S.noteFields},text:assembleNoteText(),timestamp:new Date().toISOString(),patient:PATIENT.name,
+    clinicalActions:{meds:getActiveMeds(),allergies:getActiveAllergies(),problems:getActiveProblems(),vitals:getCurrentVitals(),immunizations:getActiveImmunizations(),labOrders:[...S.labOrders],imgOrders:[...S.imgOrders],referrals:[...S.referralOrders],medRecon:{...S.medReconStatus}}
+  };
+  S.submissions=[...S.submissions.filter(s=>s.week!==S.encounterWeek),sub];
+  S.submitted=true;
+  dbSet("subs-"+S.currentUser.username,S.submissions);
+  showToast("✓ Documentation and clinical actions submitted");
+  render();
+};
 
 </script>
 </body>
