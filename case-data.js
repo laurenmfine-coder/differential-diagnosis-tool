@@ -1376,35 +1376,3 @@ window.MODULES['A3'] = {
     {title:'EMR Lens',content:'<div class="module-section-title">GENA&#39;s Role in Known Genetic Diagnoses</div><p class="module-emr-note">For patients with established genetic diagnoses, GENA&#39;s role shifts from diagnostic to surveillance \u2014 flagging overdue items based on age, diagnosis, and problem list.</p><table class="module-table"><tr><th>Surveillance Item</th><th>Last Done</th><th>Status</th></tr><tr><td>TSH</td><td>6 months ago</td><td>\u2713 Current</td></tr><tr><td>Audiology</td><td>18 months ago</td><td>\u26A0 Overdue \u2014 flag</td></tr><tr><td>Ophthalmology</td><td>18 months ago</td><td>\u26A0 Overdue \u2014 flag</td></tr><tr><td>Atlantoaxial X-ray</td><td>Never</td><td>\uD83D\uDD34 Not done \u2014 alert</td></tr></table>'}
   ]
 };
-
-// ════════════════════════════════════════════════════════════
-// DASHBOARD INIT
-// ════════════════════════════════════════════════════════════
-function init() {
-  document.getElementById('js-loading').style.display = 'none';
-  [1,2,3,4].forEach(function(i) {
-    var panel = document.getElementById('family-' + i);
-    if (panel) panel.style.display = (i === 1) ? 'block' : 'none';
-  });
-  updateDashboard();
-}
-
-function updateDashboard(justCompletedId) {
-  var done = Object.keys(window.completed || {}).length;
-  var el = document.getElementById('dash-done');
-  if (el) el.textContent = done;
-  var bar = document.getElementById('dash-bar');
-  if (bar) bar.style.width = (done / 20 * 100) + '%';
-  var familyMap = {1:['A','B','D1','E1','Raymond'],2:['C','D','C2','D2','E2'],3:['A3','B3','C3','D3','E3'],4:['F4A','F4B','F4C','F4D','F4E']};
-  [1,2,3,4].forEach(function(f) {
-    var count = (familyMap[f] || []).filter(function(id){ return (window.completed||{})[id]; }).length;
-    var el2 = document.getElementById('fcount-' + f);
-    if (el2) el2.textContent = count + '/5';
-  });
-  if (justCompletedId) {
-    var card = document.getElementById('card-' + justCompletedId);
-    var statusEl = document.getElementById('status-' + justCompletedId);
-    if (card) card.classList.add('done');
-    if (statusEl) { statusEl.textContent = 'Completed'; statusEl.className = 'case-status done'; }
-  }
-}

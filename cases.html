@@ -648,7 +648,8 @@ a{color:var(--ocean);}
 // All engine code at global scope so onclick handlers work
 let feedbackMode = 'visit'; // 'visit' | 'end' | 'immediate'
 const caseState = {}; // per-case progress
-const completed = {};
+window.completed = {}; // expose on window so updateDashboard() can find it
+const completed = window.completed; // local alias
 
 function setFeedback(mode) {
   feedbackMode = mode;
@@ -1306,11 +1307,16 @@ function updateDashboard(justCompletedId) {
   }
 }
 function init() {
-  // case-data.js is loaded - CASES and MODULES are defined
-  // Remove loading screen now that data is ready
+  // case-data.js is loaded - CASES and MODULES are now defined
   var l = document.getElementById('js-loading');
   if (l) l.style.display = 'none';
+  [1,2,3,4].forEach(function(i) {
+    var panel = document.getElementById('family-' + i);
+    if (panel) panel.style.display = (i === 1) ? 'block' : 'none';
+  });
+  updateDashboard();
 }
+
 </script>
 
 </body>
