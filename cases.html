@@ -633,11 +633,20 @@ a{color:var(--ocean);}
 <div id="screen-F4E" class="screen"><div class="case-header" id="hdr-F4E" style="background:linear-gradient(135deg,#3d0c0c,#7b1f1f)"></div><div id="body-F4E"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
 
 <script>
+// Load case data, then initialize
 (function() {
   var s = document.createElement('script');
   s.src = 'case-data.js';
-  s.onload = function() {
-    let feedbackMode = 'visit'; // 'visit' | 'end' | 'immediate'
+  s.onload = function() { init(); };
+  s.onerror = function() {
+    document.getElementById('js-loading').innerHTML = 
+      '<div style="text-align:center;padding:40px;color:#c0392b">Failed to load cases. Please refresh.</div>';
+  };
+  document.head.appendChild(s);
+})();
+
+// All engine code at global scope so onclick handlers work
+let feedbackMode = 'visit'; // 'visit' | 'end' | 'immediate'
 const caseState = {}; // per-case progress
 const completed = {};
 
@@ -1294,13 +1303,12 @@ function updateDashboard(justCompletedId) {
 }
     var l = document.getElementById('js-loading');
     if (l) l.style.display = 'none';
-  };
-  s.onerror = function() {
-    document.getElementById('js-loading').innerHTML = 
-      '<div style="text-align:center;padding:40px;color:#c0392b">Failed to load cases. Please refresh.</div>';
-  };
-  document.head.appendChild(s);
-})();
+
+function init() {
+  // Remove loading screen - everything is ready
+  var l = document.getElementById('js-loading');
+  if (l) l.style.display = 'none';
+}
 </script>
 
 </body>
