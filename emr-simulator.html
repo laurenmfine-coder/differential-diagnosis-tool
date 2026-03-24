@@ -929,6 +929,25 @@ input, textarea, select { font-family: inherit; }
 }
 .cost-counter span { color: var(--emr-amber); font-weight: 700; }
 
+/* case picker */
+.case-picker-btn {
+  width: 100%;
+  text-align: left;
+  padding: 9px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--emr-text);
+  transition: background .15s;
+  margin-bottom: 2px;
+  display: block;
+}
+.case-picker-btn:hover { background: var(--emr-hover); }
+.case-picker-btn.active { background: rgba(26,111,168,.2); border-left: 2px solid var(--emr-blue); padding-left: 8px; }
+
 /* scrollbar */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -961,7 +980,39 @@ input, textarea, select { font-family: inherit; }
   <div class="emr-topbar-sep"></div>
   <div class="emr-mode-toggle">
     <button class="emr-mode-btn active" id="mode-sim" onclick="setMode('sim')">&#127970; Simulation</button>
-    <button class="emr-mode-btn" id="mode-guided" onclick="setMode('guided')">&#127891; Guided Case</button>
+    <button class="emr-mode-btn" id="mode-guided" id="guided-case-btn" onclick="setMode('guided')" href="cases.html">&#127891; Guided Case</button>
+  </div>
+  <div class="emr-topbar-sep"></div>
+  <!-- CASE SELECTOR -->
+  <div style="position:relative;" id="case-selector-wrap">
+    <button onclick="toggleCaseSelector()" style="display:flex;align-items:center;gap:7px;padding:5px 12px;background:var(--emr-panel);border:1px solid var(--emr-border);border-radius:6px;color:var(--emr-text-dim);cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;transition:all .15s;" id="case-selector-btn" onmouseover="this.style.borderColor='var(--emr-blue)'" onmouseout="this.style.borderColor='var(--emr-border)'">
+      <span style="font-size:13px;" id="case-selector-icon">🔬</span>
+      <span id="case-selector-label">Marcus T. — Fabry Disease</span>
+      <span style="font-size:9px;opacity:.5;">▼</span>
+    </button>
+    <div id="case-selector-dropdown" style="display:none;position:absolute;top:38px;left:0;min-width:300px;background:#0f2040;border:1px solid var(--emr-border-light);border-radius:8px;box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:500;overflow:hidden;">
+      <div style="padding:8px 12px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--emr-text-muted);border-bottom:1px solid var(--emr-border);">Select Case — GENA Demo</div>
+      <div style="padding:6px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--emr-text-muted);padding:6px 8px 4px;">Adult Cases</div>
+        <button onclick="switchCase('B')" class="case-picker-btn" id="cpick-B">
+          <div style="font-weight:700;color:var(--emr-white);">Marcus T. &nbsp;<span style="font-size:10px;font-weight:400;color:var(--emr-text-muted)">41M</span></div>
+          <div style="font-size:11px;color:var(--emr-text-muted);margin-top:1px;">Fabry Disease — GLA gene &nbsp;&#183;&nbsp; X-linked lysosomal storage</div>
+        </button>
+        <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--emr-text-muted);padding:10px 8px 4px;border-top:1px solid var(--emr-border);margin-top:4px;">Pediatric Cases</div>
+        <button onclick="switchCase('A3')" class="case-picker-btn" id="cpick-A3">
+          <div style="font-weight:700;color:var(--emr-white);">Aiden C. &nbsp;<span style="font-size:10px;font-weight:400;color:var(--emr-text-muted)">3yo M</span></div>
+          <div style="font-size:11px;color:var(--emr-text-muted);margin-top:1px;">Down Syndrome — surveillance, screening gaps, developmental</div>
+        </button>
+        <button onclick="switchCase('B3')" class="case-picker-btn" id="cpick-B3">
+          <div style="font-weight:700;color:var(--emr-white);">Lily H. &nbsp;<span style="font-size:10px;font-weight:400;color:var(--emr-text-muted)">18mo F</span></div>
+          <div style="font-size:11px;color:var(--emr-text-muted);margin-top:1px;">Rett Syndrome — MECP2 gene &nbsp;&#183;&nbsp; regression, hand stereotypies</div>
+        </button>
+        <button onclick="switchCase('D3')" class="case-picker-btn" id="cpick-D3">
+          <div style="font-weight:700;color:var(--emr-white);">Liam K. &nbsp;<span style="font-size:10px;font-weight:400;color:var(--emr-text-muted)">5yo M</span></div>
+          <div style="font-size:11px;color:var(--emr-text-muted);margin-top:1px;">X-Linked Agammaglobulinemia — recurrent pneumonias, absent tonsils</div>
+        </button>
+      </div>
+    </div>
   </div>
   <div class="emr-topbar-sep"></div>
   <div class="cost-counter">Tests ordered: <span id="cost-count">0</span></div>
@@ -1115,7 +1166,7 @@ input, textarea, select { font-family: inherit; }
     <!-- INTERVIEW TAB -->
     <div class="emr-tab-panel" id="panel-interview">
       <div class="interview-layout">
-        <div class="interview-sidebar">
+        <div class="interview-sidebar" id="interview-sidebar-personas">
           <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--emr-text-muted);margin-bottom:10px;">Select Interviewee</div>
           <button class="interview-persona-btn active" id="persona-marcus" onclick="selectPersona('marcus')">
             <div class="persona-name">Marcus T.</div>
@@ -1318,8 +1369,8 @@ input, textarea, select { font-family: inherit; }
 <div class="debrief-overlay" id="debrief-overlay">
   <div class="debrief-inner">
     <div class="debrief-hdr">
-      <div class="debrief-title">Simulation Debrief — Marcus T.</div>
-      <div class="debrief-sub">Fabry Disease (GLA gene, X-linked lysosomal storage disorder) &nbsp;&#183;&nbsp; Average diagnostic delay: 14 years</div>
+      <div class="debrief-title" id="debrief-title">Simulation Debrief</div>
+      <div class="debrief-sub" id="debrief-sub-line"></div>
     </div>
     <div class="debrief-body" id="debrief-body">
       <!-- built by JS -->
@@ -1331,7 +1382,123 @@ input, textarea, select { font-family: inherit; }
   </div>
 </div>
 
+<script src="emr-case-data.js"></script>
 <script>
+
+// ── CASE LOADER ──────────────────────────────────────────
+// Reads ?case=X from URL, loads patient data from EMR_CASES
+// Falls back to 'B' (Marcus/Fabry) if no case specified
+
+var CURRENT_CASE_ID = (new URLSearchParams(window.location.search)).get('case') || 'B';
+var CURRENT_CASE = null;
+
+function loadCase() {
+  if (typeof EMR_CASES === 'undefined') {
+    console.error('EMR_CASES not loaded');
+    return;
+  }
+  CURRENT_CASE = EMR_CASES[CURRENT_CASE_ID];
+  if (!CURRENT_CASE) {
+    console.error('Case not found:', CURRENT_CASE_ID, '— falling back to B');
+    CURRENT_CASE_ID = 'B';
+    CURRENT_CASE = EMR_CASES['B'];
+  }
+  
+  var c = CURRENT_CASE;
+  
+  // Update patient header
+  document.getElementById('pt-name').textContent = c.patient.name + '  ' + c.patient.age;
+  document.getElementById('pt-mrn').textContent = c.patient.mrn;
+  document.getElementById('pt-visit').textContent = c.patient.visit;
+  
+  // Update top bar
+  var badge = document.querySelector('.patient-badge-name');
+  if (badge) badge.innerHTML = c.patient.name + ' &nbsp;<span style="font-size:11px;color:var(--emr-text-muted)">' + c.patient.age + '</span>';
+  var mrnEl = document.querySelector('.patient-badge-mrn');
+  if (mrnEl) mrnEl.textContent = c.patient.mrn;
+  var visitEl = document.querySelector('.patient-badge-info');
+  if (visitEl) visitEl.textContent = c.patient.visit;
+  
+  // Update CC
+  var ccEl = document.querySelector('.cc-text');
+  if (ccEl) ccEl.textContent = c.cc;
+  var ccMeta = document.querySelector('.cc-meta');
+  if (ccMeta) ccMeta.textContent = c.patient.name + ', ' + c.patient.age + '  ·  Visit: Today';
+  
+  // Update vitals sidebar
+  var vitalsEl = document.querySelector('.vitals-mini');
+  if (vitalsEl && c.vitals) {
+    vitalsEl.innerHTML = c.vitals.map(function(v) {
+      return '<div class="vital-mini-item"><div class="vital-mini-val' + (v.flag ? ' flag' : '') + '">' + v.val + '</div></div>';
+    }).join('');
+  }
+  
+  // Update problem list
+  var probEl = document.querySelector('.sidebar-section:nth-child(3) .sidebar-section-title');
+  if (probEl) {
+    var probSection = probEl.parentElement;
+    probSection.innerHTML = '<div class="sidebar-section-title">Problem List</div>' +
+      (c.problems || []).map(function(p) {
+        return '<div class="chart-list-item"><div class="chart-list-item-name' + (p.flag ? '" style="color:var(--emr-amber)' : '') + '">' + p.name + '</div><div class="chart-list-item-detail">' + p.detail + '</div></div>';
+      }).join('');
+  }
+  
+  // Update medications  
+  var medEls = document.querySelectorAll('.chart-list-item-name');
+  
+  // Load personas into interview sidebar
+  loadPersonas(c);
+  
+  // Show debrief diagnosis
+  var debriefSub = document.querySelector('.debrief-sub');
+  if (debriefSub) debriefSub.textContent = c.diagnosis;
+  
+  // Update guided case link
+  var guidedBtn = document.getElementById('guided-case-btn');
+  if (guidedBtn) guidedBtn.href = 'cases.html#' + CURRENT_CASE_ID;
+  
+  console.log('Loaded case:', CURRENT_CASE_ID, c.patient.name, c.diagnosis);
+}
+
+function loadPersonas(c) {
+  var sidebar = document.getElementById('interview-sidebar-personas');
+  if (!sidebar || !c.personas) return;
+  sidebar.innerHTML = '';
+  
+  var personaKeys = Object.keys(c.personas);
+  personaKeys.forEach(function(key, idx) {
+    var p = c.personas[key];
+    var btn = document.createElement('button');
+    btn.className = 'interview-persona-btn' + (idx === 0 ? ' active' : '');
+    btn.id = 'persona-' + key;
+    btn.onclick = function() { selectPersona(key); };
+    btn.innerHTML = '<div class="persona-name">' + p.name + '</div>' +
+      '<div class="persona-role">' + p.role + '</div>' +
+      '<div class="persona-status ' + (p.location.includes('phone') ? 'status-phone' : 'status-available') + '">' +
+      (p.location.includes('phone') ? '&#9742;' : '&#9679;') + ' ' + p.location + '</div>';
+    sidebar.appendChild(btn);
+  });
+}
+
+// Override PERSONAS to use current case data
+function getPersonaData(personaId) {
+  if (!CURRENT_CASE || !CURRENT_CASE.personas) return null;
+  return CURRENT_CASE.personas[personaId] || null;
+}
+
+// Override EXAM_FINDINGS to use current case data  
+function getExamSystem(system) {
+  if (!CURRENT_CASE || !CURRENT_CASE.exam) return null;
+  return CURRENT_CASE.exam[system] || null;
+}
+
+// Override ORDER_DATA to use current case data
+function getOrderData(orderId) {
+  if (!CURRENT_CASE || !CURRENT_CASE.orders) return null;
+  return CURRENT_CASE.orders[orderId] || null;
+}
+// ── END CASE LOADER ──────────────────────────────────────
+
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
@@ -1380,7 +1547,7 @@ function setMode(mode) {
 }
 
 function openGuidedCase() {
-  window.location.href = 'clinical-reasoning-suite.html';
+  window.location.href = 'cases.html';
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1465,7 +1632,8 @@ function selectPersona(personaId) {
   document.querySelectorAll('.interview-persona-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('persona-' + personaId).classList.add('active');
   
-  const persona = PERSONAS[personaId];
+  const personaObj = getPersonaData(personaId) || (typeof PERSONAS !== 'undefined' ? PERSONAS[personaId] : null);
+  const persona = personaObj;
   document.getElementById('chat-avatar').textContent = persona.avatar;
   document.getElementById('chat-avatar').style.background = persona.color;
   document.getElementById('chat-name').textContent = persona.name;
@@ -1561,7 +1729,7 @@ async function sendMessage() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
-        system: persona.systemPrompt,
+        system: (persona && persona.systemPrompt) ? persona.systemPrompt : 'You are a helpful medical simulation assistant.',
         messages: chatHistories[personaId]
       })
     });
@@ -1736,7 +1904,7 @@ function examineSystem(system) {
   btn.classList.add('examined');
   document.getElementById('check-' + system).textContent = '✓';
   
-  const finding = EXAM_FINDINGS[system];
+  const finding = getExamSystem(system) || (typeof EXAM_FINDINGS !== 'undefined' ? EXAM_FINDINGS[system] : null);
   const content = document.getElementById('exam-content');
   
   let html = '<div class="exam-system-title">' + finding.title + '</div>';
@@ -1996,7 +2164,7 @@ function toggleCategory(cat) {
 function placeOrder(orderId) {
   if (state.orders[orderId]) return; // Already ordered
   
-  const order = ORDER_DATA[orderId];
+  const order = getOrderData(orderId) || (typeof ORDER_DATA !== 'undefined' ? ORDER_DATA[orderId] : null);
   if (!order) return;
   
   state.orders[orderId] = 'ordered';
@@ -2149,11 +2317,15 @@ async function submitAP() {
   const examSystems = Object.keys(state.examinedSystems).join(', ');
   const badgesEarned = Object.values(state.badges).map(b => b.label).join(', ');
   
+  const ptName = CURRENT_CASE ? CURRENT_CASE.patient.name + ', ' + CURRENT_CASE.patient.age : 'Unknown patient';
+  const ptCC = CURRENT_CASE ? CURRENT_CASE.cc : '';
+  const ptDx = CURRENT_CASE ? CURRENT_CASE.diagnosis : 'Unknown';
+
   const prompt = `You are a clinical teaching attending reviewing a trainee's assessment and plan for the following patient:
 
-PATIENT: Marcus T., 41M
-CHIEF COMPLAINT: Chronic fatigue x5 years
-ACTUAL DIAGNOSIS: Fabry disease (GLA gene pathogenic variant, severely low alpha-galactosidase A)
+PATIENT: ${ptName}
+CHIEF COMPLAINT: ${ptCC}
+ACTUAL DIAGNOSIS: ${ptDx}
 
 WHAT THE TRAINEE DID:
 - Exam systems examined: ${examSystems || 'none documented'}
@@ -2179,9 +2351,9 @@ CRITICAL GAPS:
 • [gap 1]  
 • [gap 2 if applicable]
 
-WHAT YOU SHOULD HAVE FOUND: [2-3 sentences about the key clues that point to Fabry disease — acroparesthesias since adolescence, angiokeratomas, cornea verticillata, unexplained CKD, LVH, family history of early death and kidney disease]
+WHAT YOU SHOULD HAVE FOUND: [2-3 sentences about the key diagnostic clues specific to this case and diagnosis]
 
-NEXT STEPS IF FABRY DISEASE SUSPECTED: [2 sentences on management pathway]
+NEXT STEPS IF ${ptDx.split(' ')[0].toUpperCase()} SUSPECTED: [2 sentences on management pathway]
 
 Be direct, specific, and educational. Reference specific findings the trainee did or did not identify. Keep the total response under 300 words.`;
 
@@ -2211,7 +2383,8 @@ Be direct, specific, and educational. Reference specific findings the trainee di
     const badgeLabel = isCorrect ? '✓ Correct Diagnosis' : isPartial ? '⟳ Partial' : '✗ Diagnosis Missed';
     
     if (isCorrect && !state.badges.diagnosis) {
-      awardBadge('diagnosis', '&#127881;', 'Correct Diagnosis', 'gold', 'You identified Fabry disease as the diagnosis');
+      const dxName = CURRENT_CASE ? CURRENT_CASE.diagnosis.split(' ')[0] : 'diagnosis';
+      awardBadge('diagnosis', '&#127881;', 'Correct Diagnosis', 'gold', 'You identified ' + dxName + ' as the diagnosis');
     }
     
     feedbackEl.innerHTML = '<div class="ap-feedback-hdr">Faculty Feedback — Assessment &amp; Plan</div><div class="ap-feedback-body"><div class="ap-score-row"><span class="ap-score-badge ' + badgeClass + '">' + badgeLabel + '</span></div><div style="font-size:12.5px;line-height:1.8;color:var(--emr-text);white-space:pre-wrap;">' + escHtml(feedback) + '</div></div>';
@@ -2234,23 +2407,25 @@ function showDebrief() {
   const orderCount = Object.keys(state.orders).length;
   const resultCount = Object.values(state.orders).filter(v => v === 'resulted').length;
   const badgeCount = Object.keys(state.badges).length;
-  const hasDx = state.results['agala'] || state.results['gla'] || (document.getElementById('note-assessment')?.value || '').toLowerCase().includes('fabry');
-  
-  // Expert pathway steps
-  const expertSteps = [
-    { label: 'Elicit burning pain in hands/feet since adolescence', done: !!state.badges.acroparesthesias },
-    { label: 'Ask about sweating (hypohidrosis)', done: !!state.badges.sweat },
-    { label: 'Examine the skin — find angiokeratomas', done: !!state.badges.skin },
-    { label: 'Perform neurologic exam — find temperature deficit', done: !!state.badges.neuro },
-    { label: 'Obtain family history from collateral sources', done: !!state.badges.family || !!state.badges.maternal },
-    { label: 'Order urinalysis — identify unexplained proteinuria', done: !!state.results['ua'] },
-    { label: 'Order BMP — identify unexplained CKD (Cr 1.6, eGFR 58)', done: !!state.results['bmp'] },
-    { label: 'Order alpha-galactosidase A enzyme assay', done: !!state.results['agala'] },
-    { label: 'Confirm with GLA gene sequencing', done: !!state.results['gla'] },
-    { label: 'Refer to genetics + nephrology + cardiology', done: !!(state.results['genetics'] || state.results['nephro'] || state.results['cardio']) }
-  ];
-  
+  const hasDx = CURRENT_CASE && (
+    Object.keys(state.results).some(k => state.results[k]) ||
+    (document.getElementById('note-assessment')?.value || '').toLowerCase().includes(
+      (CURRENT_CASE.diagnosis || '').split(' ')[0].toLowerCase()
+    )
+  );
+
+  // Dynamic expert pathway based on current case
+  const expertSteps = getExpertSteps();
   const stepsDone = expertSteps.filter(s => s.done).length;
+
+  // Dynamic debrief narrative
+  const debriefNarrative = getDebriefNarrative();
+
+  // Update debrief header
+  const titleEl = document.getElementById('debrief-title');
+  const subEl = document.getElementById('debrief-sub-line');
+  if (titleEl && CURRENT_CASE) titleEl.textContent = 'Simulation Debrief — ' + CURRENT_CASE.patient.name;
+  if (subEl && CURRENT_CASE) subEl.textContent = CURRENT_CASE.diagnosis;
   
   const body = document.getElementById('debrief-body');
   body.innerHTML = '<div class="debrief-section"><div class="debrief-section-title">Session Summary</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">' +
@@ -2263,10 +2438,7 @@ function showDebrief() {
     '<div class="path-compare"><div class="path-col path-yours"><div class="path-col-label">Your Path (' + stepsDone + '/' + expertSteps.length + ' steps)</div>' +
     expertSteps.map(s => '<div class="path-step"><div class="path-step-dot ' + (s.done ? 'dot-done' : 'dot-missed') + '">' + (s.done ? '✓' : '✗') + '</div><div>' + s.label + '</div></div>').join('') +
     '</div><div class="path-col path-expert"><div class="path-col-label">Expert Pathway — Key Moves</div>' +
-    '<div style="font-size:12px;line-height:1.8;color:var(--emr-text-dim)">' +
-    '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The diagnosis is in the history:</strong> Every clue in this case was present at visit 1 — burning pain since adolescence, hypohidrosis, angiokeratomas, corneal opacity, family history. The average delay to Fabry diagnosis is 14 years. Those years were present in this room.</p>' +
-    '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The constellation:</strong> No single finding is diagnostic alone. The pattern across 5 organ systems — peripheral nervous system, skin, eye, kidney, heart — is what identifies Fabry disease.</p>' +
-    '<p><strong style="color:var(--emr-text)">Family cascade is mandatory:</strong> Marcus\'s mother has CKD and her brother died at 46 with burning and kidney disease. His brother likely has Fabry disease. This diagnosis saved more than Marcus.</p>' +
+    '<div style="font-size:12px;line-height:1.8;color:var(--emr-text-dim)">' + debriefNarrative +
     '</div></div></div></div>' +
     '<div class="debrief-section"><div class="debrief-section-title">Badges Earned (' + badgeCount + ')</div><div style="display:flex;flex-wrap:wrap;gap:6px;">' +
     (Object.values(state.badges).map(b => '<div class="diag-badge ' + b.color + '" style="position:static">' + b.icon + ' ' + b.label + '</div>').join('') || '<span style="font-size:12px;color:var(--emr-text-muted)">No badges earned yet</span>') +
@@ -2282,7 +2454,192 @@ function stat(icon, val, label) {
 function closeDebrief() {
   document.getElementById('debrief-overlay').classList.remove('show');
 }
+
+// ═══════════════════════════════════════════════════════════
+// DYNAMIC DEBRIEF HELPERS
+// ═══════════════════════════════════════════════════════════
+function getExpertSteps() {
+  const id = CURRENT_CASE_ID;
+  if (id === 'B3') { // Rett
+    return [
+      { label: 'Ask about prior normal development before regression', done: !!state.badges.regression },
+      { label: 'Clarify exact timing of regression onset', done: !!state.badges.regression },
+      { label: 'Examine for hand stereotypies (wringing/washing)', done: !!state.badges.hand_stereo },
+      { label: 'Ask about breathing irregularities', done: !!state.badges.breathing },
+      { label: 'Measure and plot head circumference trend', done: !!state.examinedSystems['heent'] },
+      { label: 'Perform neurologic exam — gait and tone', done: !!state.examinedSystems['neuro'] },
+      { label: 'Order MECP2 gene sequencing', done: !!state.results['mecp2'] },
+      { label: 'Order EEG — seizure risk assessment', done: !!state.results['eeg'] },
+      { label: 'Urgent neurology and genetics referral', done: !!(state.results['neuro_referral'] || state.results['genetics']) }
+    ];
+  } else if (id === 'A3') { // Down syndrome
+    return [
+      { label: 'Ask about prior cardiac repair (AV canal)', done: !!state.examinedSystems['cardiac'] },
+      { label: 'Order annual TSH for DS screening', done: !!state.results['tsh'] },
+      { label: 'Order audiology referral — conductive hearing loss', done: !!state.results['audiology'] },
+      { label: 'Ask about or order cervical spine X-ray for atlantoaxial stability', done: !!state.badges.atlantoaxial || !!state.results['neck_xray'] },
+      { label: 'Address joint laxity and flat feet on exam', done: !!state.examinedSystems['ext'] },
+      { label: 'Discuss developmental trajectory and early intervention', done: !!state.examinedSystems['neuro'] }
+    ];
+  } else if (id === 'D3') { // XLA
+    return [
+      { label: 'Ask about age of onset of infections (post-6m = antibody-dependent)', done: !!state.badges.onset },
+      { label: 'Examine tonsils — absent = absent B cells', done: !!state.examinedSystems['heent'] },
+      { label: 'Ask about family history (maternal uncle — X-linked)', done: !!state.badges.family },
+      { label: 'Order quantitative immunoglobulins (IgG/IgA/IgM)', done: !!state.results['igg'] },
+      { label: 'Order lymphocyte subset panel — B cell count', done: !!state.results['lymph'] },
+      { label: 'Refer to pediatric immunology', done: !!state.results['immunology'] }
+    ];
+  } else { // Fabry (B) default
+    return [
+      { label: 'Elicit burning pain in hands/feet since adolescence', done: !!state.badges.acroparesthesias },
+      { label: 'Ask about sweating (hypohidrosis)', done: !!state.badges.sweat },
+      { label: 'Examine the skin — find angiokeratomas', done: !!state.badges.skin },
+      { label: 'Perform neurologic exam — find temperature deficit', done: !!state.badges.neuro },
+      { label: 'Obtain family history from collateral sources', done: !!state.badges.family || !!state.badges.maternal },
+      { label: 'Order urinalysis — identify unexplained proteinuria', done: !!state.results['ua'] },
+      { label: 'Order BMP — identify unexplained CKD (Cr 1.6, eGFR 58)', done: !!state.results['bmp'] },
+      { label: 'Order alpha-galactosidase A enzyme assay', done: !!state.results['agala'] },
+      { label: 'Confirm with GLA gene sequencing', done: !!state.results['gla'] },
+      { label: 'Refer to genetics + nephrology + cardiology', done: !!(state.results['genetics'] || state.results['nephro'] || state.results['cardio']) }
+    ];
+  }
+}
+
+function getDebriefNarrative() {
+  const id = CURRENT_CASE_ID;
+  if (id === 'B3') {
+    return '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">Regression is the key:</strong> Rett syndrome is defined by a period of normal development followed by loss of purposeful hand use, language, and social engagement. Most physicians miss it because they don\'t ask precisely enough about what the child <em>used to</em> do.</p>' +
+      '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The stereotypies are pathognomonic:</strong> Hand-wringing or hand-washing movements are characteristic of Rett syndrome — not seen in autism. If you see them, MECP2 sequencing is your next step.</p>' +
+      '<p><strong style="color:var(--emr-text)">Head circumference deceleration:</strong> Acquired microcephaly — a head circumference that was normal and then crossed percentiles downward — is a hallmark. Plot every HC at every visit.</p>';
+  } else if (id === 'A3') {
+    return '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The known diagnosis hides the gaps:</strong> Pediatricians often assume a child with Down syndrome is being managed — but annual surveillance is frequently incomplete. TSH, hearing, and atlantoaxial stability are the most commonly missed.</p>' +
+      '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">Hearing loss drives speech delay:</strong> Mild conductive hearing loss is extremely common in DS and is a major modifiable contributor to developmental delay. Every speech delay in DS deserves a fresh audiology evaluation.</p>' +
+      '<p><strong style="color:var(--emr-text)">Atlantoaxial instability is a safety issue:</strong> Before any contact sport, gymnastics, or general anesthesia, cervical spine stability must be confirmed. This is often not done.</p>';
+  } else if (id === 'D3') {
+    return '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">Absent tonsils in a boy with recurrent infections:</strong> B cells are required for tonsil development. A child with no tonsils and recurrent bacterial (not viral) infections has XLA until proven otherwise.</p>' +
+      '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">Onset after 6 months matters:</strong> Maternal IgG wanes at 6 months. Infections that begin after 6 months are antibody-dependent — pointing to B cell or antibody deficiency, not T cell or complement.</p>' +
+      '<p><strong style="color:var(--emr-text)">The X-linked clue is in the family history:</strong> A maternal uncle who died of chest infection in childhood and absent tonsils is nearly diagnostic. GENA would surface XLA from this constellation in seconds.</p>';
+  } else {
+    return '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The diagnosis is in the history:</strong> Every clue in this case was present at visit 1 — burning pain since adolescence, hypohidrosis, angiokeratomas, corneal opacity, family history. The average delay to Fabry diagnosis is 14 years. Those years were present in this room.</p>' +
+      '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The constellation:</strong> No single finding is diagnostic alone. The pattern across 5 organ systems — peripheral nervous system, skin, eye, kidney, heart — is what identifies Fabry disease.</p>' +
+      '<p><strong style="color:var(--emr-text)">Family cascade is mandatory:</strong> Marcus\'s mother has CKD and her brother died at 46 with burning and kidney disease. His brother likely has Fabry disease. This diagnosis saved more than Marcus.</p>';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// CASE SELECTOR
+// ═══════════════════════════════════════════════════════════
+const CASE_LABELS = {
+  'B':  { icon: '🔬', label: 'Marcus T. — Fabry Disease' },
+  'A3': { icon: '👦', label: 'Aiden C. — Down Syndrome' },
+  'B3': { icon: '👧', label: 'Lily H. — Rett Syndrome' },
+  'D3': { icon: '🧒', label: 'Liam K. — XLA' }
+};
+
+function toggleCaseSelector() {
+  const dd = document.getElementById('case-selector-dropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!document.getElementById('case-selector-wrap').contains(e.target)) {
+    document.getElementById('case-selector-dropdown').style.display = 'none';
+  }
+});
+
+function switchCase(caseId) {
+  if (caseId === CURRENT_CASE_ID) {
+    document.getElementById('case-selector-dropdown').style.display = 'none';
+    return;
+  }
+
+  // Update label in topbar
+  const info = CASE_LABELS[caseId] || { icon: '🔬', label: caseId };
+  document.getElementById('case-selector-icon').textContent = info.icon;
+  document.getElementById('case-selector-label').textContent = info.label;
+
+  // Mark active
+  document.querySelectorAll('.case-picker-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('cpick-' + caseId);
+  if (btn) btn.classList.add('active');
+
+  document.getElementById('case-selector-dropdown').style.display = 'none';
+
+  // Reset all state
+  CURRENT_CASE_ID = caseId;
+  CURRENT_CASE = (typeof EMR_CASES !== 'undefined') ? EMR_CASES[caseId] : null;
+
+  // Reset state object
+  state.activeTab = 'summary';
+  state.activePersona = null;
+  state.conversations = {};
+  state.examinedSystems = {};
+  state.orders = {};
+  state.results = {};
+  state.badges = {};
+  state.testCount = 0;
+  state.startTime = Date.now();
+  state.apSubmitted = false;
+
+  // Reset chat histories
+  Object.keys(chatHistories).forEach(k => delete chatHistories[k]);
+  if (CURRENT_CASE && CURRENT_CASE.personas) {
+    Object.keys(CURRENT_CASE.personas).forEach(k => {
+      chatHistories[k] = [];
+      state.conversations[k] = [];
+    });
+  }
+
+  // Reset UI counters
+  document.getElementById('cost-count').textContent = '0';
+  document.getElementById('badge-tray').innerHTML = '';
+  document.getElementById('ap-feedback').innerHTML = '';
+  document.getElementById('note-assessment') && (document.getElementById('note-assessment').value = '');
+  document.getElementById('note-plan') && (document.getElementById('note-plan').value = '');
+  document.querySelectorAll('.exam-system-btn').forEach(b => b.classList.remove('examined'));
+  document.querySelectorAll('.exam-check').forEach(c => c.textContent = '');
+  document.getElementById('exam-content').innerHTML = '<div style="padding:32px;text-align:center;color:var(--emr-text-muted);font-size:13px;">Select a system on the left to begin the physical examination.</div>';
+  document.getElementById('order-results-list').innerHTML = '';
+  document.getElementById('exam-badge').textContent = '0/8';
+
+  // Reset progress checkboxes
+  ['prog-interview','prog-family','prog-exam','prog-orders','prog-ap'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = el.innerHTML.replace('✅','⬜');
+  });
+
+  // Reload case data into UI
+  loadCase();
+
+  // Switch to summary tab
+  switchTab('summary');
+
+  // Update debrief title
+  if (CURRENT_CASE) {
+    var debriefTitle = document.querySelector('.debrief-title');
+    if (debriefTitle) debriefTitle.textContent = 'Simulation Debrief — ' + CURRENT_CASE.patient.name;
+    var debriefSub = document.querySelector('.debrief-sub');
+    if (debriefSub) debriefSub.textContent = CURRENT_CASE.diagnosis;
+  }
+
+  console.log('Switched to case:', caseId, CURRENT_CASE ? CURRENT_CASE.patient.name : 'unknown');
+}
+
+// Mark current case as active on load
+window.addEventListener('DOMContentLoaded', function() {
+  var info = CASE_LABELS[CURRENT_CASE_ID] || { icon: '🔬', label: CURRENT_CASE_ID };
+  var iconEl = document.getElementById('case-selector-icon');
+  var labelEl = document.getElementById('case-selector-label');
+  if (iconEl) iconEl.textContent = info.icon;
+  if (labelEl) labelEl.textContent = info.label;
+  var btn = document.getElementById('cpick-' + CURRENT_CASE_ID);
+  if (btn) btn.classList.add('active');
+});
+
 </script>
+
 
 <!-- API Key Gate -->
 <div id="api-key-gate" style="position:fixed;inset:0;background:rgba(8,14,26,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;">
@@ -2297,6 +2654,8 @@ function closeDebrief() {
 </div>
 <script>
 function activateSimulation() {
+  // Also call loadCase if EMR_CASES is ready
+  
   const key = document.getElementById('api-key-input').value.trim();
   if (!key.startsWith('sk-ant')) {
     document.getElementById('api-key-input').style.borderColor = '#d94040';
@@ -2304,6 +2663,7 @@ function activateSimulation() {
   }
   window.GENA_API_KEY = key;
   document.getElementById('api-key-gate').style.display = 'none';
+  if (typeof EMR_CASES !== 'undefined') loadCase();
 }
 document.getElementById('api-key-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') activateSimulation();
