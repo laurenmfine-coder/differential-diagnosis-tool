@@ -633,30 +633,10 @@ a{color:var(--ocean);}
 
 <script>
 (function() {
-  var script = document.createElement('script');
-  script.src = 'case-data.js';
-  script.onload = function() {
-    // case-data.js has run, window.CASES and window.MODULES are defined
-    // Now run the engine
-fetch('case-data.js')
-  .then(function(r) { return r.text(); })
-  .then(function(code) {
-    try {
-      eval(code);
-    } catch(e) {
-      console.error('Data load error:', e);
-    }
-    // Now run engine
-    window.onerror = function(msg, src, line, col, err) {
-  document.getElementById('js-loading').innerHTML = 
-    '<div style="text-align:center"><div style="font-size:18px;color:#c0392b;margin-bottom:10px">&#9888; Script Error<\/div>' +
-    '<div style="font-size:12px;color:#566573">' + msg + ' (line ' + line + ')<\/div><\/div>';
-  return false;
-};
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-let feedbackMode = 'visit'; // 'visit' | 'end' | 'immediate'
+  var s = document.createElement('script');
+  s.src = 'case-data.js';
+  s.onload = function() {
+    let feedbackMode = 'visit'; // 'visit' | 'end' | 'immediate'
 const caseState = {}; // per-case progress
 const completed = {};
 
@@ -1311,35 +1291,14 @@ function updateDashboard(justCompletedId) {
     if (st) { st.textContent = '&#10003; Completed'; st.className = 'case-status done'; }
   }
 }
-
-
-// Failsafe: remove loading screen after 1 second regardless
-setTimeout(function() {
-  var l = document.getElementById('js-loading');
-  if (l) l.style.display = 'none';
-}, 1000);
-
-// Remove loading screen
-(function() {
-  var loader = document.getElementById('js-loading');
-  if (loader) loader.style.display = 'none';
-})();
-    // Remove loading screen
-    var l = document.getElementById('js-loading');
-    if (l) l.style.display = 'none';
-  })
-  .catch(function(e) {
-    console.error('Fetch error:', e);
-  });
-    // Remove loading screen
     var l = document.getElementById('js-loading');
     if (l) l.style.display = 'none';
   };
-  script.onerror = function() {
-    var l = document.getElementById('js-loading');
-    if (l) l.innerHTML = '<div style="color:#c0392b;text-align:center;padding:40px">Failed to load case data</div>';
+  s.onerror = function() {
+    document.getElementById('js-loading').innerHTML = 
+      '<div style="text-align:center;padding:40px;color:#c0392b">Failed to load cases. Please refresh.</div>';
   };
-  document.head.appendChild(script);
+  document.head.appendChild(s);
 })();
 </script>
 
