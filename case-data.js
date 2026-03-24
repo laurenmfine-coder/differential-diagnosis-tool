@@ -1,4 +1,4 @@
-const MODULES = {
+window.MODULES = {
 
 // ── FAMILY 1: FATIGUE ────────────────────────────────────────────────────────
 
@@ -1357,7 +1357,7 @@ F4E: {
 // ═══════════════════════════════════════════
 // CASE DATA
 // ═══════════════════════════════════════════
-const CASES = {
+window.CASES = {
 
   // ── CASE A: Sofia — Iron deficiency (NON-genetic) ──────────────────────────
   A: {
@@ -1710,7 +1710,7 @@ const CASES = {
 
 
 // ─── RAYMOND: Iron deficiency from GI blood loss (colon cancer) ───────────
-CASES['Raymond'] = {
+window.CASES['Raymond'] = {
   id:'Raymond', family:1,
   headline:'"I\'ve been tired and a bit short of breath &#8212; thought it was just getting older"',
   patient:'Raymond, 68M &nbsp;&#183;&nbsp; Retired teacher &nbsp;&#183;&nbsp; No bloodwork in 4 years',
@@ -1897,7 +1897,7 @@ CASES['Raymond'] = {
       ]
     }
   };
-  Object.keys(f1extra).forEach(function(k){ CASES[k] = f1extra[k]; });
+  Object.keys(f1extra).forEach(function(k){ window.CASES[k] = f1extra[k]; });
 
 
 
@@ -2262,7 +2262,7 @@ CASES['Raymond'] = {
       ]
     }
   };
-  Object.keys(newCases).forEach(function(k){ CASES[k] = newCases[k]; });
+  Object.keys(newCases).forEach(function(k){ window.CASES[k] = newCases[k]; });
 })();
 
 // ─── FAMILY 4: Joint Pain ─────────────────────────────────────────────────
@@ -2534,7 +2534,7 @@ CASES['Raymond'] = {
       ]
     }
   };
-  Object.keys(f4).forEach(function(k){ CASES[k] = f4[k]; });
+  Object.keys(f4).forEach(function(k){ window.CASES[k] = f4[k]; });
 })();
 
 
