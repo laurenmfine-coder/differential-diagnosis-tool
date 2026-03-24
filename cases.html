@@ -677,6 +677,10 @@ function showFamily(n) {
 let currentCase = null;
 
 function openCase(id) {
+  if (!window.CASES || !window.CASES[id]) {
+    console.log('Cases not loaded yet for:', id);
+    return;
+  }
   currentCase = id;
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById('screen-' + id).classList.add('active');
@@ -1301,11 +1305,9 @@ function updateDashboard(justCompletedId) {
     if (st) { st.textContent = '&#10003; Completed'; st.className = 'case-status done'; }
   }
 }
-    var l = document.getElementById('js-loading');
-    if (l) l.style.display = 'none';
-
 function init() {
-  // Remove loading screen - everything is ready
+  // case-data.js is loaded - CASES and MODULES are defined
+  // Remove loading screen now that data is ready
   var l = document.getElementById('js-loading');
   if (l) l.style.display = 'none';
 }
