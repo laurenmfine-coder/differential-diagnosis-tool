@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Test</title></head>
+<body>
+<div id="result" style="font-size:24px;padding:40px;font-family:sans-serif">Loading...</div>
+<script>
+(function() {
+  var s = document.createElement('script');
+  s.src = 'case-data.js';
+  s.onload = function() {
+    var msg = 'CASES: ' + typeof window.CASES + 
+              ' | MODULES: ' + typeof window.MODULES +
+              ' | Count: ' + (window.CASES ? Object.keys(window.CASES).length : 0);
+    document.getElementById('result').textContent = msg;
+    document.getElementById('result').style.color = window.CASES ? 'green' : 'red';
+  };
+  s.onerror = function(e) {
+    document.getElementById('result').textContent = 'ERROR loading case-data.js';
+    document.getElementById('result').style.color = 'red';
+  };
+  document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
