@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReasonDx — Clinical Simulation EMR</title>
+<style>
+/* ── DESIGN SYSTEM ── */
+:root {
+  --emr-dark: #0a1628;
+  --emr-navy: #0f2040;
+  --emr-sidebar: #101d35;
+  --emr-blue: #1a6fa8;
+  --emr-blue-light: #2589cc;
+  --emr-border: #1e3050;
+  --emr-border-light: #2a4060;
+  --emr-text: #e2eaf4;
+  --emr-text-dim: #7a9ab8;
+  --emr-text-muted: #4a6680;
+  --emr-white: #f0f6fc;
+  --emr-green: #2aad6a;
+  --emr-green-dim: #1a3a2a;
+  --emr-red: #d94040;
+  --emr-red-dim: #3a1010;
+  --emr-amber: #d4820a;
+  --emr-amber-dim: #3a2800;
+  --emr-gold: #c9a84c;
+  --emr-panel: #0d1e35;
+  --emr-panel-alt: #0b1a2e;
+  --emr-input: #0a1628;
+  --emr-hover: #162840;
+  --shadow: 0 4px 24px rgba(0,0,0,.4);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,.6);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--emr-dark);
+  color: var(--emr-text);
+  font-size: 13px;
+}
+button { font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+
+/* ── TOP HEADER BAR ── */
+.emr-topbar {
+  height: 48px;
+  background: var(--emr-navy);
+  border-bottom: 1px solid var(--emr-border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+.emr-logo {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--emr-white);
+  letter-spacing: .02em;
+}
+.emr-logo span { color: var(--emr-gold); }
+.emr-topbar-sep { width: 1px; height: 24px; background: var(--emr-border); }
+.emr-mode-toggle {
+  display: flex;
+  background: var(--emr-dark);
+  border: 1px solid var(--emr-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.emr-mode-btn {
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border: none;
+  background: transparent;
+  color: var(--emr-text-muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+.emr-mode-btn.active { background: var(--emr-blue); color: white; }
+.emr-mode-btn:hover:not(.active) { background: var(--emr-hover); color: var(--emr-text-dim); }
+.patient-badge {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--emr-panel);
+  border: 1px solid var(--emr-border);
+  border-radius: 6px;
+  padding: 5px 14px;
+}
+.patient-badge-name { font-size: 13px; font-weight: 600; color: var(--emr-white); }
+.patient-badge-info { font-size: 11px; color: var(--emr-text-dim); }
+.patient-badge-mrn { font-family: 'Courier New', monospace; font-size: 11px; color: var(--emr-text-muted); }
+.sim-timer {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--emr-amber);
+  padding: 4px 10px;
+  background: var(--emr-amber-dim);
+  border-radius: 4px;
+  border: 1px solid rgba(212,130,10,.3);
+}
+
+/* ── MAIN LAYOUT ── */
+.emr-layout {
+  display: flex;
+  height: calc(100vh - 48px);
+  overflow: hidden;
+}
+
+/* ── LEFT SIDEBAR ── */
+.emr-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--emr-sidebar);
+  border-right: 1px solid var(--emr-border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.sidebar-section {
+  border-bottom: 1px solid var(--emr-border);
+  padding: 12px 14px;
+}
+.sidebar-section-title {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--emr-text-muted);
+  margin-bottom: 8px;
+}
+.sidebar-nav-btn {
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--emr-text-dim);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all .15s;
+  margin-bottom: 2px;
+}
+.sidebar-nav-btn:hover { background: var(--emr-hover); color: var(--emr-white); }
+.sidebar-nav-btn.active { background: rgba(26,111,168,.25); color: var(--emr-blue-light); border-left: 2px solid var(--emr-blue); padding-left: 8px; }
+.sidebar-nav-icon { font-size: 13px; min-width: 16px; }
+.sidebar-badge { margin-left: auto; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+.badge-red { background: var(--emr-red-dim); color: var(--emr-red); }
+.badge-amber { background: var(--emr-amber-dim); color: var(--emr-amber); }
+.badge-green { background: var(--emr-green-dim); color: var(--emr-green); }
+.badge-blue { background: rgba(26,111,168,.2); color: var(--emr-blue-light); }
+
+/* vitals mini */
+.vitals-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.vital-mini-item {
+  background: var(--emr-panel);
+  border: 1px solid var(--emr-border);
+  border-radius: 4px;
+  padding: 5px 7px;
+}
+.vital-mini-val {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--emr-white);
+}
+.vital-mini-val.flag { color: var(--emr-amber); }
+.vital-mini-label { font-size: 9px; color: var(--emr-text-muted); margin-top: 1px; }
+
+/* med/problem list */
+.chart-list-item {
+  padding: 5px 0;
+  border-bottom: 1px solid var(--emr-border);
+  font-size: 11.5px;
+}
+.chart-list-item:last-child { border-bottom: none; }
+.chart-list-item-name { color: var(--emr-text); }
+.chart-list-item-detail { color: var(--emr-text-muted); font-size: 10.5px; margin-top: 1px; }
+
+/* ── MAIN CONTENT AREA ── */
+.emr-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--emr-panel);
+}
+
+/* Tab bar */
+.emr-tabs {
+  display: flex;
+  background: var(--emr-navy);
+  border-bottom: 1px solid var(--emr-border);
+  padding: 0 8px;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.emr-tab {
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--emr-text-muted);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .15s;
+}
+.emr-tab:hover { color: var(--emr-text); }
+.emr-tab.active { color: var(--emr-blue-light); border-bottom-color: var(--emr-blue); }
+.tab-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--emr-amber); display: none; }
+.emr-tab.has-activity .tab-dot { display: block; }
+
+/* Tab panels */
+.emr-tab-panel { display: none; flex: 1; overflow: hidden; }
+.emr-tab-panel.active { display: flex; flex-direction: column; }
+
+/* ── SUMMARY TAB ── */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+.summary-card {
+  background: var(--emr-panel-alt);
+  border: 1px solid var(--emr-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.summary-card-hdr {
+  padding: 9px 14px;
+  background: var(--emr-navy);
+  border-bottom: 1px solid var(--emr-border);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--emr-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.summary-card-body { padding: 12px 14px; }
+.cc-text {
+  font-size: 15px;
+  font-family: Georgia, serif;
+  color: var(--emr-white);
+  line-height: 1.5;
+  font-style: italic;
+}
+.cc-meta { font-size: 11px; color: var(--emr-text-muted); margin-top: 6px; }
+.flag-item {
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.flag-amber { background: var(--emr-amber-dim); color: #f0b040; border: 1px solid rgba(212,130,10,.3); }
+.flag-red { background: var(--emr-red-dim); color: #f07070; border: 1px solid rgba(217,64,64,.3); }
+.flag-blue { background: rgba(26,111,168,.15); color: var(--emr-blue-light); border: 1px solid rgba(26,111,168,.25); }
+
+/* ── INTERVIEW TAB ── */
+.interview-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+.interview-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--emr-border);
+  background: var(--emr-panel-alt);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+.interview-persona-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--emr-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--emr-text-dim);
+  cursor: pointer;
+  transition: all .15s;
+}
+.interview-persona-btn:hover { border-color: var(--emr-blue); color: var(--emr-text); background: var(--emr-hover); }
+.interview-persona-btn.active { border-color: var(--emr-blue); background: rgba(26,111,168,.2); color: var(--emr-white); }
+.persona-name { font-size: 12px; font-weight: 700; }
+.persona-role { font-size: 10px; color: var(--emr-text-muted); margin-top: 2px; }
+.persona-status { font-size: 10px; margin-top: 4px; }
+.status-available { color: var(--emr-green); }
+.status-phone { color: var(--emr-amber); }
+
+.interview-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.chat-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--emr-border);
+  background: var(--emr-navy);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.chat-persona-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--emr-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.chat-persona-name { font-size: 14px; font-weight: 600; color: var(--emr-white); }
+.chat-persona-detail { font-size: 11px; color: var(--emr-text-muted); margin-top: 2px; }
+.chat-online { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--emr-green); margin-left: auto; }
+.chat-online-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--emr-green); }
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-msg { max-width: 85%; }
+.chat-msg-patient { align-self: flex-start; }
+.chat-msg-clinician { align-self: flex-end; }
+.chat-bubble {
+  padding: 10px 14px;
+  border-radius: 12px;
+  line-height: 1.6;
+  font-size: 13px;
+}
+.chat-msg-patient .chat-bubble {
+  background: var(--emr-panel-alt);
+  border: 1px solid var(--emr-border);
+  color: var(--emr-text);
+  border-radius: 4px 12px 12px 12px;
+  font-family: Georgia, serif;
+}
+.chat-msg-clinician .chat-bubble {
+  background: rgba(26,111,168,.25);
+  border: 1px solid rgba(26,111,168,.4);
+  color: var(--emr-white);
+  border-radius: 12px 4px 12px 12px;
+}
+.chat-msg-label {
+  font-size: 10px;
+  color: var(--emr-text-muted);
+  margin-bottom: 4px;
+  padding: 0 4px;
+}
+.chat-msg-clinician .chat-msg-label { text-align: right; }
+.chat-thinking {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--emr-panel-alt);
+  border: 1px solid var(--emr-border);
+  border-radius: 4px 12px 12px 12px;
+  max-width: 120px;
+}
+.thinking-dots { display: flex; gap: 3px; }
+.thinking-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--emr-text-muted);
+  animation: dot-pulse 1.4s infinite;
+}
+.thinking-dot:nth-child(2) { animation-delay: .2s; }
+.thinking-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes dot-pulse { 0%,80%,100%{opacity:.3} 40%{opacity:1} }
+
+.chat-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--emr-border);
+  background: var(--emr-navy);
+  flex-shrink: 0;
+}
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.chat-input-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.suggestion-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--emr-border);
+  background: var(--emr-panel);
+  color: var(--emr-text-dim);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.suggestion-chip:hover { border-color: var(--emr-blue); color: var(--emr-blue-light); }
+.chat-textarea {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--emr-border);
+  background: var(--emr-input);
+  color: var(--emr-white);
+  font-size: 13px;
+  resize: none;
+  min-height: 40px;
+  max-height: 100px;
+  transition: border-color .15s;
+  line-height: 1.5;
+}
+.chat-textarea:focus { outline: none; border-color: var(--emr-blue); }
+.chat-send-btn {
+  padding: 9px 16px;
+  border-radius: 6px;
+  background: var(--emr-blue);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background .15s;
+  align-self: flex-end;
+}
+.chat-send-btn:hover { background: var(--emr-blue-light); }
+.chat-send-btn:disabled { opacity: .5; cursor: default; }
+
+/* ── EXAM TAB ── */
+.exam-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+.exam-systems {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--emr-border);
+  background: var(--emr-panel-alt);
+  padding: 12px;
+  overflow-y: auto;
+}
+.exam-system-btn {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--emr-text-dim);
+  cursor: pointer;
+  font-size: 11.5px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 3px;
+  transition: all .15s;
+}
+.exam-system-btn:hover { background: var(--emr-hover); color: var(--emr-text); }
+.exam-system-btn.examined { border-color: var(--emr-border); color: var(--emr-text); }
+.exam-system-btn.examined .exam-check { color: var(--emr-green); }
+.exam-check { font-size: 12px; margin-left: auto; }
+.exam-content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+.exam-system-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--emr-white);
+  margin-bottom: 6px;
+  font-family: Georgia, serif;
+}
+.exam-instruction {
+  font-size: 12px;
+  color: var(--emr-text-muted);
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  background: var(--emr-panel-alt);
+  border-radius: 5px;
+  border: 1px solid var(--emr-border);
+}
+.exam-reveal-btn {
+  padding: 9px 18px;
+  background: var(--emr-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background .15s;
+}
+.exam-reveal-btn:hover { background: var(--emr-blue-light); }
+.exam-finding {
+  background: var(--emr-panel-alt);
+  border: 1px solid var(--emr-border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.exam-finding-hdr {
+  padding: 8px 14px;
+  background: var(--emr-navy);
+  border-bottom: 1px solid var(--emr-border);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--emr-text-muted);
+}
+.exam-finding-body {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--emr-text);
+}
+.finding-flag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.flag-abnormal { background: var(--emr-amber-dim); color: var(--emr-amber); }
+.flag-normal { background: var(--emr-green-dim); color: var(--emr-green); }
+.flag-critical { background: var(--emr-red-dim); color: var(--emr-red); }
+
+/* ── ORDERS TAB ── */
+.orders-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+.orders-panel {
+  width: 260px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--emr-border);
+  background: var(--emr-panel-alt);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.orders-panel-hdr {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--emr-border);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--emr-text-muted);
+}
+.order-category {
+  border-bottom: 1px solid var(--emr-border);
+}
+.order-category-hdr {
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--emr-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .15s;
+}
+.order-category-hdr:hover { background: var(--emr-hover); }
+.order-list { overflow: hidden; }
+.order-item {
+  padding: 7px 14px 7px 28px;
+  font-size: 11.5px;
+  color: var(--emr-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .15s;
+  border-bottom: 1px solid rgba(30,48,80,.5);
+}
+.order-item:last-child { border-bottom: none; }
+.order-item:hover { background: var(--emr-hover); color: var(--emr-text); }
+.order-item.ordered { color: var(--emr-amber); }
+.order-item.resulted { color: var(--emr-green); }
+.order-icon { font-size: 11px; min-width: 14px; }
+.order-results-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.result-card {
+  background: var(--emr-panel-alt);
+  border: 1px solid var(--emr-border);
+  border-radius: 8px;
+  overflow: hidden;
+  animation: result-in .3s ease;
+}
+@keyframes result-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.result-hdr {
+  padding: 10px 14px;
+  background: var(--emr-navy);
+  border-bottom: 1px solid var(--emr-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.result-name { font-size: 12px; font-weight: 700; color: var(--emr-white); }
+.result-time { font-size: 10px; color: var(--emr-text-muted); font-family: 'Courier New', monospace; }
+.result-body { padding: 12px 14px; }
+.result-pending {
+  padding: 14px;
+  text-align: center;
+  color: var(--emr-text-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+.pending-bar {
+  width: 60%;
+  height: 3px;
+  background: var(--emr-border);
+  border-radius: 2px;
+  margin: 8px auto 0;
+  overflow: hidden;
+}
+.pending-fill {
+  height: 100%;
+  background: var(--emr-blue);
+  border-radius: 2px;
+  animation: pending-pulse 2s infinite;
+}
+@keyframes pending-pulse { 0%{width:10%} 50%{width:90%} 100%{width:10%} }
+.lab-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.lab-table th {
+  text-align: left;
+  padding: 4px 8px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--emr-text-muted);
+  border-bottom: 1px solid var(--emr-border);
+}
+.lab-table td { padding: 5px 8px; border-bottom: 1px solid rgba(30,48,80,.5); color: var(--emr-text); }
+.lab-table tr:last-child td { border-bottom: none; }
+.lab-val { font-family: 'Courier New', monospace; font-size: 12px; }
+.lab-val.high { color: var(--emr-amber); font-weight: 700; }
+.lab-val.low { color: #6ab4f0; font-weight: 700; }
+.lab-val.critical { color: var(--emr-red); font-weight: 700; }
+.lab-val.normal { color: var(--emr-green); }
+.lab-flag { font-size: 9px; font-weight: 700; margin-left: 4px; }
+.lab-flag.H { color: var(--emr-amber); }
+.lab-flag.L { color: #6ab4f0; }
+.lab-flag.C { color: var(--emr-red); }
+.imaging-report {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--emr-text);
+  font-family: 'Courier New', monospace;
+}
+.imaging-impression {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(212,130,10,.1);
+  border: 1px solid rgba(212,130,10,.25);
+  border-radius: 5px;
+  font-size: 11.5px;
+  color: #f0b040;
+}
+.orders-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--emr-text-muted);
+}
+.orders-empty-icon { font-size: 32px; margin-bottom: 10px; opacity: .4; }
+.orders-empty-text { font-size: 13px; }
+
+/* ── NOTES TAB ── */
+.notes-layout { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.note-section { background: var(--emr-panel-alt); border: 1px solid var(--emr-border); border-radius: 8px; overflow: hidden; }
+.note-section-hdr {
+  padding: 9px 14px;
+  background: var(--emr-navy);
+  border-bottom: 1px solid var(--emr-border);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--emr-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.note-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--emr-input);
+  border: none;
+  color: var(--emr-text);
+  font-size: 13px;
+  line-height: 1.7;
+  resize: none;
+  min-height: 90px;
+}
+.note-textarea:focus { outline: none; }
+.note-textarea::placeholder { color: var(--emr-text-muted); }
+.submit-ap-btn {
+  padding: 9px 20px;
+  background: var(--emr-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background .15s;
+  align-self: flex-start;
+}
+.submit-ap-btn:hover { background: var(--emr-blue-light); }
+
+/* ── FEEDBACK PANEL ── */
+.ap-feedback {
+  background: var(--emr-panel-alt);
+  border: 1px solid var(--emr-border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: none;
+}
+.ap-feedback.show { display: block; animation: result-in .3s ease; }
+.ap-feedback-hdr {
+  padding: 10px 14px;
+  background: var(--emr-navy);
+  border-bottom: 1px solid var(--emr-border);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--emr-white);
+}
+.ap-feedback-body { padding: 14px; }
+.ap-score-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.ap-score-badge {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── DIAGNOSTIC BADGES ── */
+.badge-tray {
+  position: fixed;
+  bottom: 16px;
+  left: 236px;
+  display: flex;
+  gap: 6px;
+  z-index: 100;
+  flex-wrap: wrap;
+  max-width: 500px;
+}
+.diag-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  animation: badge-pop .4s cubic-bezier(.17,.67,.3,1.5);
+  border: 1px solid;
+}
+@keyframes badge-pop { from{opacity:0;transform:scale(.6) translateY(10px)} to{opacity:1;transform:none} }
+.diag-badge.gold { background: rgba(201,168,76,.15); border-color: rgba(201,168,76,.4); color: var(--emr-gold); }
+.diag-badge.blue { background: rgba(26,111,168,.15); border-color: rgba(26,111,168,.4); color: var(--emr-blue-light); }
+.diag-badge.red { background: var(--emr-red-dim); border-color: rgba(217,64,64,.3); color: #f07070; }
+
+/* ── DEBRIEF OVERLAY ── */
+.debrief-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5,12,24,.92);
+  z-index: 500;
+  display: none;
+  overflow-y: auto;
+  padding: 24px;
+}
+.debrief-overlay.show { display: block; animation: fade-in .3s ease; }
+@keyframes fade-in { from{opacity:0} to{opacity:1} }
+.debrief-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--emr-panel);
+  border: 1px solid var(--emr-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.debrief-hdr {
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #0a1628, #0f2040);
+  border-bottom: 1px solid var(--emr-border);
+}
+.debrief-title { font-family: Georgia, serif; font-size: 24px; color: var(--emr-white); margin-bottom: 6px; }
+.debrief-sub { font-size: 13px; color: var(--emr-text-dim); }
+.debrief-body { padding: 24px 28px; }
+.debrief-section { margin-bottom: 24px; }
+.debrief-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--emr-text-muted);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--emr-border);
+}
+.path-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.path-col { background: var(--emr-panel-alt); border: 1px solid var(--emr-border); border-radius: 6px; padding: 14px; }
+.path-col-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+.path-yours .path-col-label { color: var(--emr-amber); }
+.path-expert .path-col-label { color: var(--emr-blue-light); }
+.path-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--emr-text);
+}
+.path-step-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.dot-done { background: var(--emr-green-dim); color: var(--emr-green); border: 1px solid var(--emr-green); }
+.dot-missed { background: var(--emr-red-dim); color: var(--emr-red); border: 1px solid var(--emr-red); }
+.dot-extra { background: var(--emr-amber-dim); color: var(--emr-amber); border: 1px solid var(--emr-amber); }
+
+/* ── DEBRIEF CLOSE ── */
+.debrief-close-row { padding: 16px 28px; border-top: 1px solid var(--emr-border); display: flex; gap: 10px; justify-content: flex-end; }
+.debrief-btn {
+  padding: 9px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all .15s;
+}
+.debrief-btn-primary { background: var(--emr-blue); color: white; }
+.debrief-btn-primary:hover { background: var(--emr-blue-light); }
+.debrief-btn-secondary { background: var(--emr-panel-alt); color: var(--emr-text); border: 1px solid var(--emr-border); }
+.debrief-btn-secondary:hover { background: var(--emr-hover); }
+
+/* ── TOOLTIPS / MISC ── */
+.emr-tooltip {
+  position: absolute;
+  background: var(--emr-navy);
+  border: 1px solid var(--emr-border);
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--emr-text);
+  pointer-events: none;
+  z-index: 1000;
+  white-space: nowrap;
+}
+.cost-counter {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--emr-text-muted);
+  padding: 4px 10px;
+  background: var(--emr-panel);
+  border: 1px solid var(--emr-border);
+  border-radius: 4px;
+}
+.cost-counter span { color: var(--emr-amber); font-weight: 700; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--emr-border-light); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="emr-topbar">
+  <div class="emr-logo">Reason<span>Dx</span> <span style="font-size:10px;color:var(--emr-text-muted);font-family:system-ui;font-weight:400;margin-left:4px">Clinical Simulation</span></div>
+  <div class="emr-topbar-sep"></div>
+  <div class="emr-mode-toggle">
+    <button class="emr-mode-btn active" id="mode-sim" onclick="setMode('sim')">&#127970; Simulation</button>
+    <button class="emr-mode-btn" id="mode-guided" onclick="setMode('guided')">&#127891; Guided Case</button>
+  </div>
+  <div class="emr-topbar-sep"></div>
+  <div class="cost-counter">Tests ordered: <span id="cost-count">0</span></div>
+  <div class="patient-badge">
+    <div>
+      <div class="patient-badge-name">Marcus T. &nbsp;<span style="font-size:11px;color:var(--emr-text-muted)">41M</span></div>
+      <div class="patient-badge-info">DOB: [Age 41] &nbsp;&#183;&nbsp; New patient visit</div>
+    </div>
+    <div class="patient-badge-mrn">RDX-2041-B</div>
+  </div>
+  <div class="sim-timer" id="sim-timer">00:00</div>
+  <button onclick="showDebrief()" style="padding:6px 14px;background:var(--emr-amber-dim);border:1px solid rgba(212,130,10,.4);color:var(--emr-amber);border-radius:5px;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;">End &amp; Debrief</button>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="emr-layout">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="emr-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Chart Navigation</div>
+      <button class="sidebar-nav-btn active" onclick="switchTab('summary')"><span class="sidebar-nav-icon">&#128196;</span> Summary</button>
+      <button class="sidebar-nav-btn" onclick="switchTab('interview')"><span class="sidebar-nav-icon">&#128172;</span> Interview <span class="sidebar-badge badge-amber" id="interview-badge"></span></button>
+      <button class="sidebar-nav-btn" onclick="switchTab('exam')"><span class="sidebar-nav-icon">&#129657;</span> Physical Exam <span class="sidebar-badge badge-blue" id="exam-badge"></span></button>
+      <button class="sidebar-nav-btn" onclick="switchTab('orders')"><span class="sidebar-nav-icon">&#128203;</span> Orders &amp; Results <span class="sidebar-badge badge-blue" id="orders-badge"></span></button>
+      <button class="sidebar-nav-btn" onclick="switchTab('notes')"><span class="sidebar-nav-icon">&#128221;</span> Assessment &amp; Plan</button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Vitals</div>
+      <div class="vitals-mini">
+        <div class="vital-mini-item"><div class="vital-mini-val flag">148/92</div><div class="vital-mini-label">BP (H)</div></div>
+        <div class="vital-mini-item"><div class="vital-mini-val">78</div><div class="vital-mini-label">HR</div></div>
+        <div class="vital-mini-item"><div class="vital-mini-val">98.6</div><div class="vital-mini-label">Temp</div></div>
+        <div class="vital-mini-item"><div class="vital-mini-val flag">26</div><div class="vital-mini-label">BMI</div></div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Problem List</div>
+      <div class="chart-list-item"><div class="chart-list-item-name">Fatigue, chronic</div><div class="chart-list-item-detail">Onset ~5 years ago</div></div>
+      <div class="chart-list-item"><div class="chart-list-item-name">Hypertension</div><div class="chart-list-item-detail">Newly identified</div></div>
+      <div class="chart-list-item"><div class="chart-list-item-name">Depression, NOS</div><div class="chart-list-item-detail">Prior dx — on sertraline</div></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Medications</div>
+      <div class="chart-list-item"><div class="chart-list-item-name">Sertraline 50mg</div><div class="chart-list-item-detail">Daily — 6 months</div></div>
+      <div class="chart-list-item"><div class="chart-list-item-name">Ibuprofen PRN</div><div class="chart-list-item-detail">OTC, occasional use</div></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Allergies</div>
+      <div class="chart-list-item"><div class="chart-list-item-name" style="color:var(--emr-green)">NKDA</div></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Flags</div>
+      <div class="flag-item flag-amber">&#9888; BP elevated — new finding</div>
+      <div class="flag-item flag-blue">&#128203; Last labs: 4 years ago</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="emr-main">
+    <!-- TAB BAR -->
+    <div class="emr-tabs">
+      <button class="emr-tab active" id="tab-summary" onclick="switchTab('summary')">&#128196; Summary</button>
+      <button class="emr-tab" id="tab-interview" onclick="switchTab('interview')">&#128172; Patient Interview</button>
+      <button class="emr-tab" id="tab-exam" onclick="switchTab('exam')">&#129657; Physical Exam</button>
+      <button class="emr-tab" id="tab-orders" onclick="switchTab('orders')">&#9879; Orders &amp; Results</button>
+      <button class="emr-tab" id="tab-notes" onclick="switchTab('notes')">&#128221; Assessment &amp; Plan</button>
+    </div>
+
+    <!-- SUMMARY TAB -->
+    <div class="emr-tab-panel active" id="panel-summary">
+      <div class="summary-grid">
+        <div class="summary-card" style="grid-column: span 3;">
+          <div class="summary-card-hdr">&#128196; Chief Complaint — New Patient Visit</div>
+          <div class="summary-card-body">
+            <div class="cc-text">"I'm exhausted all the time. It's been going on for years. My doctor said it was depression and I tried an antidepressant for 6 months but I feel exactly the same."</div>
+            <div class="cc-meta">Marcus T., 41M &nbsp;&#183;&nbsp; Referred by: Self &nbsp;&#183;&nbsp; Visit date: Today</div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-hdr">&#9888; Flags &amp; Alerts</div>
+          <div class="summary-card-body">
+            <div class="flag-item flag-amber">&#9888; BP 148/92 — elevated</div>
+            <div class="flag-item flag-amber">&#9888; No labs in 4 years</div>
+            <div class="flag-item flag-blue">&#128203; Prior dx: Depression — on sertraline 50mg, no improvement</div>
+            <div class="flag-item flag-blue">&#9745; Antidepressant trial: 6 months, ineffective</div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-hdr">&#128101; Patient Context</div>
+          <div class="summary-card-body">
+            <div style="font-size:12.5px;line-height:1.8;color:var(--emr-text)">
+              <div><span style="color:var(--emr-text-muted)">Occupation:</span> Finance, office work</div>
+              <div><span style="color:var(--emr-text-muted)">Status:</span> Married, 2 children</div>
+              <div><span style="color:var(--emr-text-muted)">Lifestyle:</span> Sedentary, minimal exercise</div>
+              <div><span style="color:var(--emr-text-muted)">Tobacco:</span> Never</div>
+              <div><span style="color:var(--emr-text-muted)">Alcohol:</span> Occasional, social</div>
+              <div><span style="color:var(--emr-text-muted)">Family hx:</span> <span style="color:var(--emr-amber)">Incomplete — needs history</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-hdr">&#128202; Simulation Progress</div>
+          <div class="summary-card-body">
+            <div id="progress-items" style="font-size:12px;line-height:2;color:var(--emr-text-dim)">
+              <div id="prog-interview">&#9744; Patient interview</div>
+              <div id="prog-family">&#9744; Family history obtained</div>
+              <div id="prog-exam">&#9744; Physical exam performed</div>
+              <div id="prog-labs">&#9744; Basic labs ordered</div>
+              <div id="prog-diagnosis">&#9744; Diagnosis identified</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-card" style="grid-column: span 3; background: linear-gradient(135deg, rgba(26,111,168,.08), rgba(10,22,40,.5)); border-color: rgba(26,111,168,.3);">
+          <div class="summary-card-hdr" style="color:var(--emr-blue-light)">&#128218; Simulation Instructions</div>
+          <div class="summary-card-body" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div style="text-align:center;padding:10px;">
+              <div style="font-size:22px;margin-bottom:5px">&#128172;</div>
+              <div style="font-size:11px;font-weight:700;color:var(--emr-white);margin-bottom:3px">Interview</div>
+              <div style="font-size:10.5px;color:var(--emr-text-muted)">Ask Marcus, his wife Diana, or call his mother for family history</div>
+            </div>
+            <div style="text-align:center;padding:10px;">
+              <div style="font-size:22px;margin-bottom:5px">&#129657;</div>
+              <div style="font-size:11px;font-weight:700;color:var(--emr-white);margin-bottom:3px">Examine</div>
+              <div style="font-size:10.5px;color:var(--emr-text-muted)">Select systems to examine — findings reveal on selection</div>
+            </div>
+            <div style="text-align:center;padding:10px;">
+              <div style="font-size:22px;margin-bottom:5px">&#9879;</div>
+              <div style="font-size:11px;font-weight:700;color:var(--emr-white);margin-bottom:3px">Order</div>
+              <div style="font-size:10.5px;color:var(--emr-text-muted)">Order labs and imaging — results return in real time</div>
+            </div>
+            <div style="text-align:center;padding:10px;">
+              <div style="font-size:22px;margin-bottom:5px">&#128221;</div>
+              <div style="font-size:11px;font-weight:700;color:var(--emr-white);margin-bottom:3px">Document</div>
+              <div style="font-size:10.5px;color:var(--emr-text-muted)">Write your assessment and plan — submit for feedback</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERVIEW TAB -->
+    <div class="emr-tab-panel" id="panel-interview">
+      <div class="interview-layout">
+        <div class="interview-sidebar">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--emr-text-muted);margin-bottom:10px;">Select Interviewee</div>
+          <button class="interview-persona-btn active" id="persona-marcus" onclick="selectPersona('marcus')">
+            <div class="persona-name">Marcus T.</div>
+            <div class="persona-role">Patient</div>
+            <div class="persona-status status-available">&#9679; In exam room</div>
+          </button>
+          <button class="interview-persona-btn" id="persona-diana" onclick="selectPersona('diana')">
+            <div class="persona-name">Diana T.</div>
+            <div class="persona-role">Wife / collateral</div>
+            <div class="persona-status status-available">&#9679; In waiting room</div>
+          </button>
+          <button class="interview-persona-btn" id="persona-helen" onclick="selectPersona('helen')">
+            <div class="persona-name">Helen T.</div>
+            <div class="persona-role">Mother (phone)</div>
+            <div class="persona-status status-phone">&#9742; Available to call</div>
+          </button>
+          <div style="margin-top:14px;padding:10px;background:var(--emr-panel);border:1px solid var(--emr-border);border-radius:6px;font-size:10.5px;color:var(--emr-text-muted);line-height:1.6;">
+            <strong style="color:var(--emr-text-dim)">Tip:</strong> Ask open-ended questions first. Specific questions yield specific answers — but only if you ask. Family history may require calling the mother.
+          </div>
+        </div>
+
+        <div class="interview-chat">
+          <div class="chat-header" id="chat-header">
+            <div class="chat-persona-avatar" id="chat-avatar">M</div>
+            <div>
+              <div class="chat-persona-name" id="chat-name">Marcus T.</div>
+              <div class="chat-persona-detail" id="chat-detail">41-year-old male, new patient — chief complaint: chronic fatigue</div>
+            </div>
+            <div class="chat-online"><div class="chat-online-dot"></div>In session</div>
+          </div>
+
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-msg chat-msg-patient">
+              <div class="chat-msg-label">Marcus T.</div>
+              <div class="chat-bubble">Hi doctor. I'm really glad to finally see someone new. I've been to three different doctors about this exhaustion and they all tell me it's stress or depression. I've been on an antidepressant for 6 months and I feel exactly the same.</div>
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <div class="chat-input-suggestions" id="chat-suggestions">
+              <span class="suggestion-chip" onclick="useSuggestion('Tell me more about your fatigue — when did it start and what does it feel like?')">Tell me more about your fatigue</span>
+              <span class="suggestion-chip" onclick="useSuggestion('Have you had any other symptoms besides fatigue?')">Other symptoms?</span>
+              <span class="suggestion-chip" onclick="useSuggestion('Can you tell me about your family medical history?')">Family history</span>
+              <span class="suggestion-chip" onclick="useSuggestion('Have you ever had any burning or unusual sensations in your hands or feet?')">Burning/sensations in hands/feet?</span>
+            </div>
+            <div class="chat-input-row">
+              <textarea class="chat-textarea" id="chat-input" placeholder="Ask a question or say something to the patient..." rows="2" onkeydown="handleChatKey(event)"></textarea>
+              <button class="chat-send-btn" id="chat-send" onclick="sendMessage()">Send &#8594;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAM TAB -->
+    <div class="emr-tab-panel" id="panel-exam">
+      <div class="exam-layout">
+        <div class="exam-systems">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--emr-text-muted);margin-bottom:10px;">Examine by System</div>
+          <button class="exam-system-btn" id="exam-btn-general" onclick="examineSystem('general')">
+            <span>&#128100;</span> General <span class="exam-check" id="check-general"></span>
+          </button>
+          <button class="exam-system-btn" id="exam-btn-heent" onclick="examineSystem('heent')">
+            <span>&#128065;</span> HEENT <span class="exam-check" id="check-heent"></span>
+          </button>
+          <button class="exam-system-btn" id="exam-btn-skin" onclick="examineSystem('skin')">
+            <span>&#129340;</span> Skin <span class="exam-check" id="check-skin"></span>
+          </button>
+          <button class="exam-system-btn" id="exam-btn-cardiac" onclick="examineSystem('cardiac')">
+            <span>&#128149;</span> Cardiovascular <span class="exam-check" id="check-cardiac"></span>
+          </button>
+          <button class="exam-system-btn" id="exam-btn-pulm" onclick="examineSystem('pulm')">
+            <span>&#129978;</span> Pulmonary <span class="exam-check" id="check-pulm"></span>
+          </button>
+          <button class="exam-system-btn" id="exam-btn-abdomen" onclick="examineSystem('abdomen')">
+            <span>&#128124;</span> Abdomen <span class="exam-check" id="check-abdomen"></span>
+          </button>
+          <button class="exam-system-btn" id="exam-btn-neuro" onclick="examineSystem('neuro')">
+            <span>&#129504;</span> Neurologic <span class="exam-check" id="check-neuro"></span>
+          </button>
+          <button class="exam-system-btn" id="exam-btn-ext" onclick="examineSystem('ext')">
+            <span>&#129461;</span> Extremities <span class="exam-check" id="check-ext"></span>
+          </button>
+        </div>
+        <div class="exam-content-area" id="exam-content">
+          <div style="padding:30px 20px;text-align:center;color:var(--emr-text-muted);">
+            <div style="font-size:28px;margin-bottom:12px;opacity:.4">&#129657;</div>
+            <div style="font-size:13px;">Select a system from the left to examine it.</div>
+            <div style="font-size:11px;margin-top:6px;color:var(--emr-text-muted);">Some findings will only be apparent if you know to look for them.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="emr-tab-panel" id="panel-orders">
+      <div class="orders-layout">
+        <div class="orders-panel">
+          <div class="orders-panel-hdr">&#9879; Order Entry</div>
+          <div style="overflow-y:auto;flex:1;">
+
+            <!-- LABS -->
+            <div class="order-category">
+              <div class="order-category-hdr" onclick="toggleCategory('labs')">
+                <span>&#128202;</span> Laboratory <span style="margin-left:auto;font-size:10px" id="cat-labs-arrow">&#9660;</span>
+              </div>
+              <div class="order-list" id="cat-labs">
+                <div class="order-item" id="ord-cbc" onclick="placeOrder('cbc')"><span class="order-icon">&#9679;</span> CBC with differential</div>
+                <div class="order-item" id="ord-bmp" onclick="placeOrder('bmp')"><span class="order-icon">&#9679;</span> BMP / CMP</div>
+                <div class="order-item" id="ord-ua" onclick="placeOrder('ua')"><span class="order-icon">&#9679;</span> Urinalysis with microscopy</div>
+                <div class="order-item" id="ord-lft" onclick="placeOrder('lft')"><span class="order-icon">&#9679;</span> Liver function tests</div>
+                <div class="order-item" id="ord-lipids" onclick="placeOrder('lipids')"><span class="order-icon">&#9679;</span> Lipid panel</div>
+                <div class="order-item" id="ord-tsh" onclick="placeOrder('tsh')"><span class="order-icon">&#9679;</span> TSH</div>
+                <div class="order-item" id="ord-agala" onclick="placeOrder('agala')"><span class="order-icon">&#9679;</span> Alpha-galactosidase A (&#945;-Gal A)</div>
+                <div class="order-item" id="ord-gla" onclick="placeOrder('gla')"><span class="order-icon">&#9679;</span> GLA gene sequencing</div>
+                <div class="order-item" id="ord-ana" onclick="placeOrder('ana')"><span class="order-icon">&#9679;</span> ANA panel</div>
+                <div class="order-item" id="ord-iron" onclick="placeOrder('iron')"><span class="order-icon">&#9679;</span> Iron studies / ferritin</div>
+                <div class="order-item" id="ord-b12" onclick="placeOrder('b12')"><span class="order-icon">&#9679;</span> B12 / folate</div>
+                <div class="order-item" id="ord-cortisol" onclick="placeOrder('cortisol')"><span class="order-icon">&#9679;</span> AM cortisol</div>
+              </div>
+            </div>
+
+            <!-- IMAGING -->
+            <div class="order-category">
+              <div class="order-category-hdr" onclick="toggleCategory('imaging')">
+                <span>&#128247;</span> Imaging <span style="margin-left:auto;font-size:10px" id="cat-imaging-arrow">&#9660;</span>
+              </div>
+              <div class="order-list" id="cat-imaging">
+                <div class="order-item" id="ord-echo" onclick="placeOrder('echo')"><span class="order-icon">&#9679;</span> Echocardiogram</div>
+                <div class="order-item" id="ord-mri" onclick="placeOrder('mri')"><span class="order-icon">&#9679;</span> Brain MRI</div>
+                <div class="order-item" id="ord-renal-us" onclick="placeOrder('renal-us')"><span class="order-icon">&#9679;</span> Renal ultrasound</div>
+                <div class="order-item" id="ord-cxr" onclick="placeOrder('cxr')"><span class="order-icon">&#9679;</span> Chest X-ray</div>
+                <div class="order-item" id="ord-ct-abd" onclick="placeOrder('ct-abd')"><span class="order-icon">&#9679;</span> CT abdomen/pelvis</div>
+              </div>
+            </div>
+
+            <!-- REFERRALS -->
+            <div class="order-category">
+              <div class="order-category-hdr" onclick="toggleCategory('referrals')">
+                <span>&#128101;</span> Referrals <span style="margin-left:auto;font-size:10px" id="cat-referrals-arrow">&#9660;</span>
+              </div>
+              <div class="order-list" id="cat-referrals">
+                <div class="order-item" id="ord-ophtho" onclick="placeOrder('ophtho')"><span class="order-icon">&#9679;</span> Ophthalmology — slit lamp exam</div>
+                <div class="order-item" id="ord-derm" onclick="placeOrder('derm')"><span class="order-icon">&#9679;</span> Dermatology — skin biopsy</div>
+                <div class="order-item" id="ord-nephro" onclick="placeOrder('nephro')"><span class="order-icon">&#9679;</span> Nephrology referral</div>
+                <div class="order-item" id="ord-genetics" onclick="placeOrder('genetics')"><span class="order-icon">&#9679;</span> Medical genetics referral</div>
+                <div class="order-item" id="ord-cardio" onclick="placeOrder('cardio')"><span class="order-icon">&#9679;</span> Cardiology referral</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="order-results-area" id="results-area">
+          <div class="orders-empty" id="results-empty">
+            <div class="orders-empty-icon">&#128202;</div>
+            <div class="orders-empty-text">No results yet. Order tests from the panel on the left.</div>
+            <div style="font-size:11px;color:var(--emr-text-muted);margin-top:6px;">Some results return immediately; others take time.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES TAB -->
+    <div class="emr-tab-panel" id="panel-notes">
+      <div class="notes-layout">
+        <div style="background:var(--emr-panel-alt);border:1px solid var(--emr-border);border-radius:8px;padding:14px 18px;font-size:12.5px;line-height:1.7;color:var(--emr-text-dim);">
+          <strong style="color:var(--emr-text)">Assessment &amp; Plan Documentation</strong><br>
+          Write your clinical assessment and plan. Your documentation will be analyzed for diagnostic accuracy, breadth of reasoning, appropriate test ordering, and management plan quality. Badges will be awarded for key diagnostic insights.
+        </div>
+
+        <div class="note-section">
+          <div class="note-section-hdr">HPI — History of Present Illness</div>
+          <textarea class="note-textarea" id="note-hpi" placeholder="Document your history of present illness based on your interview..." style="min-height:100px;"></textarea>
+        </div>
+        <div class="note-section">
+          <div class="note-section-hdr">Physical Exam Findings</div>
+          <textarea class="note-textarea" id="note-exam" placeholder="Document your physical examination findings..." style="min-height:80px;"></textarea>
+        </div>
+        <div class="note-section">
+          <div class="note-section-hdr">Assessment</div>
+          <textarea class="note-textarea" id="note-assessment" placeholder="Your primary diagnosis or differential diagnosis list..." style="min-height:80px;"></textarea>
+        </div>
+        <div class="note-section">
+          <div class="note-section-hdr">Plan</div>
+          <textarea class="note-textarea" id="note-plan" placeholder="Your management plan — workup, treatment, referrals, follow-up..." style="min-height:80px;"></textarea>
+        </div>
+        <button class="submit-ap-btn" onclick="submitAP()">&#9654; Submit Assessment &amp; Plan for Feedback</button>
+        <div class="ap-feedback" id="ap-feedback"></div>
+      </div>
+    </div>
+
+  </div><!-- end emr-main -->
+</div><!-- end emr-layout -->
+
+<!-- BADGE TRAY -->
+<div class="badge-tray" id="badge-tray"></div>
+
+<!-- DEBRIEF OVERLAY -->
+<div class="debrief-overlay" id="debrief-overlay">
+  <div class="debrief-inner">
+    <div class="debrief-hdr">
+      <div class="debrief-title">Simulation Debrief — Marcus T.</div>
+      <div class="debrief-sub">Fabry Disease (GLA gene, X-linked lysosomal storage disorder) &nbsp;&#183;&nbsp; Average diagnostic delay: 14 years</div>
+    </div>
+    <div class="debrief-body" id="debrief-body">
+      <!-- built by JS -->
+    </div>
+    <div class="debrief-close-row">
+      <button class="debrief-btn debrief-btn-secondary" onclick="closeDebrief()">Continue Simulation</button>
+      <button class="debrief-btn debrief-btn-primary" onclick="openGuidedCase()">View Guided Case &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const state = {
+  activeTab: 'summary',
+  activePersona: 'marcus',
+  conversations: { marcus: [], diana: [], helen: [] },
+  examinedSystems: {},
+  orders: {},
+  results: {},
+  badges: {},
+  testCount: 0,
+  startTime: Date.now(),
+  apSubmitted: false
+};
+
+// Chat history per persona (for API multi-turn)
+const chatHistories = { marcus: [], diana: [], helen: [] };
+
+// ═══════════════════════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════════════════════
+setInterval(function() {
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const m = Math.floor(elapsed / 60).toString().padStart(2,'0');
+  const s = (elapsed % 60).toString().padStart(2,'0');
+  document.getElementById('sim-timer').textContent = m + ':' + s;
+}, 1000);
+
+// ═══════════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function switchTab(tabId) {
+  document.querySelectorAll('.emr-tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.emr-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tabId).classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+  state.activeTab = tabId;
+}
+
+function setMode(mode) {
+  document.getElementById('mode-sim').classList.toggle('active', mode === 'sim');
+  document.getElementById('mode-guided').classList.toggle('active', mode === 'guided');
+  if (mode === 'guided') openGuidedCase();
+}
+
+function openGuidedCase() {
+  alert('Guided Case Mode: This would open the full guided case suite for Marcus (Case 1B — Fabry Disease) in the ReasonDx platform. In the integrated build, this would switch the view to the case suite module for this patient.');
+}
+
+// ═══════════════════════════════════════════════════════════
+// PERSONA SELECTION
+// ═══════════════════════════════════════════════════════════
+const PERSONAS = {
+  marcus: {
+    name: 'Marcus T.',
+    detail: '41-year-old male — patient, in exam room',
+    avatar: 'M',
+    color: '#1a6fa8',
+    greeting: null, // already shown
+    systemPrompt: `You are Marcus T., a 41-year-old man visiting a new primary care doctor. You are a finance professional. You have chronic fatigue for 5+ years and have been told repeatedly it is stress or depression. You tried sertraline for 6 months with no improvement.
+
+PERSONALITY: You are a little frustrated with the medical system but hopeful. You speak naturally and casually. You are not medically sophisticated. You attribute most of your symptoms to "work stress" or "getting older."
+
+WHAT YOU VOLUNTEER freely:
+- Extreme fatigue, difficulty concentrating at work
+- History of being told it's stress/depression
+- Ineffective antidepressant trial
+
+WHAT YOU ONLY MENTION IF DIRECTLY ASKED about:
+- Burning pain in hands and feet: "Yeah, actually, I've had that since I was a teenager — I thought everyone got that, just that burning feeling especially when it's hot or after exercising"
+- Sweating: "Now that you mention it, I almost never sweat — even at the gym everyone is drenched and I'm dry. I thought I was just lucky"
+- Eyes: "An eye doctor once told me I had something unusual about my corneas but said it wasn't a problem, I forgot about it"  
+- Skin: "I have these little red spots on my stomach and upper thighs, I've had them my whole life. My wife thinks they're weird but they don't bother me"
+- Family history: You know your father died of a heart attack age 55. Your brother has kidney problems doctors can't figure out. Your mother is alive age 68. You are NOT aware of the maternal family history in detail — suggest the doctor speak to your mother for more detail.
+
+NEVER volunteer information unless specifically asked. Respond naturally to follow-up questions. If asked something you don't know, say you're not sure. Keep responses 2-4 sentences unless the question calls for more.`
+  },
+  diana: {
+    name: 'Diana T.',
+    detail: 'Wife of Marcus — collateral history, waiting room',
+    avatar: 'D',
+    color: '#2a7a50',
+    greeting: 'Hi doctor. I came along today because I\'ve been worried about Marcus for a long time. I\'m glad he\'s finally seeing someone new.',
+    systemPrompt: `You are Diana T., age 38, wife of Marcus. You have consented to speak with the doctor about your husband's health. You are warm, articulate, and genuinely worried.
+
+WHAT YOU KNOW:
+- Marcus has been exhausted for years — he comes home from work and can barely function
+- He snores very loudly at night
+- "He gets these episodes where his feet turn bright red and he says they're burning — I thought it was circulation or something"
+- He barely sweats — even at the gym, she noticed this years ago
+- He's been to multiple doctors and they keep saying it's stress
+- His father died young of a heart attack
+- His brother has mysterious kidney problems
+
+WHAT YOU DON'T KNOW:
+- Anything about Fabry disease or genetic conditions
+- Details about the maternal family (suggest the doctor call his mother Helen)
+- Medical history beyond surface level
+
+Respond naturally. You are an observer providing collateral history, not a medical expert. Keep responses 2-4 sentences.`
+  },
+  helen: {
+    name: 'Helen T.',
+    detail: 'Mother of Marcus — phone call, 68 years old',
+    avatar: 'H',
+    color: '#7a4a1a',
+    greeting: 'Hello? Yes, this is Helen. Marcus told me you might call. Of course I\'ll help however I can, doctor.',
+    systemPrompt: `You are Helen T., age 68, mother of Marcus. You are speaking with the doctor by phone. You are cooperative and have a warm but slightly hard-of-hearing phone manner.
+
+WHAT YOU KNOW (only reveal if asked):
+- Your brother (Marcus's maternal uncle) died at age 46: "They said it was his heart, but he was always sickly, poor thing. He used to complain about burning in his hands and feet for years before he died."
+- Your brother also had kidney problems before he died
+- You yourself have been told you have "mild kidney disease, Stage 2, they can't explain why"
+- You have "some mild burning in my feet sometimes, I thought it was just getting older"
+- Marcus's father died of a heart attack at 55
+
+WHAT YOU DON'T KNOW:
+- Anything about Fabry disease
+- The word "angiokeratoma" or medical terminology
+
+CRITICAL: The detail about your brother having burning in his hands AND dying at 46 is extremely important diagnostically. Only reveal it if asked specifically about your brother or paternal/maternal family history. Don't volunteer it immediately.
+
+Respond with the natural voice of an older woman on the phone. Keep responses 2-4 sentences.`
+  }
+};
+
+function selectPersona(personaId) {
+  state.activePersona = personaId;
+  document.querySelectorAll('.interview-persona-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('persona-' + personaId).classList.add('active');
+  
+  const persona = PERSONAS[personaId];
+  document.getElementById('chat-avatar').textContent = persona.avatar;
+  document.getElementById('chat-avatar').style.background = persona.color;
+  document.getElementById('chat-name').textContent = persona.name;
+  document.getElementById('chat-detail').textContent = persona.detail;
+  
+  // Show conversation history for this persona
+  renderConversation(personaId);
+  
+  // If this persona hasn't been greeted yet, show greeting
+  if (persona.greeting && chatHistories[personaId].length === 0) {
+    const greetMsg = { role: 'assistant', content: persona.greeting };
+    chatHistories[personaId].push(greetMsg);
+    state.conversations[personaId].push({ type: 'patient', text: persona.greeting });
+    renderConversation(personaId);
+  }
+}
+
+function renderConversation(personaId) {
+  const msgs = document.getElementById('chat-messages');
+  const persona = PERSONAS[personaId];
+  
+  const convHtml = state.conversations[personaId].map(msg => {
+    if (msg.type === 'patient') {
+      return '<div class="chat-msg chat-msg-patient"><div class="chat-msg-label">' + persona.name + '</div><div class="chat-bubble">' + escHtml(msg.text) + '</div></div>';
+    } else {
+      return '<div class="chat-msg chat-msg-clinician"><div class="chat-msg-label">You (Clinician)</div><div class="chat-bubble">' + escHtml(msg.text) + '</div></div>';
+    }
+  }).join('');
+  
+  // If no messages yet and persona is marcus, keep the initial greeting
+  if (personaId === 'marcus' && state.conversations.marcus.length === 0) {
+    msgs.innerHTML = '<div class="chat-msg chat-msg-patient"><div class="chat-msg-label">Marcus T.</div><div class="chat-bubble">Hi doctor. I\'m really glad to finally see someone new. I\'ve been to three different doctors about this exhaustion and they all tell me it\'s stress or depression. I\'ve been on an antidepressant for 6 months and I feel exactly the same.</div></div>';
+  } else {
+    msgs.innerHTML = convHtml;
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHAT — CLAUDE API
+// ═══════════════════════════════════════════════════════════
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function useSuggestion(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  const personaId = state.activePersona;
+  const persona = PERSONAS[personaId];
+  
+  // Add clinician message to UI
+  state.conversations[personaId].push({ type: 'clinician', text });
+  chatHistories[personaId].push({ role: 'user', content: text });
+  input.value = '';
+  renderConversation(personaId);
+  
+  // Add thinking indicator
+  const msgs = document.getElementById('chat-messages');
+  const thinking = document.createElement('div');
+  thinking.className = 'chat-msg chat-msg-patient';
+  thinking.id = 'thinking-indicator';
+  thinking.innerHTML = '<div class="chat-msg-label">' + persona.name + '</div><div class="chat-thinking"><div class="thinking-dots"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div></div></div>';
+  msgs.appendChild(thinking);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  // Disable send
+  document.getElementById('chat-send').disabled = true;
+  
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: persona.systemPrompt,
+        messages: chatHistories[personaId]
+      })
+    });
+    
+    const data = await response.json();
+    const reply = data.content && data.content[0] ? data.content[0].text : 'I\'m sorry, I didn\'t catch that.';
+    
+    // Add to history and state
+    chatHistories[personaId].push({ role: 'assistant', content: reply });
+    state.conversations[personaId].push({ type: 'patient', text: reply });
+    
+    // Check for badge triggers
+    checkBadgeTriggers(text, reply, personaId);
+    
+    // Update progress
+    updateProgress();
+    
+  } catch(err) {
+    state.conversations[personaId].push({ type: 'patient', text: '(Connection error — please try again)' });
+  }
+  
+  // Remove thinking, re-render
+  document.getElementById('thinking-indicator')?.remove();
+  renderConversation(personaId);
+  document.getElementById('chat-send').disabled = false;
+  updateInterviewBadge();
+}
+
+function updateInterviewBadge() {
+  const totalMsgs = Object.values(state.conversations).reduce((s,c) => s + c.length, 0);
+  const badge = document.getElementById('interview-badge');
+  if (totalMsgs > 0) badge.textContent = Math.floor(totalMsgs / 2);
+}
+
+// ═══════════════════════════════════════════════════════════
+// BADGE SYSTEM
+// ═══════════════════════════════════════════════════════════
+function checkBadgeTriggers(userText, replyText, personaId) {
+  const combined = (userText + ' ' + replyText).toLowerCase();
+  
+  // Temporal reasoning — asked about childhood symptoms
+  if (!state.badges.temporal && (combined.includes('child') || combined.includes('teenager') || combined.includes('years ago') || combined.includes('since i was') || combined.includes('young'))) {
+    awardBadge('temporal', '&#9200;', 'Time Traveler', 'gold', 'You asked about symptoms since childhood — revealing 20 years of acroparesthesias');
+  }
+  
+  // Family historian — asked about family history
+  if (!state.badges.family && personaId !== 'marcus' && (personaId === 'diana' || personaId === 'helen')) {
+    awardBadge('family', '&#128101;', 'Family Historian', 'blue', 'You sought collateral history from family members');
+  }
+  
+  // Maternal family history — called the mother
+  if (!state.badges.maternal && personaId === 'helen') {
+    awardBadge('maternal', '&#9742;', 'Maternal Line', 'gold', 'You called the mother — unlocking the maternal family history of early death and kidney disease');
+  }
+  
+  // Burning feet question
+  if (!state.badges.acroparesthesias && (combined.includes('burn') || combined.includes('tingl') || combined.includes('hands') || combined.includes('feet') || combined.includes('sensation'))) {
+    awardBadge('acroparesthesias', '&#128293;', 'Small Fiber Signal', 'blue', 'You asked about burning/tingling — revealing acroparesthesias since adolescence');
+  }
+  
+  // Sweating question
+  if (!state.badges.sweat && (combined.includes('sweat') || combined.includes('perspir') || combined.includes('anhidros'))) {
+    awardBadge('sweat', '&#128166;', 'Autonomic Thinker', 'blue', 'You asked about sweating — revealing hypohidrosis');
+  }
+  
+  // Kidney family history
+  if (!state.badges.renal_fam && (combined.includes('kidney') || combined.includes('renal')) && (personaId === 'diana' || personaId === 'helen')) {
+    awardBadge('renal_fam', '&#129704;', 'Renal Radar', 'gold', 'You identified kidney disease in the family history');
+  }
+}
+
+function awardBadge(id, icon, label, color, explanation) {
+  if (state.badges[id]) return;
+  state.badges[id] = { icon, label, color, explanation };
+  
+  const tray = document.getElementById('badge-tray');
+  const badge = document.createElement('div');
+  badge.className = 'diag-badge ' + color;
+  badge.title = explanation;
+  badge.innerHTML = icon + ' ' + label;
+  tray.appendChild(badge);
+  
+  // Also flash a notification
+  showNotification(icon + ' Badge: ' + label);
+}
+
+function showNotification(text) {
+  const notif = document.createElement('div');
+  notif.style.cssText = 'position:fixed;top:60px;right:16px;background:var(--emr-navy);border:1px solid var(--emr-gold);color:var(--emr-gold);padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;z-index:400;animation:badge-pop .3s ease;';
+  notif.textContent = text;
+  document.body.appendChild(notif);
+  setTimeout(() => notif.remove(), 3000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// PHYSICAL EXAM
+// ═══════════════════════════════════════════════════════════
+const EXAM_FINDINGS = {
+  general: {
+    title: 'General Examination',
+    content: [
+      { label: 'Appearance', text: 'Alert and oriented male. Well-groomed, no acute distress. Appears stated age.', flag: 'normal' },
+      { label: 'Build', text: 'Mesomorphic build. BMI 26.', flag: 'normal' }
+    ]
+  },
+  heent: {
+    title: 'Head, Eyes, Ears, Nose, Throat',
+    content: [
+      { label: 'Head', text: 'Normocephalic, atraumatic.', flag: 'normal' },
+      { label: 'Eyes', text: 'Pupils equal, round, reactive. Extraocular movements intact. Note: Slit lamp examination not available in office — recommend ophthalmology referral if corneal pathology is suspected.', flag: 'abnormal', flagText: 'REFER' },
+      { label: 'Mucous membranes', text: 'Moist, no pallor, no jaundice.', flag: 'normal' }
+    ]
+  },
+  skin: {
+    title: 'Skin Examination',
+    content: [
+      { label: 'Distribution', text: 'Multiple small (1–3mm) dark-red, non-blanching papules clustered on the lower abdomen, umbilical region, and proximal thighs bilaterally.', flag: 'abnormal', flagText: 'ABNORMAL' },
+      { label: 'Character', text: 'Lesions are firm, smooth, and have been present since childhood per patient report. Consistent with angiokeratomas. No ulceration. No warmth or tenderness.', flag: 'abnormal', flagText: 'KEY FINDING' },
+      { label: 'Remainder of skin', text: 'No other rashes, lesions, or abnormal pigmentation elsewhere.', flag: 'normal' }
+    ]
+  },
+  cardiac: {
+    title: 'Cardiovascular Examination',
+    content: [
+      { label: 'Rate/rhythm', text: 'Regular rate and rhythm. HR 78 bpm.', flag: 'normal' },
+      { label: 'Murmurs', text: 'No murmurs, rubs, or gallops appreciated.', flag: 'normal' },
+      { label: 'BP (bilateral)', text: 'Right arm 148/92, Left arm 146/90. Hypertension confirmed bilaterally.', flag: 'abnormal', flagText: 'H' },
+      { label: 'Peripheral pulses', text: '2+ bilaterally in radial and dorsalis pedis.', flag: 'normal' },
+      { label: 'JVP', text: 'JVP not elevated.', flag: 'normal' }
+    ]
+  },
+  pulm: {
+    title: 'Pulmonary Examination',
+    content: [
+      { label: 'Inspection', text: 'No use of accessory muscles. Respiratory rate 14.', flag: 'normal' },
+      { label: 'Auscultation', text: 'Clear to auscultation bilaterally. No wheezes, crackles, or rhonchi.', flag: 'normal' }
+    ]
+  },
+  abdomen: {
+    title: 'Abdominal Examination',
+    content: [
+      { label: 'Inspection', text: 'Soft, flat abdomen. See skin exam for abdominal angiokeratomas.', flag: 'normal' },
+      { label: 'Palpation', text: 'No tenderness to palpation. No guarding, no rebound.', flag: 'normal' },
+      { label: 'Organomegaly', text: 'No hepatomegaly or splenomegaly. Kidneys not palpable.', flag: 'normal' }
+    ]
+  },
+  neuro: {
+    title: 'Neurological Examination',
+    content: [
+      { label: 'Cranial nerves', text: 'CN II–XII intact.', flag: 'normal' },
+      { label: 'Motor', text: 'Strength 5/5 in all extremities. Normal bulk and tone.', flag: 'normal' },
+      { label: 'Coordination', text: 'Finger-nose-finger normal. Heel-shin normal. Gait normal.', flag: 'normal' },
+      { label: 'Reflexes', text: 'Deep tendon reflexes 2+ and symmetric bilaterally. Plantars downgoing.', flag: 'normal' },
+      { label: 'Sensation — temperature', text: 'DECREASED sensation to temperature testing in bilateral hands (dorsal surface) and bilateral feet. Patient reports recognizing this as "normal for him."', flag: 'abnormal', flagText: 'KEY FINDING' },
+      { label: 'Sensation — vibration/proprioception', text: 'Intact bilaterally.', flag: 'normal' },
+      { label: 'Interpretation', text: 'Pattern consistent with small fiber neuropathy — temperature and pain fibers (Aδ and C fibers) affected; large fiber modalities preserved.', flag: 'abnormal', flagText: 'NOTE' }
+    ]
+  },
+  ext: {
+    title: 'Extremities',
+    content: [
+      { label: 'Edema', text: 'No peripheral edema bilaterally.', flag: 'normal' },
+      { label: 'Clubbing / cyanosis', text: 'None.', flag: 'normal' },
+      { label: 'Skin — extremities', text: 'No lesions on extremities beyond those noted on abdomen/thighs.', flag: 'normal' }
+    ]
+  }
+};
+
+function examineSystem(system) {
+  state.examinedSystems[system] = true;
+  const btn = document.getElementById('exam-btn-' + system);
+  btn.classList.add('examined');
+  document.getElementById('check-' + system).textContent = '✓';
+  
+  const finding = EXAM_FINDINGS[system];
+  const content = document.getElementById('exam-content');
+  
+  let html = '<div class="exam-system-title">' + finding.title + '</div>';
+  html += '<div class="exam-instruction">Examination completed. Findings documented below.</div>';
+  
+  finding.content.forEach(item => {
+    html += '<div class="exam-finding">';
+    html += '<div class="exam-finding-hdr">' + item.label;
+    if (item.flag && item.flag !== 'normal') html += ' <span class="finding-flag ' + (item.flag === 'abnormal' ? 'flag-abnormal' : 'flag-critical') + '">' + (item.flagText || '!') + '</span>';
+    html += '</div>';
+    html += '<div class="exam-finding-body">' + item.text;
+    if (item.flag === 'normal') html += ' <span class="finding-flag flag-normal">WNL</span>';
+    html += '</div></div>';
+  });
+  
+  content.innerHTML = html;
+  
+  // Badge for skin finding
+  if (system === 'skin' && !state.badges.skin) {
+    awardBadge('skin', '&#129340;', 'Skin Detective', 'gold', 'You examined the skin — finding angiokeratomas, a pathognomonic feature of Fabry disease');
+  }
+  if (system === 'neuro' && !state.badges.neuro) {
+    awardBadge('neuro', '&#129504;', 'Neuro Examiner', 'blue', 'You tested small fiber sensation — finding temperature deficits consistent with small fiber neuropathy');
+  }
+  
+  updateExamBadge();
+  updateProgress();
+}
+
+function updateExamBadge() {
+  const count = Object.keys(state.examinedSystems).length;
+  document.getElementById('exam-badge').textContent = count + '/8';
+}
+
+// ═══════════════════════════════════════════════════════════
+// ORDERS & RESULTS
+// ═══════════════════════════════════════════════════════════
+const ORDER_DATA = {
+  cbc: {
+    name: 'CBC with Differential',
+    timing: 0,
+    relevant: false,
+    result: {
+      type: 'labs',
+      rows: [
+        ['Test','Result','Reference','Flag'],
+        ['WBC','7.2 K/uL','4.5–11.0',''],
+        ['Hemoglobin','13.8 g/dL','13.5–17.5',''],
+        ['Hematocrit','41.2%','41–53%',''],
+        ['Platelets','218 K/uL','150–400',''],
+        ['MCV','88 fL','80–100',''],
+        ['Neutrophils','62%','50–70%',''],
+        ['Lymphocytes','29%','20–40%','']
+      ]
+    }
+  },
+  bmp: {
+    name: 'BMP / CMP',
+    timing: 0,
+    relevant: true,
+    result: {
+      type: 'labs',
+      rows: [
+        ['Test','Result','Reference','Flag'],
+        ['Sodium','139 mEq/L','136–145',''],
+        ['Potassium','4.1 mEq/L','3.5–5.0',''],
+        ['CO2','24 mEq/L','22–29',''],
+        ['BUN','22 mg/dL','7–25',''],
+        ['Creatinine','1.6 mg/dL','0.7–1.3','H'],
+        ['eGFR','58 mL/min/1.73m²','> 60','L'],
+        ['Glucose','94 mg/dL','70–100',''],
+        ['Calcium','9.3 mg/dL','8.5–10.5','']
+      ],
+      note: '⚠ eGFR 58 = Stage 3a CKD. Creatinine elevated for age 41. Unexplained CKD in a male <50 requires further investigation.'
+    }
+  },
+  ua: {
+    name: 'Urinalysis with Microscopy',
+    timing: 0,
+    relevant: true,
+    result: {
+      type: 'labs',
+      rows: [
+        ['Test','Result','Reference','Flag'],
+        ['Color','Yellow','Yellow',''],
+        ['pH','6.0','4.5–8.0',''],
+        ['Protein','2+ (100 mg/dL)','Negative','H'],
+        ['Blood','Trace','Negative','H'],
+        ['WBCs','0–2/hpf','0–5',''],
+        ['RBCs','3–5/hpf','0–2','H'],
+        ['Casts','None seen','None',''],
+        ['Urine Protein/Cr ratio','0.68','< 0.2','H']
+      ],
+      note: '⚠ Proteinuria 2+ with elevated protein/Cr ratio. No infection. Pattern consistent with glomerular protein leak. Consider nephrology referral.'
+    }
+  },
+  lft: { name: 'Liver Function Tests', timing: 2, relevant: false, result: { type: 'labs', rows: [['Test','Result','Reference','Flag'],['AST','32 U/L','10–40',''],['ALT','28 U/L','7–56',''],['Alk Phos','88 U/L','44–147',''],['Total Bili','0.8 mg/dL','0.1–1.2',''],['Albumin','4.2 g/dL','3.5–5.0','']] } },
+  lipids: { name: 'Lipid Panel', timing: 2, relevant: false, result: { type: 'labs', rows: [['Test','Result','Reference','Flag'],['Total Cholesterol','188 mg/dL','< 200',''],['LDL','112 mg/dL','< 130',''],['HDL','42 mg/dL','> 40',''],['Triglycerides','178 mg/dL','< 150','H']] } },
+  tsh: { name: 'TSH', timing: 2, relevant: false, result: { type: 'labs', rows: [['Test','Result','Reference','Flag'],['TSH','2.1 mIU/L','0.4–4.5','']], note: 'TSH within normal limits. Hypothyroidism excluded.' } },
+  agala: {
+    name: 'Alpha-galactosidase A Enzyme Activity',
+    timing: 24,
+    relevant: true,
+    result: {
+      type: 'labs',
+      rows: [
+        ['Test','Result','Reference','Flag'],
+        ['α-Gal A Activity','0.3 nmol/hr/mg protein','> 3.0 nmol/hr/mg','C']
+      ],
+      note: '🔴 CRITICAL: Alpha-galactosidase A enzyme activity severely reduced (< 10% of lower normal limit). Consistent with Fabry disease. GLA gene sequencing ordered — results pending.'
+    }
+  },
+  gla: {
+    name: 'GLA Gene Sequencing',
+    timing: 48,
+    relevant: true,
+    result: {
+      type: 'labs',
+      rows: [
+        ['Gene','Variant','Classification','Zygosity'],
+        ['GLA','c.901C>T (p.Arg301Trp)','Pathogenic','Hemizygous']
+      ],
+      note: '✅ DIAGNOSTIC: Pathogenic hemizygous variant in GLA gene confirmed. This variant (p.Arg301Trp) is an established disease-causing mutation in Fabry disease. Initiate multidisciplinary management. Family cascade testing indicated.'
+    }
+  },
+  ana: { name: 'ANA Panel', timing: 24, relevant: false, result: { type: 'labs', rows: [['Test','Result','Flag'],['ANA (IFA)','Negative',''],['Anti-dsDNA','Negative',''],['Anti-Smith','Negative','']], note: 'ANA panel negative. Autoimmune connective tissue disease excluded.' } },
+  iron: { name: 'Iron Studies', timing: 2, relevant: false, result: { type: 'labs', rows: [['Test','Result','Reference','Flag'],['Serum Iron','88 mcg/dL','65–175',''],['TIBC','310 mcg/dL','250–370',''],['Ferritin','142 ng/mL','24–336',''],['Transferrin Sat','28%','20–50%','']], note: 'Iron stores normal. Iron deficiency anemia excluded.' } },
+  b12: { name: 'B12 / Folate', timing: 2, relevant: false, result: { type: 'labs', rows: [['Test','Result','Reference','Flag'],['B12','412 pg/mL','200–900',''],['Folate','11.2 ng/mL','> 3.0','']], note: 'B12 and folate normal. Nutritional deficiency excluded.' } },
+  cortisol: { name: 'AM Cortisol', timing: 24, relevant: false, result: { type: 'labs', rows: [['Test','Result','Reference','Flag'],['AM Cortisol','18.4 mcg/dL','6–23','']], note: 'AM cortisol normal. Adrenal insufficiency unlikely.' } },
+  echo: {
+    name: 'Echocardiogram',
+    timing: 48,
+    relevant: true,
+    result: {
+      type: 'imaging',
+      report: `ECHOCARDIOGRAM REPORT
+Patient: Marcus T. | Date: Today
+
+MEASUREMENTS:
+  IVS (interventricular septum): 13mm [Normal: 6–11mm] ↑
+  PW (posterior wall): 12mm [Normal: 6–11mm] ↑
+  LVEDD: 49mm [Normal 42–59mm]
+  LVEF: 60% [Normal: ≥55%]
+
+FINDINGS:
+  — Mild concentric left ventricular hypertrophy (LVH)
+  — Wall thickness symmetrically increased
+  — Normal diastolic function
+  — Small pericardial effusion (< 5mm)
+  — No significant valvular disease
+  — No wall motion abnormalities`,
+      impression: 'IMPRESSION: Mild concentric LVH with small pericardial effusion in a 41-year-old male. LVH without hypertension of sufficient duration or severity to explain this degree of hypertrophy. Pattern atypical for hypertensive heart disease alone. Consider infiltrative/storage etiology. Clinical correlation recommended.'
+    }
+  },
+  mri: {
+    name: 'Brain MRI',
+    timing: 48,
+    relevant: true,
+    result: {
+      type: 'imaging',
+      report: `BRAIN MRI WITH AND WITHOUT CONTRAST
+Patient: Marcus T. | 1.5T | Date: Today
+
+SEQUENCES: T1, T2, FLAIR, DWI, post-contrast T1
+
+FINDINGS:
+  — No acute infarct on DWI
+  — No mass lesion, no herniation
+  — Scattered T2/FLAIR hyperintensities in periventricular
+    white matter bilaterally (grade 1 Fazekas scale)
+  — No enhancement on post-contrast sequences
+  — No microhemorrhages on GRE
+  — Ventricles and sulci: normal for age`,
+      impression: 'IMPRESSION: Scattered periventricular white matter T2 hyperintensities, pattern consistent with small vessel disease. These changes are atypical for a 41-year-old without significant cardiovascular risk factors. Consider metabolic or storage etiology contributing to small vessel pathology. Correlate clinically.'
+    }
+  },
+  'renal-us': {
+    name: 'Renal Ultrasound',
+    timing: 24,
+    relevant: true,
+    result: {
+      type: 'imaging',
+      report: `RENAL ULTRASOUND
+Patient: Marcus T. | Date: Today
+
+RIGHT KIDNEY: 10.8 cm. Normal shape. Mildly increased cortical echogenicity. No hydronephrosis. No nephrolithiasis. No mass.
+
+LEFT KIDNEY: 10.6 cm. Normal shape. Mildly increased cortical echogenicity. No hydronephrosis. No nephrolithiasis. No mass.
+
+BLADDER: Not distended at time of exam.`,
+      impression: 'IMPRESSION: Bilateral mildly increased renal cortical echogenicity. Normal kidney sizes. This echogenicity pattern is consistent with chronic parenchymal disease. In the setting of unexplained CKD and proteinuria in a young male, further workup for intrinsic renal disease is recommended.'
+    }
+  },
+  cxr: { name: 'Chest X-ray', timing: 0, relevant: false, result: { type: 'imaging', report: 'CHEST X-RAY PA AND LATERAL\n\nHEART: Normal cardiac silhouette. No cardiomegaly.\nLUNGS: Clear. No infiltrates, effusions, or pneumothorax.\nMEDIASTINUM: Normal width.\nBONES: No acute osseous abnormality.', impression: 'IMPRESSION: No acute cardiopulmonary abnormality.' } },
+  'ct-abd': { name: 'CT Abdomen/Pelvis', timing: 24, relevant: false, result: { type: 'imaging', report: 'CT ABDOMEN/PELVIS WITH CONTRAST\n\nLIVER: Normal size and attenuation. No focal lesions.\nKIDNEYS: Bilateral kidneys 10–11cm. No obstruction. No stones. Mild cortical thinning bilaterally noted.\nBLADDER: Normal.\nBOWEL: No obstruction or perforation.\nLYMPH NODES: No pathologic adenopathy.', impression: 'IMPRESSION: Mild bilateral renal cortical thinning consistent with chronic parenchymal disease. No acute abdominal pathology.' } },
+  ophtho: {
+    name: 'Ophthalmology — Slit Lamp Exam',
+    timing: 72,
+    relevant: true,
+    result: {
+      type: 'imaging',
+      report: `OPHTHALMOLOGY CONSULTATION NOTE
+Patient: Marcus T. | Referring provider: You
+
+SLIT LAMP EXAMINATION:
+  Anterior segment: Cornea verticillata present bilaterally
+    — Whorl-like, spoke-wheel pattern of gold-brown deposits
+    — Located in inferior corneal epithelium
+    — Bilateral and symmetric
+  Lens: Clear, no lenticular opacities
+  Iris: Normal architecture
+  
+POSTERIOR SEGMENT:
+  Disc: Normal cup-to-disc ratio bilaterally
+  Macula: Normal
+  Vessels: No vascular tortuosity noted
+  
+VISUAL ACUITY: 20/20 bilaterally, corrected`,
+      impression: 'IMPRESSION: Cornea verticillata (vortex keratopathy) bilaterally. This finding is pathognomonic for Fabry disease in the absence of amiodarone use (patient takes no amiodarone). Strongly supports diagnosis of Fabry disease. Recommend confirmatory enzyme assay and genetic testing if not already obtained.'
+    }
+  },
+  derm: {
+    name: 'Dermatology — Skin Biopsy',
+    timing: 72,
+    relevant: true,
+    result: {
+      type: 'imaging',
+      report: `DERMATOPATHOLOGY REPORT
+Patient: Marcus T. | Site: Right lower abdomen papule
+
+GROSS: 3mm dark-red papule, submitted in entirety.
+
+MICROSCOPIC:
+  H&E: Dilated thin-walled blood vessels in superficial dermis.
+       Overlying epidermis thinned and flattened.
+       Consistent with angiokeratoma.
+  
+  Electron microscopy: Lamellar ('zebra body') inclusions
+       present in endothelial cell cytoplasm, consistent
+       with glycolipid (Gb3) storage.`,
+      impression: 'IMPRESSION: Angiokeratoma with lamellar cytoplasmic inclusions on electron microscopy. Morphology consistent with glycolipid storage — highly supportive of Fabry disease. Recommend enzyme assay and GLA gene sequencing.'
+    }
+  },
+  nephro: { name: 'Nephrology Referral', timing: 0, relevant: true, result: { type: 'imaging', report: 'NEPHROLOGY REFERRAL PLACED\n\nReferral indication: Unexplained CKD Stage 3a in 41-year-old male with proteinuria.\n\nEstimated appointment: 2–3 weeks.\n\nPre-referral labs recommended: Renal ultrasound, urine protein/Cr ratio, GFR trend if available.', impression: 'Nephrology referral accepted. Patient to be seen for evaluation of unexplained CKD and proteinuria.' } },
+  genetics: { name: 'Medical Genetics Referral', timing: 0, relevant: true, result: { type: 'imaging', report: 'MEDICAL GENETICS REFERRAL PLACED\n\nReferral indication: Suspected metabolic/storage disorder — multi-organ involvement in young adult male.\n\nEstimated appointment: 3–4 weeks.\n\nNote: Alpha-galactosidase A enzyme assay recommended before appointment.', impression: 'Genetics referral accepted. Enzyme activity assay pending.' } },
+  cardio: { name: 'Cardiology Referral', timing: 0, relevant: true, result: { type: 'imaging', report: 'CARDIOLOGY REFERRAL PLACED\n\nReferral indication: Unexplained LVH in 41-year-old male.\n\nEstimated appointment: 2 weeks.\n\nRecommended: Echocardiogram prior to appointment.', impression: 'Cardiology referral accepted.' } }
+};
+
+function toggleCategory(cat) {
+  const list = document.getElementById('cat-' + cat);
+  const arrow = document.getElementById('cat-' + cat + '-arrow');
+  const isOpen = list.style.display !== 'none';
+  list.style.display = isOpen ? 'none' : '';
+  arrow.textContent = isOpen ? '▶' : '▼';
+}
+
+function placeOrder(orderId) {
+  if (state.orders[orderId]) return; // Already ordered
+  
+  const order = ORDER_DATA[orderId];
+  if (!order) return;
+  
+  state.orders[orderId] = 'ordered';
+  state.testCount++;
+  document.getElementById('cost-count').textContent = state.testCount;
+  
+  const btn = document.getElementById('ord-' + orderId);
+  if (btn) {
+    btn.classList.add('ordered');
+    btn.querySelector('.order-icon').textContent = '⏳';
+  }
+  
+  // Remove empty state
+  document.getElementById('results-empty').style.display = 'none';
+  
+  // Show pending card
+  const area = document.getElementById('results-area');
+  const pending = document.createElement('div');
+  pending.className = 'result-card';
+  pending.id = 'result-card-' + orderId;
+  pending.innerHTML = '<div class="result-hdr"><div class="result-name">' + order.name + '</div><div class="result-time">PENDING</div></div><div class="result-pending">Processing...<div class="pending-bar"><div class="pending-fill"></div></div></div>';
+  area.appendChild(pending);
+  
+  // Update orders badge
+  updateOrdersBadge();
+  
+  // Deliver result after timing
+  const delay = order.timing === 0 ? 800 : order.timing === 2 ? 4000 : order.timing === 24 ? 8000 : 12000;
+  const displayTime = order.timing === 0 ? 'IMMEDIATE' : order.timing === 2 ? '~2 hrs' : order.timing === 24 ? '~24 hrs' : order.timing === 48 ? '~48 hrs' : '~72 hrs';
+  
+  setTimeout(() => deliverResult(orderId, displayTime), delay);
+  
+  // Badge for ordering key tests
+  if (orderId === 'agala' && !state.badges.enzyme) {
+    awardBadge('enzyme', '&#9879;', 'Genetic Thinker', 'gold', 'You ordered alpha-galactosidase A enzyme assay — the key diagnostic test for Fabry disease');
+  }
+  if (orderId === 'gla' && !state.badges.genetic) {
+    awardBadge('genetic', '&#129516;', 'Gene Sequencer', 'gold', 'You ordered GLA gene sequencing — confirming the diagnosis at the molecular level');
+  }
+  if (!order.relevant && state.testCount > 5 && !state.badges.overtest) {
+    awardBadge('overtest', '&#9888;', 'Over-Ordered', 'red', 'You have ordered >5 tests — some may not be relevant. Consider the clinical picture before ordering.');
+  }
+  
+  updateProgress();
+}
+
+function deliverResult(orderId, displayTime) {
+  const order = ORDER_DATA[orderId];
+  state.orders[orderId] = 'resulted';
+  state.results[orderId] = order.result;
+  
+  const card = document.getElementById('result-card-' + orderId);
+  if (!card) return;
+  
+  const btn = document.getElementById('ord-' + orderId);
+  if (btn) { btn.classList.remove('ordered'); btn.classList.add('resulted'); btn.querySelector('.order-icon').textContent = '✓'; }
+  
+  let bodyHtml = '';
+  if (order.result.type === 'labs') {
+    bodyHtml += '<table class="lab-table"><thead><tr>';
+    order.result.rows[0].forEach(h => bodyHtml += '<th>' + h + '</th>');
+    bodyHtml += '</tr></thead><tbody>';
+    for (let i = 1; i < order.result.rows.length; i++) {
+      const row = order.result.rows[i];
+      const flagVal = row[3] || row[2] || '';
+      const isHigh = flagVal === 'H';
+      const isLow = flagVal === 'L';
+      const isCrit = flagVal === 'C';
+      bodyHtml += '<tr>';
+      row.forEach((cell, ci) => {
+        if (ci === 1) {
+          const cls = isCrit ? 'critical' : isHigh ? 'high' : isLow ? 'low' : 'normal';
+          bodyHtml += '<td><span class="lab-val ' + cls + '">' + cell + '</span>';
+          if (flagVal && ci === 1) bodyHtml += '<span class="lab-flag ' + flagVal + '">' + flagVal + '</span>';
+          bodyHtml += '</td>';
+        } else {
+          bodyHtml += '<td>' + cell + '</td>';
+        }
+      });
+      bodyHtml += '</tr>';
+    }
+    bodyHtml += '</tbody></table>';
+    if (order.result.note) bodyHtml += '<div class="imaging-impression" style="margin-top:10px">' + order.result.note + '</div>';
+  } else {
+    bodyHtml += '<div class="imaging-report">' + order.result.report.replace(/\n/g,'<br>') + '</div>';
+    if (order.result.impression) bodyHtml += '<div class="imaging-impression">' + order.result.impression + '</div>';
+  }
+  
+  card.innerHTML = '<div class="result-hdr"><div class="result-name">' + order.name + '</div><div class="result-time">' + displayTime + '</div></div><div class="result-body">' + bodyHtml + '</div>';
+  
+  updateOrdersBadge();
+  updateProgress();
+  
+  // Badge for connecting 4+ abnormal results
+  const relevantResults = Object.keys(state.results).filter(id => ORDER_DATA[id]?.relevant).length;
+  if (relevantResults >= 4 && !state.badges.constellation) {
+    awardBadge('constellation', '&#11088;', 'Constellation Builder', 'gold', 'You have identified findings across 4+ organ systems — building the diagnostic constellation of Fabry disease');
+  }
+}
+
+function updateOrdersBadge() {
+  const resulted = Object.values(state.orders).filter(v => v === 'resulted').length;
+  const ordered = Object.values(state.orders).filter(v => v === 'ordered').length;
+  const badge = document.getElementById('orders-badge');
+  if (ordered > 0) badge.textContent = ordered + ' pending';
+  else if (resulted > 0) badge.textContent = resulted + ' results';
+  else badge.textContent = '';
+}
+
+// ═══════════════════════════════════════════════════════════
+// PROGRESS TRACKING
+// ═══════════════════════════════════════════════════════════
+function updateProgress() {
+  const hasMsgs = Object.values(state.conversations).some(c => c.length > 0);
+  const hasFamHx = state.conversations.diana.length > 0 || state.conversations.helen.length > 0;
+  const hasExam = Object.keys(state.examinedSystems).length >= 3;
+  const hasLabs = Object.keys(state.orders).length >= 2;
+  const hasDx = state.results['agala'] || state.results['gla'];
+  
+  const check = (id, val) => {
+    const el = document.getElementById('prog-' + id);
+    if (el) el.textContent = (val ? '☑' : '☐') + el.textContent.substring(1);
+  };
+  
+  check('interview', hasMsgs);
+  check('family', hasFamHx);
+  check('exam', hasExam);
+  check('labs', hasLabs);
+  check('diagnosis', hasDx);
+}
+
+// ═══════════════════════════════════════════════════════════
+// ASSESSMENT & PLAN — CLAUDE FEEDBACK
+// ═══════════════════════════════════════════════════════════
+async function submitAP() {
+  if (state.apSubmitted) return;
+  const hpi = document.getElementById('note-hpi').value;
+  const exam = document.getElementById('note-exam').value;
+  const assessment = document.getElementById('note-assessment').value;
+  const plan = document.getElementById('note-plan').value;
+  
+  if (!assessment.trim()) { alert('Please write your assessment before submitting.'); return; }
+  
+  state.apSubmitted = true;
+  const feedbackEl = document.getElementById('ap-feedback');
+  feedbackEl.classList.add('show');
+  feedbackEl.innerHTML = '<div class="ap-feedback-hdr">Analyzing your assessment...</div><div class="ap-feedback-body"><div class="pending-bar" style="width:100%;margin:0"><div class="pending-fill"></div></div></div>';
+  
+  const orderedTests = Object.keys(state.orders).join(', ');
+  const examSystems = Object.keys(state.examinedSystems).join(', ');
+  const badgesEarned = Object.values(state.badges).map(b => b.label).join(', ');
+  
+  const prompt = `You are a clinical teaching attending reviewing a trainee's assessment and plan for the following patient:
+
+PATIENT: Marcus T., 41M
+CHIEF COMPLAINT: Chronic fatigue x5 years
+ACTUAL DIAGNOSIS: Fabry disease (GLA gene pathogenic variant, severely low alpha-galactosidase A)
+
+WHAT THE TRAINEE DID:
+- Exam systems examined: ${examSystems || 'none documented'}
+- Tests ordered: ${orderedTests || 'none'}
+- Interview conducted with: ${Object.keys(state.conversations).filter(k => state.conversations[k].length > 0).join(', ') || 'patient only'}
+- Badges earned: ${badgesEarned || 'none'}
+
+TRAINEE'S DOCUMENTATION:
+HPI: ${hpi || '(not written)'}
+Exam: ${exam || '(not written)'}
+Assessment: ${assessment}
+Plan: ${plan || '(not written)'}
+
+Provide structured feedback in this EXACT format:
+
+DIAGNOSIS ACCURACY: [Correct/Partial/Missed] — [1 sentence explanation]
+
+REASONING STRENGTHS:
+• [strength 1]
+• [strength 2]
+
+CRITICAL GAPS:
+• [gap 1]  
+• [gap 2 if applicable]
+
+WHAT YOU SHOULD HAVE FOUND: [2-3 sentences about the key clues that point to Fabry disease — acroparesthesias since adolescence, angiokeratomas, cornea verticillata, unexplained CKD, LVH, family history of early death and kidney disease]
+
+NEXT STEPS IF FABRY DISEASE SUSPECTED: [2 sentences on management pathway]
+
+Be direct, specific, and educational. Reference specific findings the trainee did or did not identify. Keep the total response under 300 words.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const feedback = data.content?.[0]?.text || 'Unable to generate feedback.';
+    
+    // Detect accuracy level
+    const isCorrect = feedback.toLowerCase().includes('diagnosis accuracy: correct');
+    const isPartial = feedback.toLowerCase().includes('diagnosis accuracy: partial');
+    
+    const badgeClass = isCorrect ? 'badge-green' : isPartial ? 'badge-amber' : 'badge-red';
+    const badgeLabel = isCorrect ? '✓ Correct Diagnosis' : isPartial ? '⟳ Partial' : '✗ Diagnosis Missed';
+    
+    if (isCorrect && !state.badges.diagnosis) {
+      awardBadge('diagnosis', '&#127881;', 'Correct Diagnosis', 'gold', 'You identified Fabry disease as the diagnosis');
+    }
+    
+    feedbackEl.innerHTML = '<div class="ap-feedback-hdr">Faculty Feedback — Assessment &amp; Plan</div><div class="ap-feedback-body"><div class="ap-score-row"><span class="ap-score-badge ' + badgeClass + '">' + badgeLabel + '</span></div><div style="font-size:12.5px;line-height:1.8;color:var(--emr-text);white-space:pre-wrap;">' + escHtml(feedback) + '</div></div>';
+    
+  } catch(e) {
+    feedbackEl.innerHTML = '<div class="ap-feedback-hdr">Feedback Error</div><div class="ap-feedback-body">Unable to connect to feedback engine. Please check your connection and try again.</div>';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// DEBRIEF
+// ═══════════════════════════════════════════════════════════
+function showDebrief() {
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const minutes = Math.floor(elapsed / 60);
+  const seconds = elapsed % 60;
+  
+  const interviewCount = Object.values(state.conversations).reduce((s,c) => s + Math.floor(c.length/2), 0);
+  const examCount = Object.keys(state.examinedSystems).length;
+  const orderCount = Object.keys(state.orders).length;
+  const resultCount = Object.values(state.orders).filter(v => v === 'resulted').length;
+  const badgeCount = Object.keys(state.badges).length;
+  const hasDx = state.results['agala'] || state.results['gla'] || (document.getElementById('note-assessment')?.value || '').toLowerCase().includes('fabry');
+  
+  // Expert pathway steps
+  const expertSteps = [
+    { label: 'Elicit burning pain in hands/feet since adolescence', done: !!state.badges.acroparesthesias },
+    { label: 'Ask about sweating (hypohidrosis)', done: !!state.badges.sweat },
+    { label: 'Examine the skin — find angiokeratomas', done: !!state.badges.skin },
+    { label: 'Perform neurologic exam — find temperature deficit', done: !!state.badges.neuro },
+    { label: 'Obtain family history from collateral sources', done: !!state.badges.family || !!state.badges.maternal },
+    { label: 'Order urinalysis — identify unexplained proteinuria', done: !!state.results['ua'] },
+    { label: 'Order BMP — identify unexplained CKD (Cr 1.6, eGFR 58)', done: !!state.results['bmp'] },
+    { label: 'Order alpha-galactosidase A enzyme assay', done: !!state.results['agala'] },
+    { label: 'Confirm with GLA gene sequencing', done: !!state.results['gla'] },
+    { label: 'Refer to genetics + nephrology + cardiology', done: !!(state.results['genetics'] || state.results['nephro'] || state.results['cardio']) }
+  ];
+  
+  const stepsDone = expertSteps.filter(s => s.done).length;
+  
+  const body = document.getElementById('debrief-body');
+  body.innerHTML = '<div class="debrief-section"><div class="debrief-section-title">Session Summary</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">' +
+    stat('&#9200;', minutes + ':' + seconds.toString().padStart(2,'0'), 'Time') +
+    stat('&#128172;', interviewCount, 'Questions asked') +
+    stat('&#129657;', examCount + '/8', 'Systems examined') +
+    stat('&#9879;', orderCount, 'Tests ordered') +
+    '</div></div>' +
+    '<div class="debrief-section"><div class="debrief-section-title">Diagnostic Pathway — Your Path vs. Expert Pathway</div>' +
+    '<div class="path-compare"><div class="path-col path-yours"><div class="path-col-label">Your Path (' + stepsDone + '/' + expertSteps.length + ' steps)</div>' +
+    expertSteps.map(s => '<div class="path-step"><div class="path-step-dot ' + (s.done ? 'dot-done' : 'dot-missed') + '">' + (s.done ? '✓' : '✗') + '</div><div>' + s.label + '</div></div>').join('') +
+    '</div><div class="path-col path-expert"><div class="path-col-label">Expert Pathway — Key Moves</div>' +
+    '<div style="font-size:12px;line-height:1.8;color:var(--emr-text-dim)">' +
+    '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The diagnosis is in the history:</strong> Every clue in this case was present at visit 1 — burning pain since adolescence, hypohidrosis, angiokeratomas, corneal opacity, family history. The average delay to Fabry diagnosis is 14 years. Those years were present in this room.</p>' +
+    '<p style="margin-bottom:8px"><strong style="color:var(--emr-text)">The constellation:</strong> No single finding is diagnostic alone. The pattern across 5 organ systems — peripheral nervous system, skin, eye, kidney, heart — is what identifies Fabry disease.</p>' +
+    '<p><strong style="color:var(--emr-text)">Family cascade is mandatory:</strong> Marcus\'s mother has CKD and her brother died at 46 with burning and kidney disease. His brother likely has Fabry disease. This diagnosis saved more than Marcus.</p>' +
+    '</div></div></div></div>' +
+    '<div class="debrief-section"><div class="debrief-section-title">Badges Earned (' + badgeCount + ')</div><div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+    (Object.values(state.badges).map(b => '<div class="diag-badge ' + b.color + '" style="position:static">' + b.icon + ' ' + b.label + '</div>').join('') || '<span style="font-size:12px;color:var(--emr-text-muted)">No badges earned yet</span>') +
+    '</div></div>';
+    
+  document.getElementById('debrief-overlay').classList.add('show');
+}
+
+function stat(icon, val, label) {
+  return '<div style="text-align:center;background:var(--emr-panel-alt);border:1px solid var(--emr-border);border-radius:6px;padding:12px;"><div style="font-size:22px;margin-bottom:4px">' + icon + '</div><div style="font-family:Courier New;font-size:20px;font-weight:700;color:var(--emr-white)">' + val + '</div><div style="font-size:10px;color:var(--emr-text-muted);margin-top:2px">' + label + '</div></div>';
+}
+
+function closeDebrief() {
+  document.getElementById('debrief-overlay').classList.remove('show');
+}
+</script>
+</body>
+</html>
