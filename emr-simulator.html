@@ -933,6 +933,24 @@ input, textarea, select { font-family: inherit; }
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--emr-border-light); border-radius: 3px; }
+
+/* Scroll fixes */
+.emr-layout { min-height: 0; }
+.emr-main { min-height: 0; overflow: hidden; }
+.emr-tab-panel.active { min-height: 0; flex: 1; overflow: hidden; }
+.orders-layout { min-height: 0; height: 100%; }
+.order-results-area { 
+  flex: 1; 
+  overflow-y: auto !important; 
+  min-height: 0; 
+  padding: 16px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px;
+}
+.orders-panel { min-height: 0; overflow: hidden; }
+.result-card { flex-shrink: 0; }
+.imaging-report { white-space: pre-wrap; word-break: break-word; }
 </style>
 </head>
 <body>
