@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clinical Reasoning in Practice — Demo</title>
 <style>
+
+/* RENDER FIX: dashboard visible immediately before JS */
+#screen-dash { display: block !important; }
+.screen { display: none; }
+.screen.active { display: block; }
+
 :root {
   --deep:#1a3a52; --ocean:#2874A6; --light:#aed6f1; --pale:#eaf4fb;
   --gold:#c9a84c; --gold-light:#fdf3dc;
@@ -627,10 +633,12 @@ a{color:var(--ocean);}
 
 <script>
 
+
+
 window.onerror = function(msg, src, line, col, err) {
   document.getElementById('js-loading').innerHTML = 
-    '<div style="text-align:center"><div style="font-size:18px;color:#c0392b;margin-bottom:10px">&#9888; Script Error</div>' +
-    '<div style="font-size:12px;color:#566573">' + msg + ' (line ' + line + ')</div></div>';
+    '<div style="text-align:center"><div style="font-size:18px;color:#c0392b;margin-bottom:10px">&#9888; Script Error<\/div>' +
+    '<div style="font-size:12px;color:#566573">' + msg + ' (line ' + line + ')<\/div><\/div>';
   return false;
 };
 // ═══════════════════════════════════════════
@@ -662,7 +670,7 @@ const MODULES = {
 A: {
   pathophys: {
     title: 'Iron Deficiency Anemia — Mechanism',
-    body: 'Iron is required for hemoglobin synthesis in developing erythrocytes. When iron stores (ferritin) are depleted, erythropoiesis becomes iron-restricted, producing small (microcytic) red cells with reduced hemoglobin content (hypochromic). In premenopausal women, the two most common causes are <strong>chronic blood loss</strong> (menstrual) and <strong>reduced intake/absorption</strong> (dietary insufficiency, malabsorption). The body compensates by increasing transferrin production (raised TIBC) to maximize iron capture from the gut, while ferritin falls as stores are consumed. Symptoms — fatigue, dyspnea, pallor — reflect reduced oxygen-carrying capacity.',
+    body: 'Iron is required for hemoglobin synthesis in developing erythrocytes. When iron stores (ferritin) are depleted, erythropoiesis becomes iron-restricted, producing small (microcytic) red cells with reduced hemoglobin content (hypochromic). In premenopausal women, the two most common causes are <strong>chronic blood loss<\/strong> (menstrual) and <strong>reduced intake/absorption<\/strong> (dietary insufficiency, malabsorption). The body compensates by increasing transferrin production (raised TIBC) to maximize iron capture from the gut, while ferritin falls as stores are consumed. Symptoms — fatigue, dyspnea, pallor — reflect reduced oxygen-carrying capacity.',
     table: [
       ['Parameter','In IDA','Direction'],
       ['Hemoglobin','Low','↓'],
@@ -725,7 +733,7 @@ A: {
 B: {
   pathophys: {
     title: 'Fabry Disease — Mechanism',
-    body: 'Fabry disease is an X-linked lysosomal storage disorder caused by mutations in the <em>GLA</em> gene encoding alpha-galactosidase A (α-Gal A). Enzyme deficiency leads to progressive accumulation of globotriaosylceramide (Gb3) in vascular endothelial cells, smooth muscle, cardiomyocytes, renal podocytes, and neurons. In the peripheral nervous system, Gb3 accumulation causes small fiber neuropathy — producing the acroparesthesias (burning pain in hands and feet) that begin in childhood. Renal accumulation causes proteinuria and progressive CKD. Cardiac accumulation causes left ventricular hypertrophy. The disease is multisystemic and progressive, with organ damage accruing silently for decades before presentation.',
+    body: 'Fabry disease is an X-linked lysosomal storage disorder caused by mutations in the <em>GLA<\/em> gene encoding alpha-galactosidase A (α-Gal A). Enzyme deficiency leads to progressive accumulation of globotriaosylceramide (Gb3) in vascular endothelial cells, smooth muscle, cardiomyocytes, renal podocytes, and neurons. In the peripheral nervous system, Gb3 accumulation causes small fiber neuropathy — producing the acroparesthesias (burning pain in hands and feet) that begin in childhood. Renal accumulation causes proteinuria and progressive CKD. Cardiac accumulation causes left ventricular hypertrophy. The disease is multisystemic and progressive, with organ damage accruing silently for decades before presentation.',
     table: [
       ['Organ System','Manifestation','Onset'],
       ['Peripheral nervous system','Acroparesthesias, hypohidrosis','Childhood (ages 5–15)'],
@@ -862,7 +870,7 @@ D1: {
 E1: {
   pathophys: {
     title: 'Obstructive Sleep Apnea — Mechanism',
-    body: 'During sleep, pharyngeal muscle tone decreases. In OSA, the upper airway collapses repeatedly during sleep — each collapse (apnea) causes progressive hypoxia until the brain generates an arousal to restore airway tone. These arousals are brief and rarely remembered but fragment sleep architecture, preventing normal cycling through slow-wave and REM sleep stages. The result: adequate sleep <em>duration</em> but severely impaired sleep <em>quality</em>, producing unrefreshing sleep and profound daytime sleepiness. Simultaneously, each apneic episode triggers sympathetic nervous system activation, catecholamine release, and cortisol rise — driving sustained hypertension even when awake. Repeated nocturnal hypoxia also causes endothelial dysfunction, systemic inflammation, and increased cardiovascular risk.',
+    body: 'During sleep, pharyngeal muscle tone decreases. In OSA, the upper airway collapses repeatedly during sleep — each collapse (apnea) causes progressive hypoxia until the brain generates an arousal to restore airway tone. These arousals are brief and rarely remembered but fragment sleep architecture, preventing normal cycling through slow-wave and REM sleep stages. The result: adequate sleep <em>duration<\/em> but severely impaired sleep <em>quality<\/em>, producing unrefreshing sleep and profound daytime sleepiness. Simultaneously, each apneic episode triggers sympathetic nervous system activation, catecholamine release, and cortisol rise — driving sustained hypertension even when awake. Repeated nocturnal hypoxia also causes endothelial dysfunction, systemic inflammation, and increased cardiovascular risk.',
     table: [
       ['Feature','Mechanism'],
       ['Unrefreshing sleep','Fragmented sleep architecture — no sustained slow-wave/REM'],
@@ -1002,7 +1010,7 @@ Raymond: {
 C: {
   pathophys: {
     title: 'X-linked Agammaglobulinemia (XLA) — Mechanism',
-    body: 'XLA is caused by mutations in the <em>BTK</em> gene (Bruton\'s tyrosine kinase), which encodes a cytoplasmic enzyme essential for B cell receptor signaling and B cell maturation. Without functional BTK, B cell development arrests at the pro-B cell stage in the bone marrow — no mature B cells are produced, and therefore no immunoglobulins (antibodies) of any class are synthesized. Maternal IgG crosses the placenta and protects infants for the first 6–18 months. As maternal antibody titers wane, the XLA infant loses protection against encapsulated bacteria — <em>Streptococcus pneumoniae</em>, <em>Haemophilus influenzae</em>, <em>Pseudomonas</em> — which rely on opsonization by antibodies for clearance. The result: recurrent serious bacterial infections beginning at approximately 18 months of age.',
+    body: 'XLA is caused by mutations in the <em>BTK<\/em> gene (Bruton\'s tyrosine kinase), which encodes a cytoplasmic enzyme essential for B cell receptor signaling and B cell maturation. Without functional BTK, B cell development arrests at the pro-B cell stage in the bone marrow — no mature B cells are produced, and therefore no immunoglobulins (antibodies) of any class are synthesized. Maternal IgG crosses the placenta and protects infants for the first 6–18 months. As maternal antibody titers wane, the XLA infant loses protection against encapsulated bacteria — <em>Streptococcus pneumoniae<\/em>, <em>Haemophilus influenzae<\/em>, <em>Pseudomonas<\/em> — which rely on opsonization by antibodies for clearance. The result: recurrent serious bacterial infections beginning at approximately 18 months of age.',
     table: [
       ['Feature','Explanation'],
       ['Male sex only','BTK is X-linked — hemizygous males are fully affected'],
@@ -1203,7 +1211,7 @@ C2: {
 D2: {
   pathophys: {
     title: 'Selective IgA Deficiency — Mechanism',
-    body: 'Selective IgA deficiency (SIgAD) is the most common primary immune deficiency, affecting 1 in 300–500 people. It results from a failure of B cells to terminally differentiate into IgA-secreting plasma cells — total serum IgG and IgM are normal. The key role of IgA is <strong>mucosal immunity</strong>: secretory IgA (sIgA) coats mucosal surfaces of the respiratory and GI tracts, neutralizing pathogens and preventing adherence. In its absence, the mucosal barrier is breached more easily, leading to recurrent sinopulmonary infections and GI infections — particularly with <em>Giardia</em>, which is cleared by sIgA. Most patients are asymptomatic; symptomatic disease is usually mild. A critical clinical implication: commercial IVIG preparations contain negligible IgA, making IVIG both ineffective and potentially dangerous (anti-IgA antibody-mediated anaphylaxis).',
+    body: 'Selective IgA deficiency (SIgAD) is the most common primary immune deficiency, affecting 1 in 300–500 people. It results from a failure of B cells to terminally differentiate into IgA-secreting plasma cells — total serum IgG and IgM are normal. The key role of IgA is <strong>mucosal immunity<\/strong>: secretory IgA (sIgA) coats mucosal surfaces of the respiratory and GI tracts, neutralizing pathogens and preventing adherence. In its absence, the mucosal barrier is breached more easily, leading to recurrent sinopulmonary infections and GI infections — particularly with <em>Giardia<\/em>, which is cleared by sIgA. Most patients are asymptomatic; symptomatic disease is usually mild. A critical clinical implication: commercial IVIG preparations contain negligible IgA, making IVIG both ineffective and potentially dangerous (anti-IgA antibody-mediated anaphylaxis).',
     table: [
       ['Parameter','SIgAD','Normal'],
       ['Total IgA','<7 mg/dL','70–400 mg/dL'],
@@ -1267,7 +1275,7 @@ D2: {
 E2: {
   pathophys: {
     title: 'Cystic Fibrosis — Mechanism',
-    body: 'CF is caused by mutations in <em>CFTR</em>, which encodes a chloride ion channel in epithelial cell membranes. The most common mutation, F508del, causes misfolding and premature degradation of the CFTR protein. Without functional CFTR, chloride (and secondarily sodium and water) cannot be secreted into the airway lumen. The result: dehydrated, thick, viscous mucus that cannot be cleared by ciliary action. In the lungs, mucus stasis creates an ideal environment for chronic bacterial colonization — <em>Pseudomonas aeruginosa</em>, <em>Staphylococcus aureus</em> — causing progressive bronchiectasis and lung function decline. In the pancreas, viscous secretions block pancreatic ducts → exocrine pancreatic insufficiency → malabsorption of fat and fat-soluble vitamins → steatorrhea and failure to thrive.',
+    body: 'CF is caused by mutations in <em>CFTR<\/em>, which encodes a chloride ion channel in epithelial cell membranes. The most common mutation, F508del, causes misfolding and premature degradation of the CFTR protein. Without functional CFTR, chloride (and secondarily sodium and water) cannot be secreted into the airway lumen. The result: dehydrated, thick, viscous mucus that cannot be cleared by ciliary action. In the lungs, mucus stasis creates an ideal environment for chronic bacterial colonization — <em>Pseudomonas aeruginosa<\/em>, <em>Staphylococcus aureus<\/em> — causing progressive bronchiectasis and lung function decline. In the pancreas, viscous secretions block pancreatic ducts → exocrine pancreatic insufficiency → malabsorption of fat and fat-soluble vitamins → steatorrhea and failure to thrive.',
     table: [
       ['Organ','Mechanism','Clinical Effect'],
       ['Lungs','Thick mucus → colonization → inflammation','Recurrent pulmonary infections, bronchiectasis, FEV1 decline'],
@@ -1470,7 +1478,7 @@ B3: {
 C3: {
   pathophys: {
     title: 'Angelman Syndrome — Mechanism',
-    body: 'Angelman syndrome results from loss of function of the maternally inherited <em>UBE3A</em> gene on chromosome 15q11-q13, which encodes an E3 ubiquitin ligase essential for synaptic plasticity and neuronal function. The paternal copy of UBE3A is silenced in neurons (imprinting), making the maternal copy the sole functional allele. Loss occurs via four mechanisms: maternal deletion (70–75% — most severe), paternal uniparental disomy (UPD, ~7%), imprinting center defect (~3%), and UBE3A point mutations (~11%). The molecular consequence is accumulation of substrate proteins that disrupt synaptic function, explaining the severe cognitive impairment, absent speech, and seizures. The characteristically happy, excitable affect reflects altered limbic circuit function — not intact cognition.',
+    body: 'Angelman syndrome results from loss of function of the maternally inherited <em>UBE3A<\/em> gene on chromosome 15q11-q13, which encodes an E3 ubiquitin ligase essential for synaptic plasticity and neuronal function. The paternal copy of UBE3A is silenced in neurons (imprinting), making the maternal copy the sole functional allele. Loss occurs via four mechanisms: maternal deletion (70–75% — most severe), paternal uniparental disomy (UPD, ~7%), imprinting center defect (~3%), and UBE3A point mutations (~11%). The molecular consequence is accumulation of substrate proteins that disrupt synaptic function, explaining the severe cognitive impairment, absent speech, and seizures. The characteristically happy, excitable affect reflects altered limbic circuit function — not intact cognition.',
     table: [
       ['Mechanism','Frequency','Severity','Detectable by'],
       ['Maternal 15q deletion','70–75%','Most severe','Chromosomal microarray'],
@@ -1600,7 +1608,7 @@ D3: {
 E3: {
   pathophys: {
     title: 'Rett Syndrome — Mechanism',
-    body: 'Rett syndrome is caused by de novo loss-of-function mutations in <em>MECP2</em> (methyl CpG binding protein 2), an X-linked gene encoding a transcriptional regulator that modulates the expression of hundreds of genes involved in synaptic maturation. In the absence of functional MeCP2, synaptic development proceeds abnormally — particularly for inhibitory interneurons and the circuits governing breathing regulation, motor coordination, and language. The condition is almost exclusively seen in females because males with MECP2 mutations typically have a severe neonatal encephalopathy and do not survive to present with the classic Rett phenotype. X-chromosome inactivation mosaicism in females allows partial gene expression, explaining the variability in severity. The mutations are de novo in virtually all cases — parents are not carriers.',
+    body: 'Rett syndrome is caused by de novo loss-of-function mutations in <em>MECP2<\/em> (methyl CpG binding protein 2), an X-linked gene encoding a transcriptional regulator that modulates the expression of hundreds of genes involved in synaptic maturation. In the absence of functional MeCP2, synaptic development proceeds abnormally — particularly for inhibitory interneurons and the circuits governing breathing regulation, motor coordination, and language. The condition is almost exclusively seen in females because males with MECP2 mutations typically have a severe neonatal encephalopathy and do not survive to present with the classic Rett phenotype. X-chromosome inactivation mosaicism in females allows partial gene expression, explaining the variability in severity. The mutations are de novo in virtually all cases — parents are not carriers.',
     table: [
       ['Rett Stage','Age','Features'],
       ['I — Stagnation','6–18 months','Subtle developmental slowdown; often not recognized'],
@@ -1807,7 +1815,7 @@ F4B: {
 F4C: {
   pathophys: {
     title: 'Reactive Arthritis — Mechanism',
-    body: 'Reactive arthritis is a sterile synovial inflammation triggered by a remote infection — most commonly genitourinary (<em>Chlamydia trachomatis</em>, <em>Ureaplasma</em>) or gastrointestinal (<em>Salmonella</em>, <em>Shigella</em>, <em>Campylobacter</em>, <em>Yersinia</em>). The joint is not infected — bacterial antigens (lipopolysaccharide, outer membrane proteins) translocate to synovial tissue and trigger an HLA-B27-restricted T cell response. HLA-B27 presents bacterial peptides to CD8+ T cells with aberrant cross-reactivity — explaining why HLA-B27 positive individuals are at higher risk. The inflammation typically peaks 1–4 weeks after the triggering infection and resolves in 3–6 months in most cases, though HLA-B27 positive patients have higher rates of chronic disease and subsequent spondyloarthropathy.',
+    body: 'Reactive arthritis is a sterile synovial inflammation triggered by a remote infection — most commonly genitourinary (<em>Chlamydia trachomatis<\/em>, <em>Ureaplasma<\/em>) or gastrointestinal (<em>Salmonella<\/em>, <em>Shigella<\/em>, <em>Campylobacter<\/em>, <em>Yersinia<\/em>). The joint is not infected — bacterial antigens (lipopolysaccharide, outer membrane proteins) translocate to synovial tissue and trigger an HLA-B27-restricted T cell response. HLA-B27 presents bacterial peptides to CD8+ T cells with aberrant cross-reactivity — explaining why HLA-B27 positive individuals are at higher risk. The inflammation typically peaks 1–4 weeks after the triggering infection and resolves in 3–6 months in most cases, though HLA-B27 positive patients have higher rates of chronic disease and subsequent spondyloarthropathy.',
     table: [
       ['Step','Event'],
       ['1. Triggering infection','Urogenital (Chlamydia) or GI (Salmonella, Shigella, etc.)'],
@@ -2041,9 +2049,9 @@ const CASES = {
         nextFinding: 'Sofia reports her periods have been heavier than usual for the past year since switching her IUD. She eats meat occasionally but mostly a plant-based diet. She has no family history of thyroid disease or autoimmune conditions. She has not had bloodwork in 3 years.',
         nextFindingLabel: 'What the history reveals',
         feedback: [
-          { icon:'&#128269;', text:'<strong>Heavy menstrual bleeding + dietary iron restriction</strong> are the two most common causes of iron deficiency in women of reproductive age. Together, they are additive. Did you ask about both?' },
-          { icon:'&#9203;', text:'<strong>Duration matters:</strong> 14 months of progressive fatigue is rarely stress alone. Functional causes are possible, but an organic workup should precede that diagnosis.' },
-          { icon:'&#128203;', text:'<strong>No bloodwork in 3 years</strong> in a symptomatic patient means the answer may already be visible in basic labs. A CBC with differential is the most efficient first move here.' }
+          { icon:'&#128269;', text:'<strong>Heavy menstrual bleeding + dietary iron restriction<\/strong> are the two most common causes of iron deficiency in women of reproductive age. Together, they are additive. Did you ask about both?' },
+          { icon:'&#9203;', text:'<strong>Duration matters:<\/strong> 14 months of progressive fatigue is rarely stress alone. Functional causes are possible, but an organic workup should precede that diagnosis.' },
+          { icon:'&#128203;', text:'<strong>No bloodwork in 3 years<\/strong> in a symptomatic patient means the answer may already be visible in basic labs. A CBC with differential is the most efficient first move here.' }
         ]
       },
       {
@@ -2062,9 +2070,9 @@ const CASES = {
         nextFinding: 'Celiac serology (tTG-IgA) returns negative. Colonoscopy not indicated at this age without red flags. The pattern is consistent with iron deficiency from combined dietary insufficiency and heavy menstrual loss.',
         nextFindingLabel: 'Additional workup results',
         feedback: [
-          { icon:'&#128269;', text:'<strong>Microcytic hypochromic anemia + low ferritin + elevated TIBC</strong> is the classic triad of iron deficiency. This is not ambiguous — the pattern is highly specific.' },
-          { icon:'&#9888;', text:'<strong>Always identify the source:</strong> Iron deficiency in a premenopausal woman is common, but the underlying cause (menstrual loss, dietary, malabsorption) should always be named, not assumed.' },
-          { icon:'&#128203;', text:'<strong>No genetic testing indicated here.</strong> This is a nutritional and gynecologic problem. The pattern does not support a hereditary hemolytic anemia or other genetic cause.' }
+          { icon:'&#128269;', text:'<strong>Microcytic hypochromic anemia + low ferritin + elevated TIBC<\/strong> is the classic triad of iron deficiency. This is not ambiguous — the pattern is highly specific.' },
+          { icon:'&#9888;', text:'<strong>Always identify the source:<\/strong> Iron deficiency in a premenopausal woman is common, but the underlying cause (menstrual loss, dietary, malabsorption) should always be named, not assumed.' },
+          { icon:'&#128203;', text:'<strong>No genetic testing indicated here.<\/strong> This is a nutritional and gynecologic problem. The pattern does not support a hereditary hemolytic anemia or other genetic cause.' }
         ]
       },
       {
@@ -2092,11 +2100,11 @@ const CASES = {
         ],
         diagnosis: 'Iron Deficiency Anemia',
         diagnosisText: 'A nutritional and gynecologic problem, fully reversible with oral iron and management of menstrual blood loss. This case was designed to demonstrate that the most common diagnosis is still the correct one — and that ordering genetic testing without a plausible genetic pattern adds harm without benefit.',
-        genaText: 'In this case, GENA Screen would not be indicated. The clinical picture — microcytic anemia, low ferritin, heavy menstrual bleeding, dietary history — fully supports a non-genetic etiology. Applying genetic decision support here would represent inappropriate use. Recognizing when <em>not</em> to use a tool is as important as knowing when to use it.',
+        genaText: 'In this case, GENA Screen would not be indicated. The clinical picture — microcytic anemia, low ferritin, heavy menstrual bleeding, dietary history — fully supports a non-genetic etiology. Applying genetic decision support here would represent inappropriate use. Recognizing when <em>not<\/em> to use a tool is as important as knowing when to use it.',
         reflection: [
-          { icon:'&#128269;', q:'<strong>The diagnostic anchor:</strong> Did you consider iron deficiency at Visit 1, or did you chase other diagnoses first? What would have made you think of it earlier?' },
-          { icon:'&#9888;', q:'<strong>The genetic testing question:</strong> Sofia asked if it could be genetic. How do you explain to a patient — without dismissing their concern — that genetic testing is not appropriate here?' },
-          { icon:'&#128203;', q:'<strong>The source:</strong> Iron deficiency always has a source. What are the three most common causes in a premenopausal woman, and which would you investigate if oral iron failed to correct the anemia?' }
+          { icon:'&#128269;', q:'<strong>The diagnostic anchor:<\/strong> Did you consider iron deficiency at Visit 1, or did you chase other diagnoses first? What would have made you think of it earlier?' },
+          { icon:'&#9888;', q:'<strong>The genetic testing question:<\/strong> Sofia asked if it could be genetic. How do you explain to a patient — without dismissing their concern — that genetic testing is not appropriate here?' },
+          { icon:'&#128203;', q:'<strong>The source:<\/strong> Iron deficiency always has a source. What are the three most common causes in a premenopausal woman, and which would you investigate if oral iron failed to correct the anemia?' }
         ]
       }
     ]
@@ -2127,9 +2135,9 @@ const CASES = {
         nextFinding: 'Further history: Marcus mentions his younger brother has kidney disease of unknown cause. His maternal uncle died of a heart attack at age 46. He also mentions he had a corneal opacity found on a routine eye exam years ago that was never explained. He has no urticaria, no joint swelling, no lymphadenopathy.',
         nextFindingLabel: 'Deeper history reveals',
         feedback: [
-          { icon:'&#128269;', text:'<strong>Neuropathic pain in the extremities since adolescence</strong> is not a feature of depression or stress-related fatigue. It should immediately broaden the differential toward neurologic or metabolic etiologies.' },
-          { icon:'&#9203;', text:'<strong>Decreased sweating (hypohidrosis)</strong> is a sign of autonomic dysfunction — a feature of several multisystem genetic disorders. Combined with acroparesthesias, it points toward a small fiber neuropathy pattern.' },
-          { icon:'&#128203;', text:'<strong>Family history is the key unlock here:</strong> Unexplained kidney disease in a brother, early cardiovascular death in a maternal uncle, and unexplained corneal opacity together form a pattern that demands a unifying diagnosis.' }
+          { icon:'&#128269;', text:'<strong>Neuropathic pain in the extremities since adolescence<\/strong> is not a feature of depression or stress-related fatigue. It should immediately broaden the differential toward neurologic or metabolic etiologies.' },
+          { icon:'&#9203;', text:'<strong>Decreased sweating (hypohidrosis)<\/strong> is a sign of autonomic dysfunction — a feature of several multisystem genetic disorders. Combined with acroparesthesias, it points toward a small fiber neuropathy pattern.' },
+          { icon:'&#128203;', text:'<strong>Family history is the key unlock here:<\/strong> Unexplained kidney disease in a brother, early cardiovascular death in a maternal uncle, and unexplained corneal opacity together form a pattern that demands a unifying diagnosis.' }
         ]
       },
       {
@@ -2148,9 +2156,9 @@ const CASES = {
         nextFinding: 'Alpha-galactosidase A enzyme activity assay returns markedly reduced. GLA gene sequencing confirms a pathogenic variant. Diagnosis of Fabry disease confirmed.',
         nextFindingLabel: 'Confirmatory testing',
         feedback: [
-          { icon:'&#9733;', text:'<strong>Fabry disease</strong> is an X-linked lysosomal storage disorder caused by GLA gene mutations leading to alpha-galactosidase A deficiency. It is one of the most commonly missed genetic diagnoses in adults — average delay to diagnosis is 14 years.' },
-          { icon:'&#128269;', text:'<strong>The constellation:</strong> Acroparesthesias + hypohidrosis + angiokeratomas + cornea verticillata + CKD + LVH in a male with family history of early cardiovascular death and kidney disease is Fabry disease until proven otherwise.' },
-          { icon:'&#9203;', text:'<strong>Family screening is mandatory:</strong> Fabry disease is X-linked. Marcus\'s mother is an obligate carrier. His brother with kidney disease likely has it. His sisters may be carriers. Genetic counseling and family cascade testing must be initiated.' }
+          { icon:'&#9733;', text:'<strong>Fabry disease<\/strong> is an X-linked lysosomal storage disorder caused by GLA gene mutations leading to alpha-galactosidase A deficiency. It is one of the most commonly missed genetic diagnoses in adults — average delay to diagnosis is 14 years.' },
+          { icon:'&#128269;', text:'<strong>The constellation:<\/strong> Acroparesthesias + hypohidrosis + angiokeratomas + cornea verticillata + CKD + LVH in a male with family history of early cardiovascular death and kidney disease is Fabry disease until proven otherwise.' },
+          { icon:'&#9203;', text:'<strong>Family screening is mandatory:<\/strong> Fabry disease is X-linked. Marcus\'s mother is an obligate carrier. His brother with kidney disease likely has it. His sisters may be carriers. Genetic counseling and family cascade testing must be initiated.' }
         ]
       },
       {
@@ -2181,9 +2189,9 @@ const CASES = {
         diagnosisText: 'Fabry disease affects 1 in 40,000 males and is one of the most commonly missed diagnoses in primary care. Enzyme replacement therapy (ERT) can stabilize kidney function, reduce cardiac hypertrophy, and improve neuropathic pain — but only if started before irreversible organ damage occurs. The features that identified this diagnosis were present for over two decades.',
         genaText: 'GENA Screen, when given Marcus\'s constellation — acroparesthesias since adolescence, hypohidrosis, angiokeratomas, cornea verticillata, CKD with proteinuria, LVH, family history of early cardiovascular death and unexplained kidney disease — returns Fabry disease as the top-ranked pre-diagnostic finding with a recommendation for alpha-galactosidase A enzyme activity assay and GLA gene sequencing. This is exactly the use case GENA is designed for: a multisystem pattern in a patient who has been seen many times without the picture being assembled.',
         reflection: [
-          { icon:'&#9203;', q:'<strong>The 20-year delay:</strong> Marcus had acroparesthesias since his twenties. He was 41 at diagnosis. What would it have taken to catch this at age 25? What questions were never asked?' },
-          { icon:'&#128101;', q:'<strong>Family cascade testing:</strong> When you confirm a genetic diagnosis, you implicitly have information about people who are not your patient. How do you approach the ethical obligation to notify family members?' },
-          { icon:'&#9733;', q:'<strong>Compare to Case 01:</strong> Both Sofia and Marcus presented with chronic fatigue. What were the specific features in Marcus\'s history that should have told you this was different from the first visit — before any labs?' }
+          { icon:'&#9203;', q:'<strong>The 20-year delay:<\/strong> Marcus had acroparesthesias since his twenties. He was 41 at diagnosis. What would it have taken to catch this at age 25? What questions were never asked?' },
+          { icon:'&#128101;', q:'<strong>Family cascade testing:<\/strong> When you confirm a genetic diagnosis, you implicitly have information about people who are not your patient. How do you approach the ethical obligation to notify family members?' },
+          { icon:'&#9733;', q:'<strong>Compare to Case 01:<\/strong> Both Sofia and Marcus presented with chronic fatigue. What were the specific features in Marcus\'s history that should have told you this was different from the first visit — before any labs?' }
         ]
       }
     ]
@@ -2214,9 +2222,9 @@ const CASES = {
         nextFinding: 'All three infections have been bacterial (pneumococcal pneumonia x2, Haemophilus influenzae pneumonia x1). No viral or fungal infections. No thrush, no unusual skin infections. His maternal uncle died of a "chest infection" at age 8 in another country. Liam has had no serious infections with viruses — his colds resolve normally.',
         nextFindingLabel: 'Critical history emerges',
         feedback: [
-          { icon:'&#9733;', text:'<strong>Bacterial-only infections</strong> are the key discriminating feature. Children in daycare get viral URIs constantly — but recurrent serious bacterial infections (pneumonia, sepsis, meningitis) affecting the same sites suggest a specific immune defect in antibody-mediated (humoral) immunity.' },
-          { icon:'&#128269;', text:'<strong>Timing of onset at 18 months</strong> is critical. Maternal IgG crosses the placenta and protects infants for the first 6–18 months. A child who was well until 18 months and then began getting serious bacterial infections has lost maternal antibody protection — and may not be making their own.' },
-          { icon:'&#9888;', text:'<strong>A male relative who died of a "chest infection" in childhood</strong> in the maternal line is the single most alarming family history finding for X-linked agammaglobulinemia.' }
+          { icon:'&#9733;', text:'<strong>Bacterial-only infections<\/strong> are the key discriminating feature. Children in daycare get viral URIs constantly — but recurrent serious bacterial infections (pneumonia, sepsis, meningitis) affecting the same sites suggest a specific immune defect in antibody-mediated (humoral) immunity.' },
+          { icon:'&#128269;', text:'<strong>Timing of onset at 18 months<\/strong> is critical. Maternal IgG crosses the placenta and protects infants for the first 6–18 months. A child who was well until 18 months and then began getting serious bacterial infections has lost maternal antibody protection — and may not be making their own.' },
+          { icon:'&#9888;', text:'<strong>A male relative who died of a "chest infection" in childhood<\/strong> in the maternal line is the single most alarming family history finding for X-linked agammaglobulinemia.' }
         ]
       },
       {
@@ -2235,9 +2243,9 @@ const CASES = {
         nextFinding: 'Liam is started on intravenous immunoglobulin (IVIG) replacement every 3–4 weeks. Within 6 months he has had no further serious infections. His mother is found to be a carrier of the BTK mutation. Her brother (Liam\'s maternal uncle) died of the same condition undiagnosed.',
         nextFindingLabel: 'Treatment response and family findings',
         feedback: [
-          { icon:'&#9733;', text:'<strong>XLA (X-linked Agammaglobulinemia)</strong> is caused by BTK gene mutations that arrest B cell development. Affected males have absent B cells and cannot produce any immunoglobulins. IVIG replacement is lifesaving and highly effective when started early.' },
-          { icon:'&#128101;', text:'<strong>The maternal uncle who died of a "chest infection" at age 8</strong> almost certainly had XLA that was never diagnosed. This is the typical pre-IVIG era outcome. Liam\'s diagnosis potentially saves his cousins.' },
-          { icon:'&#9203;', text:'<strong>The discriminating question</strong> that most clinicians don\'t ask: "Have all the infections been bacterial?" Recurrent bacterial-only infections in a male child = humoral immune defect until proven otherwise.' }
+          { icon:'&#9733;', text:'<strong>XLA (X-linked Agammaglobulinemia)<\/strong> is caused by BTK gene mutations that arrest B cell development. Affected males have absent B cells and cannot produce any immunoglobulins. IVIG replacement is lifesaving and highly effective when started early.' },
+          { icon:'&#128101;', text:'<strong>The maternal uncle who died of a "chest infection" at age 8<\/strong> almost certainly had XLA that was never diagnosed. This is the typical pre-IVIG era outcome. Liam\'s diagnosis potentially saves his cousins.' },
+          { icon:'&#9203;', text:'<strong>The discriminating question<\/strong> that most clinicians don\'t ask: "Have all the infections been bacterial?" Recurrent bacterial-only infections in a male child = humoral immune defect until proven otherwise.' }
         ]
       },
       {
@@ -2268,9 +2276,9 @@ const CASES = {
         diagnosisText: 'XLA affects approximately 1 in 200,000 males. IVIG replacement therapy is highly effective and allows near-normal life expectancy. Without it, affected males die of overwhelming bacterial infection in childhood or early adulthood. The features that identify this diagnosis — bacterial-only infections, onset at 18 months, male sex, maternal family history — are present at the first serious infection.',
         genaText: 'GENA Screen, when given the pattern of recurrent serious bacterial-only infections beginning at 18 months in a male child with absent B cells and family history of a male relative dying of infection in childhood, identifies X-linked Agammaglobulinemia as the top pre-diagnostic finding and recommends BTK gene sequencing alongside serum immunoglobulins and lymphocyte subset panel.',
         reflection: [
-          { icon:'&#128269;', q:'<strong>The discriminating question:</strong> "What type of organisms caused the infections?" is the single question that separates normal daycare illness from immunodeficiency. When did you think to ask it — and would you ask it routinely after a second serious infection?' },
-          { icon:'&#9203;', q:'<strong>The maternal uncle:</strong> He died of a "chest infection" at age 8. How do you take a family history that catches information like this — and how does the death of a male relative in another country get factored into your clinical reasoning?' },
-          { icon:'&#128101;', q:'<strong>Compare to Case 04:</strong> The next patient has a nearly identical presentation. What will you look for differently?' }
+          { icon:'&#128269;', q:'<strong>The discriminating question:<\/strong> "What type of organisms caused the infections?" is the single question that separates normal daycare illness from immunodeficiency. When did you think to ask it — and would you ask it routinely after a second serious infection?' },
+          { icon:'&#9203;', q:'<strong>The maternal uncle:<\/strong> He died of a "chest infection" at age 8. How do you take a family history that catches information like this — and how does the death of a male relative in another country get factored into your clinical reasoning?' },
+          { icon:'&#128101;', q:'<strong>Compare to Case 04:<\/strong> The next patient has a nearly identical presentation. What will you look for differently?' }
         ]
       }
     ]
@@ -2301,9 +2309,9 @@ const CASES = {
         nextFinding: 'All three episodes were viral or caused by common bacteria (one otitis media, two viral URIs). Noah has also had four colds this year that resolved without medical care. He has had no pneumonias, no serious bacterial infections. He is growing normally, hitting all developmental milestones, and is fully vaccinated. No family history of early death or immune deficiency. His older sister (age 7, same daycare) gets sick at the same rate.',
         nextFindingLabel: 'History clarified',
         feedback: [
-          { icon:'&#9989;', text:'<strong>6–8 respiratory infections per year is normal for a child in daycare or preschool.</strong> The immune system is actively learning. This is physiologic, not pathologic.' },
-          { icon:'&#128269;', text:'<strong>The critical difference from the previous case:</strong> Noah\'s infections are viral and one bacterial otitis media — not recurrent serious bacterial pneumonias from encapsulated organisms. Severity and type matter more than count.' },
-          { icon:'&#9888;', text:'<strong>A sibling in the same environment with the same infection rate</strong> is strong evidence for an environmental explanation rather than a host immune defect.' }
+          { icon:'&#9989;', text:'<strong>6–8 respiratory infections per year is normal for a child in daycare or preschool.<\/strong> The immune system is actively learning. This is physiologic, not pathologic.' },
+          { icon:'&#128269;', text:'<strong>The critical difference from the previous case:<\/strong> Noah\'s infections are viral and one bacterial otitis media — not recurrent serious bacterial pneumonias from encapsulated organisms. Severity and type matter more than count.' },
+          { icon:'&#9888;', text:'<strong>A sibling in the same environment with the same infection rate<\/strong> is strong evidence for an environmental explanation rather than a host immune defect.' }
         ]
       },
       {
@@ -2322,9 +2330,9 @@ const CASES = {
         nextFinding: 'You decide not to order immune testing. You provide anticipatory guidance about normal illness frequency in daycare, signs that would prompt reassessment (hospitalization, failure to thrive, unusual organisms, infections not responding to treatment), and a safety net follow-up plan. Over the next 12 months Noah\'s illness frequency decreases as his immune system matures.',
         nextFindingLabel: 'Your management and outcome',
         feedback: [
-          { icon:'&#9989;', text:'<strong>Immune testing in a well-growing, well-developing child with viral URIs and one otitis media</strong> has a very low pre-test probability of finding pathology. A false-positive or variant of uncertain significance result creates significant anxiety and further unnecessary workup.' },
-          { icon:'&#9203;', text:'<strong>Normal lymph nodes and normal tonsils</strong> are actually reassuring for immune function — XLA patients often have absent tonsils and lymph nodes because these structures require B cells to develop.' },
-          { icon:'&#128203;', text:'<strong>Anticipatory guidance with a clear safety net</strong> is better medicine here than immune testing. Tell parents: if he is ever hospitalized for an infection, has a serious bacterial infection, or stops growing normally — come back immediately.' }
+          { icon:'&#9989;', text:'<strong>Immune testing in a well-growing, well-developing child with viral URIs and one otitis media<\/strong> has a very low pre-test probability of finding pathology. A false-positive or variant of uncertain significance result creates significant anxiety and further unnecessary workup.' },
+          { icon:'&#9203;', text:'<strong>Normal lymph nodes and normal tonsils<\/strong> are actually reassuring for immune function — XLA patients often have absent tonsils and lymph nodes because these structures require B cells to develop.' },
+          { icon:'&#128203;', text:'<strong>Anticipatory guidance with a clear safety net<\/strong> is better medicine here than immune testing. Tell parents: if he is ever hospitalized for an infection, has a serious bacterial infection, or stops growing normally — come back immediately.' }
         ]
       },
       {
@@ -2355,14 +2363,16 @@ const CASES = {
         diagnosisText: 'This case was designed to directly follow the XLA case. Noah\'s presentation sounds similar at first glance but the details are fundamentally different. Appropriate clinical reasoning requires reading those details — not applying the previous case\'s diagnosis to this patient. The most important skill demonstrated here is knowing when a pattern does NOT support escalation.',
         genaText: 'GENA Screen is not indicated in this case. Noah\'s infections are viral with one bacterial otitis media, his growth is normal, and there is no family history of immune deficiency. Applying genetic or immune decision support here would represent a pattern mismatch. This case demonstrates that clinical decision support tools — like all diagnostic tools — are only as useful as the reasoning that decides when to use them.',
         reflection: [
-          { icon:'&#128269;', q:'<strong>The anchoring effect:</strong> You just diagnosed XLA in the previous patient. How did that affect how you approached Noah? Did you catch yourself applying the previous diagnosis to this patient?' },
-          { icon:'&#9888;', q:'<strong>The parent communication challenge:</strong> Noah\'s parents are anxious and want testing. You are saying no. How do you make them feel heard while still making the right clinical decision?' },
-          { icon:'&#9989;', q:'<strong>The safety net:</strong> You are not ordering immune testing. But what specific findings — if they appeared at the next visit — would make you reconsider? What is your threshold?' }
+          { icon:'&#128269;', q:'<strong>The anchoring effect:<\/strong> You just diagnosed XLA in the previous patient. How did that affect how you approached Noah? Did you catch yourself applying the previous diagnosis to this patient?' },
+          { icon:'&#9888;', q:'<strong>The parent communication challenge:<\/strong> Noah\'s parents are anxious and want testing. You are saying no. How do you make them feel heard while still making the right clinical decision?' },
+          { icon:'&#9989;', q:'<strong>The safety net:<\/strong> You are not ordering immune testing. But what specific findings — if they appeared at the next visit — would make you reconsider? What is your threshold?' }
         ]
       }
     ]
   }
 };
+
+
 
 // ─── RAYMOND: Iron deficiency from GI blood loss (colon cancer) ───────────
 CASES['Raymond'] = {
@@ -2384,9 +2394,9 @@ CASES['Raymond'] = {
       nextFinding:'CBC: Hgb 8.2 g/dL (low), MCV 69 fL (microcytic), ferritin 4 ng/mL (critically low). Fecal occult blood test: strongly positive. Urgent colonoscopy arranged.',
       nextFindingLabel:'Labs and initial workup',
       feedback:[
-        { icon:'&#9888;', text:'<strong>Iron deficiency in a post-menopausal woman or any man requires a GI source to be identified.</strong> "Common cause" thinking (dietary, menstrual) does not apply here. GI malignancy must be excluded.' },
-        { icon:'&#128269;', text:'<strong>Unintentional weight loss + change in bowel habits + iron deficiency in a 68-year-old male</strong> is colorectal cancer until proven otherwise. This is not a workup that can wait.' },
-        { icon:'&#9203;', text:'<strong>Compare to Sofia:</strong> Both have iron deficiency anemia with low ferritin. Sofia\'s cause was reproductive and dietary. Raymond\'s cause is occult GI bleeding — same lab pattern, completely different urgency and diagnostic pathway.' }
+        { icon:'&#9888;', text:'<strong>Iron deficiency in a post-menopausal woman or any man requires a GI source to be identified.<\/strong> "Common cause" thinking (dietary, menstrual) does not apply here. GI malignancy must be excluded.' },
+        { icon:'&#128269;', text:'<strong>Unintentional weight loss + change in bowel habits + iron deficiency in a 68-year-old male<\/strong> is colorectal cancer until proven otherwise. This is not a workup that can wait.' },
+        { icon:'&#9203;', text:'<strong>Compare to Sofia:<\/strong> Both have iron deficiency anemia with low ferritin. Sofia\'s cause was reproductive and dietary. Raymond\'s cause is occult GI bleeding — same lab pattern, completely different urgency and diagnostic pathway.' }
       ]
     },
     { id:'v2', label:'Visit 2', icon:'&#128202;', iconClass:'v2',
@@ -2400,9 +2410,9 @@ CASES['Raymond'] = {
       nextFinding:'Raymond undergoes sigmoid colectomy. Pathology: 3/18 lymph nodes positive — upgraded to Stage IIIB. Adjuvant chemotherapy initiated. Microsatellite instability testing: MSS (microsatellite stable) — Lynch syndrome excluded. Daughter referred for colonoscopy at 48 (10 years before Raymond\'s diagnosis age).',
       nextFindingLabel:'Surgical and genetic findings',
       feedback:[
-        { icon:'&#9889;', text:'<strong>Iron deficiency anemia in a man or post-menopausal woman is a GI malignancy until proven otherwise.</strong> Treating the anemia without identifying the source is one of the most consequential delays in oncology.' },
-        { icon:'&#128269;', text:'<strong>Most colorectal cancer is sporadic, not hereditary.</strong> MSI testing and Lynch syndrome evaluation are standard — but a negative result is the most common outcome. Raymond\'s daughter needs colonoscopy screening starting 10 years before his diagnosis age, not genetic testing.' },
-        { icon:'&#9203;', text:'<strong>The lesson of this case:</strong> Iron deficiency looks like iron deficiency on a CBC. It does not reveal its cause. In a 68-year-old man, always find the source before treating the anemia.' }
+        { icon:'&#9889;', text:'<strong>Iron deficiency anemia in a man or post-menopausal woman is a GI malignancy until proven otherwise.<\/strong> Treating the anemia without identifying the source is one of the most consequential delays in oncology.' },
+        { icon:'&#128269;', text:'<strong>Most colorectal cancer is sporadic, not hereditary.<\/strong> MSI testing and Lynch syndrome evaluation are standard — but a negative result is the most common outcome. Raymond\'s daughter needs colonoscopy screening starting 10 years before his diagnosis age, not genetic testing.' },
+        { icon:'&#9203;', text:'<strong>The lesson of this case:<\/strong> Iron deficiency looks like iron deficiency on a CBC. It does not reveal its cause. In a 68-year-old man, always find the source before treating the anemia.' }
       ]
     },
     { id:'v3', label:'Decision', icon:'&#128250;', iconClass:'v3',
@@ -2429,9 +2439,9 @@ CASES['Raymond'] = {
       diagnosisText:'Iron deficiency anemia in an older man is a GI malignancy until proven otherwise. This case directly mirrors Case 1A (Sofia, iron deficiency from menstrual loss) to demonstrate that the same laboratory pattern demands completely different management depending on the patient\'s demographics and context. Sofia needed iron and gynecology. Raymond needed a colonoscopy immediately.',
       genaText:'GENA Screen is not the primary tool in this case — colorectal cancer diagnosis requires endoscopy, not genetic screening. However, MSI and Lynch syndrome testing are now standard after colorectal cancer diagnosis, and GENA Screen would appropriately flag Lynch syndrome evaluation based on the tumor findings. The negative MSI result appropriately excluded hereditary colorectal cancer. This case reinforces that genetic decision support follows clinical diagnosis — not the other way around.',
       reflection:[
-        { icon:'&#9888;', q:'<strong>The same lab, different urgency:</strong> Sofia and Raymond both had ferritin of 4–6 and microcytic anemia. What was the single clinical feature in Raymond\'s presentation that most urgently changed the next step — and would you have identified it at the first visit?' },
-        { icon:'&#9203;', q:'<strong>The surveillance failure:</strong> Raymond\'s colonoscopy lapsed by 3 years. Do you track when your patients\' preventive screenings are due — and do you have a system to flag overdue tests before symptoms develop?' },
-        { icon:'&#128269;', q:'<strong>The genetic question:</strong> Raymond\'s daughter asked about genetic testing. How do you explain the difference between "sporadic colorectal cancer" and "hereditary colorectal cancer syndrome" — and what screening do you recommend for her?' }
+        { icon:'&#9888;', q:'<strong>The same lab, different urgency:<\/strong> Sofia and Raymond both had ferritin of 4–6 and microcytic anemia. What was the single clinical feature in Raymond\'s presentation that most urgently changed the next step — and would you have identified it at the first visit?' },
+        { icon:'&#9203;', q:'<strong>The surveillance failure:<\/strong> Raymond\'s colonoscopy lapsed by 3 years. Do you track when your patients\' preventive screenings are due — and do you have a system to flag overdue tests before symptoms develop?' },
+        { icon:'&#128269;', q:'<strong>The genetic question:<\/strong> Raymond\'s daughter asked about genetic testing. How do you explain the difference between "sporadic colorectal cancer" and "hereditary colorectal cancer syndrome" — and what screening do you recommend for her?' }
       ]
     }
   ]
@@ -2460,9 +2470,9 @@ CASES['Raymond'] = {
           nextFinding:'TSH: 14.2 mIU/L (elevated). Free T4: 0.6 ng/dL (low). Anti-TPO antibodies: 480 IU/mL (markedly elevated). Diagnosis: Hashimoto\'s thyroiditis. CBC and iron studies normal.',
           nextFindingLabel:'Lab results',
           feedback:[
-            { icon:'&#9889;', text:'<strong>Hashimoto\'s thyroiditis</strong> is the most common cause of hypothyroidism in developed countries — an autoimmune destruction of the thyroid. Affects women 7–10x more than men, strong familial component.' },
-            { icon:'&#128269;', text:'<strong>Bradycardia + low temperature</strong> are objective signs of reduced metabolic rate. These are not features of depression or stress — they are physical examination findings that confirm a systemic cause.' },
-            { icon:'&#9203;', text:'<strong>Medical students are the worst patients</strong> — they attribute everything to stress and delay care. The lesson: apply the same clinical rigor to yourself that you would apply to your patients.' }
+            { icon:'&#9889;', text:'<strong>Hashimoto\'s thyroiditis<\/strong> is the most common cause of hypothyroidism in developed countries — an autoimmune destruction of the thyroid. Affects women 7–10x more than men, strong familial component.' },
+            { icon:'&#128269;', text:'<strong>Bradycardia + low temperature<\/strong> are objective signs of reduced metabolic rate. These are not features of depression or stress — they are physical examination findings that confirm a systemic cause.' },
+            { icon:'&#9203;', text:'<strong>Medical students are the worst patients<\/strong> — they attribute everything to stress and delay care. The lesson: apply the same clinical rigor to yourself that you would apply to your patients.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2',
@@ -2489,9 +2499,9 @@ CASES['Raymond'] = {
           diagnosisText:'Hashimoto\'s thyroiditis is the most common autoimmune disorder in women. Primary care management with levothyroxine is definitive. This case shows that the same complaint (chronic fatigue) can have a different common answer — one that requires a different clinical lens than the iron deficiency in Case 1A or the rare genetic condition in Case 1B.',
           genaText:'GENA Screen is not indicated for Hashimoto\'s hypothyroidism — it is a polygenic autoimmune condition, not a single-gene genetic disorder. Periodic TSH monitoring in family members is appropriate; genetic workup is not. This reinforces when genetic clinical decision support should not be applied.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The objective exam findings:</strong> Heart rate 58 and temperature 97.1 are not stress. What physical examination findings would you specifically look for when hypothyroidism is on your differential?' },
-            { icon:'&#9203;', q:'<strong>Across the fatigue family:</strong> Sofia (iron deficiency), Marcus (Fabry disease), Priya (hypothyroidism), James (sleep apnea), Raymond (colon cancer). What was the single most distinguishing feature of each case at Visit 1?' },
-            { icon:'&#128269;', q:'<strong>"Runs in families" vs "genetic":</strong> How do you explain the difference between hereditary predisposition and a single-gene disorder to a patient who asks about testing her sister?' }
+            { icon:'&#9889;', q:'<strong>The objective exam findings:<\/strong> Heart rate 58 and temperature 97.1 are not stress. What physical examination findings would you specifically look for when hypothyroidism is on your differential?' },
+            { icon:'&#9203;', q:'<strong>Across the fatigue family:<\/strong> Sofia (iron deficiency), Marcus (Fabry disease), Priya (hypothyroidism), James (sleep apnea), Raymond (colon cancer). What was the single most distinguishing feature of each case at Visit 1?' },
+            { icon:'&#128269;', q:'<strong>"Runs in families" vs "genetic":<\/strong> How do you explain the difference between hereditary predisposition and a single-gene disorder to a patient who asks about testing her sister?' }
           ]
         }
       ]
@@ -2515,9 +2525,9 @@ CASES['Raymond'] = {
           nextFinding:'Epworth Sleepiness Scale: 18/24 (severe). CBC, TSH, CMP: all normal. Home sleep study: AHI 34 events/hour (severe OSA), minimum O2 saturation 82%.',
           nextFindingLabel:'Screening and sleep study',
           feedback:[
-            { icon:'&#9889;', text:'<strong>Obstructive sleep apnea</strong> affects 25–30% of middle-aged men and is one of the most underdiagnosed conditions in primary care. The triad of snoring + witnessed apneas + daytime sleepiness is essentially diagnostic before any testing.' },
-            { icon:'&#128269;', text:'<strong>Unrefreshing sleep despite adequate duration</strong> is the key discriminator from insomnia. OSA fragments sleep architecture through repeated arousals — preventing restorative slow-wave and REM sleep.' },
-            { icon:'&#9203;', text:'<strong>OSA is a cardiovascular risk factor:</strong> Repeated nocturnal hypoxia triggers sympathetic activation. James\'s refractory hypertension on lisinopril may be partially OSA-driven. CPAP can lower blood pressure.' }
+            { icon:'&#9889;', text:'<strong>Obstructive sleep apnea<\/strong> affects 25–30% of middle-aged men and is one of the most underdiagnosed conditions in primary care. The triad of snoring + witnessed apneas + daytime sleepiness is essentially diagnostic before any testing.' },
+            { icon:'&#128269;', text:'<strong>Unrefreshing sleep despite adequate duration<\/strong> is the key discriminator from insomnia. OSA fragments sleep architecture through repeated arousals — preventing restorative slow-wave and REM sleep.' },
+            { icon:'&#9203;', text:'<strong>OSA is a cardiovascular risk factor:<\/strong> Repeated nocturnal hypoxia triggers sympathetic activation. James\'s refractory hypertension on lisinopril may be partially OSA-driven. CPAP can lower blood pressure.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2',
@@ -2544,15 +2554,17 @@ CASES['Raymond'] = {
           diagnosisText:'OSA is one of the most prevalent and underdiagnosed conditions in primary care. This case closes the fatigue family — five patients, five common complaints, five completely different diagnoses. Iron deficiency, Fabry disease, hypothyroidism, OSA, colon cancer. Each required a completely different diagnostic pathway from the same chief complaint.',
           genaText:'GENA Screen is not indicated for OSA. This is anatomic and physiologic — upper airway obstruction during sleep, exacerbated by BMI and neck circumference. No genetic testing is needed. This case closes the fatigue family by demonstrating that the same complaint can arise from mechanisms spanning nutritional, genetic, autoimmune, anatomic, and oncologic domains. Genetic decision support applies to only one of these five.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The Epworth:</strong> Takes 2 minutes. Do you use it routinely? At what score would you order a home sleep study without asking further questions?' },
-            { icon:'&#9203;', q:'<strong>The driving conversation:</strong> James has an ESS of 18 and drives to work. What is your legal and ethical obligation — and how do you have this conversation with a patient who may push back?' },
-            { icon:'&#128269;', q:'<strong>The whole fatigue family:</strong> Five cases, five diagnoses. What single question asked at Visit 1 would most efficiently distinguish each case from the others?' }
+            { icon:'&#9889;', q:'<strong>The Epworth:<\/strong> Takes 2 minutes. Do you use it routinely? At what score would you order a home sleep study without asking further questions?' },
+            { icon:'&#9203;', q:'<strong>The driving conversation:<\/strong> James has an ESS of 18 and drives to work. What is your legal and ethical obligation — and how do you have this conversation with a patient who may push back?' },
+            { icon:'&#128269;', q:'<strong>The whole fatigue family:<\/strong> Five cases, five diagnoses. What single question asked at Visit 1 would most efficiently distinguish each case from the others?' }
           ]
         }
       ]
     }
   };
   Object.keys(f1extra).forEach(function(k){ CASES[k] = f1extra[k]; });
+
+
 
   // Family 2 extra + Family 3
   var newCases = {
@@ -2568,9 +2580,9 @@ CASES['Raymond'] = {
           nextFinding:'IgG 280 mg/dL (low), IgA 18 (low), IgM 45 (low). B cells present but non-functional. Vaccine titers: absent response to pneumococcal polysaccharide. No BTK mutation.',
           nextFindingLabel:'Immunology workup',
           feedback:[
-            { icon:'&#9733;', text:'<strong>CVID differs from XLA:</strong> later onset (childhood–adulthood, not infancy), both sexes affected equally, B cells present but dysfunctional rather than absent.' },
-            { icon:'&#128269;', text:'<strong>Mixed infections (bacterial + viral + parasitic)</strong> suggest a broader defect than XLA. Giardia is cleared by secretory IgA — its presence is a clue to IgA deficiency.' },
-            { icon:'&#9203;', text:'<strong>Declining growth trajectory + recurrent infections</strong> = immune failure, not bad luck.' }
+            { icon:'&#9733;', text:'<strong>CVID differs from XLA:<\/strong> later onset (childhood–adulthood, not infancy), both sexes affected equally, B cells present but dysfunctional rather than absent.' },
+            { icon:'&#128269;', text:'<strong>Mixed infections (bacterial + viral + parasitic)<\/strong> suggest a broader defect than XLA. Giardia is cleared by secretory IgA — its presence is a clue to IgA deficiency.' },
+            { icon:'&#9203;', text:'<strong>Declining growth trajectory + recurrent infections<\/strong> = immune failure, not bad luck.' }
           ]
         },
         { id:'v2', label:'Visit 2', icon:'&#128202;', iconClass:'v2', title:'CVID Confirmed', sub:'Management and family implications.',
@@ -2583,9 +2595,9 @@ CASES['Raymond'] = {
           nextFinding:'Aisha: no further serious infections on SCIG at 12 months. Sister: mildly low IgA, otherwise normal — monitored annually.',
           nextFindingLabel:'Outcome',
           feedback:[
-            { icon:'&#9889;', text:'<strong>CVID: most common serious primary immune deficiency</strong>, 1 in 25,000. Frequently diagnosed 5–10 years after symptom onset.' },
-            { icon:'&#128101;', text:'<strong>Polygenic conditions:</strong> unlike XLA\'s clear BTK test, CVID family screening involves monitoring immunoglobulins and symptoms — not a single genetic test.' },
-            { icon:'&#9203;', text:'<strong>Absent post-vaccine titers</strong> is the definitive early test for humoral immune failure that was never ordered.' }
+            { icon:'&#9889;', text:'<strong>CVID: most common serious primary immune deficiency<\/strong>, 1 in 25,000. Frequently diagnosed 5–10 years after symptom onset.' },
+            { icon:'&#128101;', text:'<strong>Polygenic conditions:<\/strong> unlike XLA\'s clear BTK test, CVID family screening involves monitoring immunoglobulins and symptoms — not a single genetic test.' },
+            { icon:'&#9203;', text:'<strong>Absent post-vaccine titers<\/strong> is the definitive early test for humoral immune failure that was never ordered.' }
           ]
         },
         { id:'v3', label:'Decision', icon:'&#128250;', iconClass:'v3', title:'When Should This Have Been Caught?', sub:'Four infections over three years.',
@@ -2605,9 +2617,9 @@ CASES['Raymond'] = {
           diagnosisText:'CVID is the most common serious primary immune deficiency requiring treatment. Average diagnostic delay: 7 years from symptom onset.',
           genaText:'GENA Screen identifies CVID from late-onset recurrent mixed infections, declining growth, female sex, and absent vaccine responses — recommending immunoglobulins, vaccine titers, and lymphocyte subset panel.',
           reflection:[
-            { icon:'&#9203;', q:'<strong>CVID vs XLA:</strong> What three features clearly distinguish them — and which would you now ask about in any child with recurrent serious infections?' },
-            { icon:'&#128101;', q:'<strong>The growth curve:</strong> Aisha fell from 60th to 40th percentile over 4 years. Do you plot and review growth curves at every pediatric visit?' },
-            { icon:'&#9889;', q:'<strong>Vaccine responses:</strong> Simple, cheap, highly informative. When should checking post-vaccine titers be routine practice?' }
+            { icon:'&#9203;', q:'<strong>CVID vs XLA:<\/strong> What three features clearly distinguish them — and which would you now ask about in any child with recurrent serious infections?' },
+            { icon:'&#128101;', q:'<strong>The growth curve:<\/strong> Aisha fell from 60th to 40th percentile over 4 years. Do you plot and review growth curves at every pediatric visit?' },
+            { icon:'&#9889;', q:'<strong>Vaccine responses:<\/strong> Simple, cheap, highly informative. When should checking post-vaccine titers be routine practice?' }
           ]
         }
       ]
@@ -2624,9 +2636,9 @@ CASES['Raymond'] = {
           nextFinding:'IgG 820 (normal), IgM 110 (normal), IgA <7 mg/dL (severely low). B cells present, vaccine responses intact for IgG antigens.',
           nextFindingLabel:'Immunology workup',
           feedback:[
-            { icon:'&#9733;', text:'<strong>Selective IgA deficiency:</strong> most common primary immune deficiency, 1 in 300–500 people. Most are asymptomatic or have only mild mucosal infections.' },
-            { icon:'&#128269;', text:'<strong>IgA protects mucosal surfaces</strong> — respiratory and GI tracts. Its absence predisposes specifically to sinusitis and GI infections, not serious systemic bacterial infections.' },
-            { icon:'&#9888;', text:'<strong>Celiac screening trap:</strong> standard tTG-IgA is falsely negative in IgA deficiency. Always check total IgA first — then use IgG-based testing.' }
+            { icon:'&#9733;', text:'<strong>Selective IgA deficiency:<\/strong> most common primary immune deficiency, 1 in 300–500 people. Most are asymptomatic or have only mild mucosal infections.' },
+            { icon:'&#128269;', text:'<strong>IgA protects mucosal surfaces<\/strong> — respiratory and GI tracts. Its absence predisposes specifically to sinusitis and GI infections, not serious systemic bacterial infections.' },
+            { icon:'&#9888;', text:'<strong>Celiac screening trap:<\/strong> standard tTG-IgA is falsely negative in IgA deficiency. Always check total IgA first — then use IgG-based testing.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2', title:'Management Decision', sub:'Selective IgA deficiency confirmed.',
@@ -2646,9 +2658,9 @@ CASES['Raymond'] = {
           diagnosisText:'The most common primary immune deficiency. Majority are asymptomatic. IVIG not indicated and can cause reactions. This case demonstrates that not every immune deficiency requires aggressive intervention.',
           genaText:'GENA Screen identifies selective IgA deficiency from recurrent mucosal infections with normal growth and specifically flags the celiac screening implication and IVIG contraindication — preventing a common management error.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The celiac trap:</strong> How often do you check total IgA before interpreting a negative celiac screen? When should this be routine?' },
-            { icon:'&#128269;', q:'<strong>Severity spectrum:</strong> Compare Tyler to Aisha (CVID) and Liam (XLA). What features distinguish mild from serious humoral immune defects?' },
-            { icon:'&#9888;', q:'<strong>The IVIG question:</strong> Tyler\'s parents read about IVIG. How do you explain why the "internet answer" is wrong for their child?' }
+            { icon:'&#9889;', q:'<strong>The celiac trap:<\/strong> How often do you check total IgA before interpreting a negative celiac screen? When should this be routine?' },
+            { icon:'&#128269;', q:'<strong>Severity spectrum:<\/strong> Compare Tyler to Aisha (CVID) and Liam (XLA). What features distinguish mild from serious humoral immune defects?' },
+            { icon:'&#9888;', q:'<strong>The IVIG question:<\/strong> Tyler\'s parents read about IVIG. How do you explain why the "internet answer" is wrong for their child?' }
           ]
         }
       ]
@@ -2665,9 +2677,9 @@ CASES['Raymond'] = {
           nextFinding:'Sweat chloride 82 mmol/L (positive; >60 diagnostic). CFTR sequencing: compound heterozygous F508del/R117H. Pancreatic elastase severely low.',
           nextFindingLabel:'Diagnostic workup',
           feedback:[
-            { icon:'&#9733;', text:'<strong>The triad of recurrent pulmonary infections + steatorrhea + failure to thrive</strong> is cystic fibrosis until proven otherwise.' },
-            { icon:'&#9888;', text:'<strong>Newborn screens miss CF in 5–10% of cases</strong>, particularly with rarer mutations or R117H. A "normal" screen never excludes CF when clinical suspicion exists.' },
-            { icon:'&#128269;', text:'<strong>The steatorrhea distinguishes this from immune deficiency</strong> — none of the immune cases caused GI malabsorption. Oily stools + failure to thrive + pulmonary infections = exocrine pancreatic insufficiency.' }
+            { icon:'&#9733;', text:'<strong>The triad of recurrent pulmonary infections + steatorrhea + failure to thrive<\/strong> is cystic fibrosis until proven otherwise.' },
+            { icon:'&#9888;', text:'<strong>Newborn screens miss CF in 5–10% of cases<\/strong>, particularly with rarer mutations or R117H. A "normal" screen never excludes CF when clinical suspicion exists.' },
+            { icon:'&#128269;', text:'<strong>The steatorrhea distinguishes this from immune deficiency<\/strong> — none of the immune cases caused GI malabsorption. Oily stools + failure to thrive + pulmonary infections = exocrine pancreatic insufficiency.' }
           ]
         },
         { id:'v2', label:'Visit 2', icon:'&#128202;', iconClass:'v2', title:'CF Confirmed', sub:'Management and family counseling.',
@@ -2680,9 +2692,9 @@ CASES['Raymond'] = {
           nextFinding:'At 6 months: weight gain 2.3 kg, FEV1 improved 78% to 91%. No exacerbations on Trikafta. Both parents confirmed carriers.',
           nextFindingLabel:'Six-month follow-up',
           feedback:[
-            { icon:'&#9889;', text:'<strong>Trikafta</strong> addresses underlying CFTR dysfunction — one of the most significant advances in genetic medicine. Eligible patients show dramatic improvement.' },
-            { icon:'&#128101;', text:'<strong>25% risk per pregnancy</strong>: affected, 50% carrier, 25% unaffected. Prenatal genetic diagnosis and preimplantation testing are available options.' },
-            { icon:'&#9203;', text:'<strong>6 years of untreated CF</strong> = irreversible lung damage. The steatorrhea and failure to thrive were present since infancy — actionable signals missed.' }
+            { icon:'&#9889;', text:'<strong>Trikafta<\/strong> addresses underlying CFTR dysfunction — one of the most significant advances in genetic medicine. Eligible patients show dramatic improvement.' },
+            { icon:'&#128101;', text:'<strong>25% risk per pregnancy<\/strong>: affected, 50% carrier, 25% unaffected. Prenatal genetic diagnosis and preimplantation testing are available options.' },
+            { icon:'&#9203;', text:'<strong>6 years of untreated CF<\/strong> = irreversible lung damage. The steatorrhea and failure to thrive were present since infancy — actionable signals missed.' }
           ]
         },
         { id:'v3', label:'Decision', icon:'&#128250;', iconClass:'v3', title:'When Was This Diagnosable?', sub:'Diego had symptoms since infancy.',
@@ -2702,9 +2714,9 @@ CASES['Raymond'] = {
           diagnosisText:'CF is the most common life-shortening autosomal recessive condition in people of Northern European descent. CFTR modulator therapy has transformed life expectancy. This case shows that the same presenting complaint (recurrent infections) can have a non-immune mechanism — CF — that is entirely different from XLA, CVID, or IgA deficiency.',
           genaText:'GENA Screen identifies CF from recurrent pulmonary infections + exocrine pancreatic insufficiency + failure to thrive and recommends sweat chloride and CFTR sequencing. This demonstrates that genetic decision support can identify non-immune genetic causes of a presentation that mimics immune deficiency.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The newborn screen:</strong> When should clinical suspicion override a normal newborn screen result? What is your threshold for ordering sweat chloride despite a "normal" screen?' },
-            { icon:'&#9203;', q:'<strong>The CF triad:</strong> Pulmonary + pancreatic + growth failure. Which element was present earliest in Diego? What stopped it from triggering the right workup?' },
-            { icon:'&#128101;', q:'<strong>The conversation:</strong> How do you tell parents their child has had a diagnosable condition for years — and still move forward constructively?' }
+            { icon:'&#9889;', q:'<strong>The newborn screen:<\/strong> When should clinical suspicion override a normal newborn screen result? What is your threshold for ordering sweat chloride despite a "normal" screen?' },
+            { icon:'&#9203;', q:'<strong>The CF triad:<\/strong> Pulmonary + pancreatic + growth failure. Which element was present earliest in Diego? What stopped it from triggering the right workup?' },
+            { icon:'&#128101;', q:'<strong>The conversation:<\/strong> How do you tell parents their child has had a diagnosable condition for years — and still move forward constructively?' }
           ]
         }
       ]
@@ -2721,9 +2733,9 @@ CASES['Raymond'] = {
           nextFinding:'Neurologic exam: normal tone, normal DTRs, symmetrical strength, no clonus. All developmental domains age-appropriate except gross motor. Excellent social development, 5–6 words, no regression.',
           nextFindingLabel:'Developmental assessment',
           feedback:[
-            { icon:'&#9989;', text:'<strong>Isolated late walking with normal neurology and normal other domains</strong> is benign in the vast majority. Normal range for walking: 9–18 months.' },
-            { icon:'&#128269;', text:'<strong>Reassuring features:</strong> normal tone, normal reflexes, age-appropriate language and social development, no regression, normal growth.' },
-            { icon:'&#9203;', text:'<strong>Knowing when to reassure is a clinical skill.</strong> Over-investigation of normal variation causes real harm.' }
+            { icon:'&#9989;', text:'<strong>Isolated late walking with normal neurology and normal other domains<\/strong> is benign in the vast majority. Normal range for walking: 9–18 months.' },
+            { icon:'&#128269;', text:'<strong>Reassuring features:<\/strong> normal tone, normal reflexes, age-appropriate language and social development, no regression, normal growth.' },
+            { icon:'&#9203;', text:'<strong>Knowing when to reassure is a clinical skill.<\/strong> Over-investigation of normal variation causes real harm.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2', title:'Management Decision', sub:'What do you tell this family?',
@@ -2743,9 +2755,9 @@ CASES['Raymond'] = {
           diagnosisText:'Most late walkers are normal children at the late end of the developmental distribution. The critical skill is distinguishing isolated late walking from a global or regressive picture. This case demonstrates that the most important action is sometimes reassurance.',
           genaText:'GENA Screen is not indicated here. Isolated gross motor delay with normal neurology and no regression does not support a genetic or metabolic etiology. The next four cases in this family will show what a concerning developmental picture actually looks like.',
           reflection:[
-            { icon:'&#9989;', q:'<strong>The normal range:</strong> Upper limit for independent walking? First words? Social smiling? How confident are you in these milestones?' },
-            { icon:'&#9203;', q:'<strong>Parental anxiety:</strong> Maya\'s parents wanted an MRI. How do you hold "this is normal" against "this feels wrong" — and still leave the family feeling heard?' },
-            { icon:'&#128269;', q:'<strong>The safety net:</strong> "Not walking by 18 months = re-evaluate." What specifically would you do at 18 months? Tests, referrals, in what order?' }
+            { icon:'&#9989;', q:'<strong>The normal range:<\/strong> Upper limit for independent walking? First words? Social smiling? How confident are you in these milestones?' },
+            { icon:'&#9203;', q:'<strong>Parental anxiety:<\/strong> Maya\'s parents wanted an MRI. How do you hold "this is normal" against "this feels wrong" — and still leave the family feeling heard?' },
+            { icon:'&#128269;', q:'<strong>The safety net:<\/strong> "Not walking by 18 months = re-evaluate." What specifically would you do at 18 months? Tests, referrals, in what order?' }
           ]
         }
       ]
@@ -2762,9 +2774,9 @@ CASES['Raymond'] = {
           nextFinding:'M-CHAT-R/F: high risk. Delays in social-communication and language with repetitive behaviors. Normal gross and fine motor. Audiogram: normal. EEG: normal. Metabolic screen: normal.',
           nextFindingLabel:'Screening and workup',
           feedback:[
-            { icon:'&#9889;', text:'<strong>Language regression + loss of social referencing + repetitive behaviors</strong> is the classic ASD presentation. The regression distinguishes this from a late talker.' },
-            { icon:'&#128269;', text:'<strong>M-CHAT-R/F</strong> at 18 and 24 months is standard of care. High-risk screen requires immediate referral — do not wait for specialist confirmation before initiating early intervention.' },
-            { icon:'&#9203;', text:'<strong>ASD is not primarily a genetic diagnosis in this context</strong> — developmental workup precedes genetic workup.' }
+            { icon:'&#9889;', text:'<strong>Language regression + loss of social referencing + repetitive behaviors<\/strong> is the classic ASD presentation. The regression distinguishes this from a late talker.' },
+            { icon:'&#128269;', text:'<strong>M-CHAT-R/F<\/strong> at 18 and 24 months is standard of care. High-risk screen requires immediate referral — do not wait for specialist confirmation before initiating early intervention.' },
+            { icon:'&#9203;', text:'<strong>ASD is not primarily a genetic diagnosis in this context<\/strong> — developmental workup precedes genetic workup.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2', title:'Management Decision', sub:'ASD suspected — what happens now?',
@@ -2784,9 +2796,9 @@ CASES['Raymond'] = {
           diagnosisText:'ASD affects 1 in 36 US children. Primary care\'s most important role is early identification and referral. The single most impactful action is early intervention before age 3. This case shows ASD presents very differently from benign motor delay.',
           genaText:'GENA Screen is not the first step in ASD evaluation. Primary workup is developmental and behavioral. After diagnosis is confirmed, chromosomal microarray and Fragile X testing are recommended — but as a second step, not a first response.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>Regression vs. delay:</strong> Why does losing previously acquired skills change urgency? What conditions can cause regression in a toddler?' },
-            { icon:'&#9203;', q:'<strong>The M-CHAT:</strong> Do you administer it at every 18-month and 24-month well visit? What barriers exist in primary care?' },
-            { icon:'&#128269;', q:'<strong>Compare to Maya:</strong> What three specific features made Ethan clearly different — and what would Maya have needed to look like to reach the same urgency level?' }
+            { icon:'&#9889;', q:'<strong>Regression vs. delay:<\/strong> Why does losing previously acquired skills change urgency? What conditions can cause regression in a toddler?' },
+            { icon:'&#9203;', q:'<strong>The M-CHAT:<\/strong> Do you administer it at every 18-month and 24-month well visit? What barriers exist in primary care?' },
+            { icon:'&#128269;', q:'<strong>Compare to Maya:<\/strong> What three specific features made Ethan clearly different — and what would Maya have needed to look like to reach the same urgency level?' }
           ]
         }
       ]
@@ -2803,9 +2815,9 @@ CASES['Raymond'] = {
           nextFinding:'EEG: high-amplitude slow spike-wave discharges consistent with Angelman syndrome. Chromosomal microarray: deletion of maternal 15q11-q13 (UBE3A gene region). Angelman syndrome confirmed.',
           nextFindingLabel:'Genetic and EEG workup',
           feedback:[
-            { icon:'&#9733;', text:'<strong>Angelman syndrome</strong> classic features: profound intellectual disability, absent speech, seizures, wide-based jerky gait, hand-flapping, and markedly happy excitable affect.' },
-            { icon:'&#9889;', text:'<strong>The affect is the clue, not reassurance:</strong> Inappropriately happy affect in a child with absent speech and seizures is pathognomonic to the experienced clinician.' },
-            { icon:'&#128269;', text:'<strong>Chromosomal microarray is the first test</strong>; add methylation analysis if microarray is normal (to detect UPD and imprinting defects).' }
+            { icon:'&#9733;', text:'<strong>Angelman syndrome<\/strong> classic features: profound intellectual disability, absent speech, seizures, wide-based jerky gait, hand-flapping, and markedly happy excitable affect.' },
+            { icon:'&#9889;', text:'<strong>The affect is the clue, not reassurance:<\/strong> Inappropriately happy affect in a child with absent speech and seizures is pathognomonic to the experienced clinician.' },
+            { icon:'&#128269;', text:'<strong>Chromosomal microarray is the first test<\/strong>; add methylation analysis if microarray is normal (to detect UPD and imprinting defects).' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2', title:'Communication and Management', sub:'Angelman syndrome confirmed. The hardest part.',
@@ -2825,9 +2837,9 @@ CASES['Raymond'] = {
           diagnosisText:'Angelman syndrome affects 1 in 12,000–20,000. Average diagnosis age is 6 years despite features appearing at 18 months. The happy demeanor consistently reassures families and clinicians — it is the most important diagnostic trap in pediatric developmental medicine.',
           genaText:'GENA Screen identifies Angelman syndrome from absent speech, seizures, abnormal gait, hand-flapping, and inappropriate happy affect — recommending chromosomal microarray with methylation analysis. The affect itself is as diagnostically important as any clinical finding.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The happy trap:</strong> How many times have you been reassured by affect rather than concerned by it? What would it take to reframe "very happy baby" as a clinical signal?' },
-            { icon:'&#128269;', q:'<strong>Compare Maya, Ethan, Lily:</strong> All had developmental concerns at 14–18 months. What three features in Lily\'s presentation made this clearly the most urgent of the three?' },
-            { icon:'&#9203;', q:'<strong>The conversation:</strong> How do you hold the truth ("happiness is a feature of the condition causing her disability") with compassion — without destroying that joy?' }
+            { icon:'&#9889;', q:'<strong>The happy trap:<\/strong> How many times have you been reassured by affect rather than concerned by it? What would it take to reframe "very happy baby" as a clinical signal?' },
+            { icon:'&#128269;', q:'<strong>Compare Maya, Ethan, Lily:<\/strong> All had developmental concerns at 14–18 months. What three features in Lily\'s presentation made this clearly the most urgent of the three?' },
+            { icon:'&#9203;', q:'<strong>The conversation:<\/strong> How do you hold the truth ("happiness is a feature of the condition causing her disability") with compassion — without destroying that joy?' }
           ]
         }
       ]
@@ -2844,9 +2856,9 @@ CASES['Raymond'] = {
           nextFinding:'TSH: >100 mIU/L (severely elevated). Free T4: undetectable. Bone age: equivalent to 4–6 months. Thyroid ultrasound: hypoplastic thyroid. Severe congenital hypothyroidism, undetected and untreated for 15 months.',
           nextFindingLabel:'Thyroid workup',
           feedback:[
-            { icon:'&#9889;', text:'<strong>Congenital hypothyroidism</strong> is the most common preventable cause of intellectual disability worldwide. Caught by newborn screening, treated within days — normal developmental outcomes. Carlos had none of that.' },
-            { icon:'&#9888;', text:'<strong>The classic features</strong> — coarse facies, macroglossia, hoarse cry, constipation, dry skin, growth failure, global delay — develop over months without thyroid hormone.' },
-            { icon:'&#128203;', text:'<strong>International adoption: always repeat metabolic workup.</strong> Newborn screening coverage varies widely internationally. Do not assume a foreign "normal" screen covers what US screens cover.' }
+            { icon:'&#9889;', text:'<strong>Congenital hypothyroidism<\/strong> is the most common preventable cause of intellectual disability worldwide. Caught by newborn screening, treated within days — normal developmental outcomes. Carlos had none of that.' },
+            { icon:'&#9888;', text:'<strong>The classic features<\/strong> — coarse facies, macroglossia, hoarse cry, constipation, dry skin, growth failure, global delay — develop over months without thyroid hormone.' },
+            { icon:'&#128203;', text:'<strong>International adoption: always repeat metabolic workup.<\/strong> Newborn screening coverage varies widely internationally. Do not assume a foreign "normal" screen covers what US screens cover.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2', title:'Diagnosis Confirmed — What Now?', sub:'TSH >100, undetectable T4. 15 months untreated.',
@@ -2866,9 +2878,9 @@ CASES['Raymond'] = {
           diagnosisText:'Congenital hypothyroidism affects 1 in 2,000–3,000 newborns. With newborn screening and early treatment, affected children develop normally. Without treatment, irreversible intellectual disability occurs within the first two years. This case demonstrates what newborn screening exists to prevent.',
           genaText:'GENA Screen is not the primary tool here — congenital hypothyroidism is diagnosed with TSH and T4, not genetic testing. However, if the hypothyroidism has a genetic basis (PAX8, NKX2-1 mutations), GENA could support workup after the diagnosis is established. The primary lesson: endocrine causes of global developmental delay must be excluded before genetic evaluation.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The newborn screen:</strong> What does your state\'s screen cover — and what does it miss? When should you repeat it?' },
-            { icon:'&#9888;', q:'<strong>The prognosis conversation:</strong> You must tell a family their child has likely permanent disability from a preventable condition. How do you prepare?' },
-            { icon:'&#128269;', q:'<strong>Compare Lily, Ethan, Carlos:</strong> All three had global or near-global delay. What specific features distinguished Carlos\'s dysmorphic presentation — and what would you check first in any internationally adopted child with delay?' }
+            { icon:'&#9889;', q:'<strong>The newborn screen:<\/strong> What does your state\'s screen cover — and what does it miss? When should you repeat it?' },
+            { icon:'&#9888;', q:'<strong>The prognosis conversation:<\/strong> You must tell a family their child has likely permanent disability from a preventable condition. How do you prepare?' },
+            { icon:'&#128269;', q:'<strong>Compare Lily, Ethan, Carlos:<\/strong> All three had global or near-global delay. What specific features distinguished Carlos\'s dysmorphic presentation — and what would you check first in any internationally adopted child with delay?' }
           ]
         }
       ]
@@ -2885,9 +2897,9 @@ CASES['Raymond'] = {
           nextFinding:'MECP2 sequencing: pathogenic de novo variant (R306C). EEG: generalized slowing, no seizures yet. MRI: mild cortical atrophy. Parents ask: "Where did this come from?"',
           nextFindingLabel:'Genetic testing',
           feedback:[
-            { icon:'&#9733;', text:'<strong>Rett syndrome</strong> is caused by de novo MECP2 mutations — not inherited from parents. Mutation arises spontaneously. Parental recurrence risk <1%.' },
-            { icon:'&#9889;', text:'<strong>Clinical stages:</strong> Normal development → regression (12–18 months) → hand-wringing, breathing irregularities, speech loss → stabilization → late motor decline.' },
-            { icon:'&#128269;', text:'<strong>Why almost exclusively females:</strong> Males with MECP2 mutations typically have a severe neonatal phenotype and rarely survive to present with classic Rett.' }
+            { icon:'&#9733;', text:'<strong>Rett syndrome<\/strong> is caused by de novo MECP2 mutations — not inherited from parents. Mutation arises spontaneously. Parental recurrence risk <1%.' },
+            { icon:'&#9889;', text:'<strong>Clinical stages:<\/strong> Normal development → regression (12–18 months) → hand-wringing, breathing irregularities, speech loss → stabilization → late motor decline.' },
+            { icon:'&#128269;', text:'<strong>Why almost exclusively females:<\/strong> Males with MECP2 mutations typically have a severe neonatal phenotype and rarely survive to present with classic Rett.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2', title:'After Diagnosis — What Ava Needs', sub:'Rett syndrome confirmed. Building a care plan.',
@@ -2907,9 +2919,9 @@ CASES['Raymond'] = {
           diagnosisText:'Rett syndrome affects 1 in 10,000 females. Caused by de novo MECP2 mutations — one of the most commonly missed genetic diagnoses in girls because normal early development creates false security. The regression phase — when the diagnosis is most actionable — lasts only months.',
           genaText:'GENA Screen identifies Rett syndrome from normal early development followed by regression with hand-wringing and breathing irregularities in a female child — recommending MECP2 sequencing. The regression pattern combined with gender specificity makes this one of the most recognizable genetic presentations, but only if the clinician asks specifically about what skills were lost and when.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The regression window:</strong> Ava\'s regression occurred at 13–15 months. When during that window could the diagnosis have been suspected? What question at the 12-month visit would have set the stage?' },
-            { icon:'&#128269;', q:'<strong>The gender clue:</strong> Rett almost exclusively affects females. In which cases in this family did patient sex provide a diagnostic clue?' },
-            { icon:'&#9203;', q:'<strong>Compare all five cases:</strong> Maya (benign), Ethan (ASD), Lily (Angelman), Carlos (hypothyroidism), Ava (Rett). What single question most efficiently separates "watch and reassure" from "investigate urgently" across all five?' }
+            { icon:'&#9889;', q:'<strong>The regression window:<\/strong> Ava\'s regression occurred at 13–15 months. When during that window could the diagnosis have been suspected? What question at the 12-month visit would have set the stage?' },
+            { icon:'&#128269;', q:'<strong>The gender clue:<\/strong> Rett almost exclusively affects females. In which cases in this family did patient sex provide a diagnostic clue?' },
+            { icon:'&#9203;', q:'<strong>Compare all five cases:<\/strong> Maya (benign), Ethan (ASD), Lily (Angelman), Carlos (hypothyroidism), Ava (Rett). What single question most efficiently separates "watch and reassure" from "investigate urgently" across all five?' }
           ]
         }
       ]
@@ -2933,9 +2945,9 @@ CASES['Raymond'] = {
           nextFinding:'CRP 42 mg/L (elevated), ESR 68 mm/hr (elevated), RF positive 1:320, anti-CCP >250 U/mL (strongly positive). Mild normocytic anemia. Hand X-rays: periarticular osteopenia, no erosions yet.',
           nextFindingLabel:'Inflammatory workup',
           feedback:[
-            { icon:'&#9733;', text:'<strong>Morning stiffness >1 hour that improves with use</strong> is the hallmark of inflammatory arthritis. Mechanical arthritis causes stiffness that worsens with use and lasts <30 minutes.' },
-            { icon:'&#128269;', text:'<strong>Bilateral symmetric MCP/PIP with DIP sparing</strong> is the classic RA distribution. DIP involvement points toward OA or psoriatic arthritis. Wrist involvement in RA is nearly universal.' },
-            { icon:'&#9203;', text:'<strong>Anti-CCP is the most specific test for RA</strong> (>95% specificity) and predicts erosive destructive disease. RF alone is less specific — positive in Sjögren\'s, lupus, chronic infection, aging.' }
+            { icon:'&#9733;', text:'<strong>Morning stiffness >1 hour that improves with use<\/strong> is the hallmark of inflammatory arthritis. Mechanical arthritis causes stiffness that worsens with use and lasts <30 minutes.' },
+            { icon:'&#128269;', text:'<strong>Bilateral symmetric MCP/PIP with DIP sparing<\/strong> is the classic RA distribution. DIP involvement points toward OA or psoriatic arthritis. Wrist involvement in RA is nearly universal.' },
+            { icon:'&#9203;', text:'<strong>Anti-CCP is the most specific test for RA<\/strong> (>95% specificity) and predicts erosive destructive disease. RF alone is less specific — positive in Sjögren\'s, lupus, chronic infection, aging.' }
           ]
         },
         { id:'v2', label:'Visit 2', icon:'&#128202;', iconClass:'v2', title:'Rheumatology Confirms RA', sub:'DAS28 5.8 — high disease activity. Treatment initiated.',
@@ -2948,9 +2960,9 @@ CASES['Raymond'] = {
           nextFinding:'At 3 months: DAS28 3.1 (low disease activity). CRP normalized. Morning stiffness <20 min. Elena feels "cured" and asks to stop medication.',
           nextFindingLabel:'3-month treatment response',
           feedback:[
-            { icon:'&#9889;', text:'<strong>The window of opportunity:</strong> Treating early seropositive RA before radiographic erosions dramatically changes long-term joint outcome. Anti-CCP positive = more aggressive disease. Early aggressive treatment is evidence-based.' },
-            { icon:'&#128101;', text:'<strong>RA and pregnancy:</strong> RA often improves during pregnancy, flares postpartum. Methotrexate must stop 3 months before conception. Hydroxychloroquine and sulfasalazine are pregnancy-compatible.' },
-            { icon:'&#9203;', text:'<strong>Remission ≠ cure:</strong> Stopping DMARDs in RA remission leads to flare in 70–80% of patients. This conversation is essential at every visit.' }
+            { icon:'&#9889;', text:'<strong>The window of opportunity:<\/strong> Treating early seropositive RA before radiographic erosions dramatically changes long-term joint outcome. Anti-CCP positive = more aggressive disease. Early aggressive treatment is evidence-based.' },
+            { icon:'&#128101;', text:'<strong>RA and pregnancy:<\/strong> RA often improves during pregnancy, flares postpartum. Methotrexate must stop 3 months before conception. Hydroxychloroquine and sulfasalazine are pregnancy-compatible.' },
+            { icon:'&#9203;', text:'<strong>Remission ≠ cure:<\/strong> Stopping DMARDs in RA remission leads to flare in 70–80% of patients. This conversation is essential at every visit.' }
           ]
         },
         { id:'v3', label:'Decision', icon:'&#128250;', iconClass:'v3', title:'Elena Wants to Stop Medication', sub:'She\'s in remission and feels completely better.',
@@ -2970,9 +2982,9 @@ CASES['Raymond'] = {
           diagnosisText:'RA affects 1% of the population, predominantly women. Early treatment with DMARDs in seropositive disease has transformed outcomes. The central primary care skill is recognizing the inflammatory vs mechanical distinction at the first visit — before any labs.',
           genaText:'GENA Screen is not indicated for RA — it is a multifactorial autoimmune condition without a single diagnostic gene. However, if the presentation suggested a genetic autoinflammatory syndrome (periodic fever + arthritis in a young patient), GENA would be appropriate. For Elena, the clinical and serologic picture is sufficient.',
           reflection:[
-            { icon:'&#9733;', q:'<strong>The morning stiffness clock:</strong> >1 hour improves with use = inflammatory. <30 min worsens with use = mechanical. How reliably do you ask about stiffness duration and direction at every joint pain visit?' },
-            { icon:'&#9203;', q:'<strong>The remission conversation:</strong> Elena feels cured. You are telling her she\'s not. How do you communicate this honestly without undermining her experience of feeling well?' },
-            { icon:'&#128269;', q:'<strong>Anti-CCP vs RF:</strong> When would you order anti-CCP? When is RF alone sufficient? What does a strongly positive anti-CCP tell you about prognosis that RF does not?' }
+            { icon:'&#9733;', q:'<strong>The morning stiffness clock:<\/strong> >1 hour improves with use = inflammatory. <30 min worsens with use = mechanical. How reliably do you ask about stiffness duration and direction at every joint pain visit?' },
+            { icon:'&#9203;', q:'<strong>The remission conversation:<\/strong> Elena feels cured. You are telling her she\'s not. How do you communicate this honestly without undermining her experience of feeling well?' },
+            { icon:'&#128269;', q:'<strong>Anti-CCP vs RF:<\/strong> When would you order anti-CCP? When is RF alone sufficient? What does a strongly positive anti-CCP tell you about prognosis that RF does not?' }
           ]
         }
       ]
@@ -2989,9 +3001,9 @@ CASES['Raymond'] = {
           nextFinding:'Knee exam: crepitus, bony enlargement, mild varus deformity, no warmth, no effusion at rest. X-rays: medial compartment narrowing, osteophytes, subchondral sclerosis — moderate-severe OA. CRP 4 (normal). ESR 18 (normal). RF negative.',
           nextFindingLabel:'Exam and imaging',
           feedback:[
-            { icon:'&#9989;', text:'<strong>Normal CRP and ESR</strong> confirm mechanical not inflammatory disease. Extensive autoimmune workup in classic OA generates false positives. Stop at the diagnosis.' },
-            { icon:'&#128269;', text:'<strong>OA exam:</strong> Bony enlargement, crepitus, varus deformity, limited ROM without warmth or significant effusion at rest — structural mechanical disease, not synovitis.' },
-            { icon:'&#9203;', text:'<strong>Occupational history:</strong> 40 years of carpentry = decades of repetitive knee loading. Occupation is one of the most underrecorded risk factors in musculoskeletal disease.' }
+            { icon:'&#9989;', text:'<strong>Normal CRP and ESR<\/strong> confirm mechanical not inflammatory disease. Extensive autoimmune workup in classic OA generates false positives. Stop at the diagnosis.' },
+            { icon:'&#128269;', text:'<strong>OA exam:<\/strong> Bony enlargement, crepitus, varus deformity, limited ROM without warmth or significant effusion at rest — structural mechanical disease, not synovitis.' },
+            { icon:'&#9203;', text:'<strong>Occupational history:<\/strong> 40 years of carpentry = decades of repetitive knee loading. Occupation is one of the most underrecorded risk factors in musculoskeletal disease.' }
           ]
         },
         { id:'v2', label:'Decision', icon:'&#128250;', iconClass:'v2', title:'Management Decision', sub:'Bilateral moderate-severe knee OA. What does Harold need?',
@@ -3011,9 +3023,9 @@ CASES['Raymond'] = {
           diagnosisText:'OA is the most common joint disease worldwide. It is mechanical and degenerative — not autoimmune. The primary care role: accurate diagnosis without over-investigation, prescribing exercise, counseling against activity restriction. Directly contrasts with Elena\'s RA to show that the same complaint requires a completely different approach.',
           genaText:'GENA Screen is not indicated for OA — polygenic, multifactorial, structural. No genetic test changes management. Over-investigating classic OA with autoimmune panels generates false positives. This case teaches when to stop testing.',
           reflection:[
-            { icon:'&#9989;', q:'<strong>Exercise as medicine:</strong> Harold wanted to rest. Evidence says opposite. How do you convince an older patient with painful joints that exercise will help — not worsen — their condition?' },
-            { icon:'&#9203;', q:'<strong>Imaging vs function:</strong> Harold has severe OA on X-ray but still walks daily. When does imaging severity drive surgical referral — and when should it not?' },
-            { icon:'&#128269;', q:'<strong>Compare Elena and Harold:</strong> Three features that most efficiently distinguish inflammatory from mechanical arthritis before any labs.' }
+            { icon:'&#9989;', q:'<strong>Exercise as medicine:<\/strong> Harold wanted to rest. Evidence says opposite. How do you convince an older patient with painful joints that exercise will help — not worsen — their condition?' },
+            { icon:'&#9203;', q:'<strong>Imaging vs function:<\/strong> Harold has severe OA on X-ray but still walks daily. When does imaging severity drive surgical referral — and when should it not?' },
+            { icon:'&#128269;', q:'<strong>Compare Elena and Harold:<\/strong> Three features that most efficiently distinguish inflammatory from mechanical arthritis before any labs.' }
           ]
         }
       ]
@@ -3030,9 +3042,9 @@ CASES['Raymond'] = {
           nextFinding:'Urine NAAT: Chlamydia trachomatis positive. Knee arthrocentesis: inflammatory fluid (WBC 28,000, no organisms, no crystals). HLA-B27: positive.',
           nextFindingLabel:'Infectious and joint workup',
           feedback:[
-            { icon:'&#9733;', text:'<strong>Reactive arthritis</strong> presents 1–4 weeks after urogenital or GI infection. The triad: arthritis + urethritis/cervicitis + conjunctivitis. You don\'t need all three to make the diagnosis.' },
-            { icon:'&#128269;', text:'<strong>The questions that unlock it:</strong> "Any urinary symptoms in the past month?" and "Any eye redness?" distinguish reactive arthritis from septic arthritis — questions most clinicians don\'t ask in a 19-year-old with a swollen joint.' },
-            { icon:'&#9203;', text:'<strong>HLA-B27 positive</strong> in ~75% of reactive arthritis cases (vs 8% general population). Associated with severity and risk of chronicity and future spondyloarthropathy.' }
+            { icon:'&#9733;', text:'<strong>Reactive arthritis<\/strong> presents 1–4 weeks after urogenital or GI infection. The triad: arthritis + urethritis/cervicitis + conjunctivitis. You don\'t need all three to make the diagnosis.' },
+            { icon:'&#128269;', text:'<strong>The questions that unlock it:<\/strong> "Any urinary symptoms in the past month?" and "Any eye redness?" distinguish reactive arthritis from septic arthritis — questions most clinicians don\'t ask in a 19-year-old with a swollen joint.' },
+            { icon:'&#9203;', text:'<strong>HLA-B27 positive<\/strong> in ~75% of reactive arthritis cases (vs 8% general population). Associated with severity and risk of chronicity and future spondyloarthropathy.' }
           ]
         },
         { id:'v2', label:'Visit 2', icon:'&#128202;', iconClass:'v2', title:'Treatment and Counseling', sub:'Two issues to address: the infection and the arthritis.',
@@ -3045,9 +3057,9 @@ CASES['Raymond'] = {
           nextFinding:'Doxycycline for Chlamydia (partner treated). NSAIDs for arthritis. Significant improvement at 3 weeks. Full resolution at 8 weeks. Counseled on HLA-B27 and recurrence risk.',
           nextFindingLabel:'Treatment response',
           feedback:[
-            { icon:'&#9889;', text:'<strong>Reactive arthritis is post-infectious, not septic.</strong> The joint is not infected — it\'s immunologically inflamed by bacterial antigens. Treating the trigger prevents ongoing stimulus and reduces chronicity risk.' },
-            { icon:'&#128101;', text:'<strong>Partner notification is a medical obligation</strong> for reportable STIs. Most female partners have asymptomatic Chlamydia — and risk PID and infertility if untreated.' },
-            { icon:'&#9203;', text:'<strong>Most reactive arthritis resolves in 3–6 months.</strong> HLA-B27 positive patients have higher risk of chronic arthritis and future spondyloarthropathy (ankylosing spondylitis).' }
+            { icon:'&#9889;', text:'<strong>Reactive arthritis is post-infectious, not septic.<\/strong> The joint is not infected — it\'s immunologically inflamed by bacterial antigens. Treating the trigger prevents ongoing stimulus and reduces chronicity risk.' },
+            { icon:'&#128101;', text:'<strong>Partner notification is a medical obligation<\/strong> for reportable STIs. Most female partners have asymptomatic Chlamydia — and risk PID and infertility if untreated.' },
+            { icon:'&#9203;', text:'<strong>Most reactive arthritis resolves in 3–6 months.<\/strong> HLA-B27 positive patients have higher risk of chronic arthritis and future spondyloarthropathy (ankylosing spondylitis).' }
           ]
         },
         { id:'v3', label:'Decision', icon:'&#128250;', iconClass:'v3', title:'The History That Changes Everything', sub:'What if you hadn\'t asked about the urethritis?',
@@ -3067,9 +3079,9 @@ CASES['Raymond'] = {
           diagnosisText:'Reactive arthritis follows urogenital or GI infection by 1–4 weeks. The joint is not infected — it is immunologically reactive. Most cases resolve in 3–6 months. The diagnosis is almost always missed when the antecedent infection history is not elicited.',
           genaText:'GENA Screen is not indicated for reactive arthritis. The clinical picture and targeted infectious testing are sufficient. GENA\'s pattern recognition would correctly prioritize reactive arthritis from the triad — but the history alone achieves this at zero cost.',
           reflection:[
-            { icon:'&#128269;', q:'<strong>The question you almost didn\'t ask:</strong> "Any urinary symptoms in the past month?" What other diagnoses require asking questions patients will never volunteer unprompted?' },
-            { icon:'&#128101;', q:'<strong>Partner notification:</strong> Jordan was embarrassed. How do you have this conversation while meeting your medical and legal obligations?' },
-            { icon:'&#9203;', q:'<strong>HLA-B27 and the future:</strong> Jordan is HLA-B27 positive at 19. What does this mean for long-term risk — and how do you follow him?' }
+            { icon:'&#128269;', q:'<strong>The question you almost didn\'t ask:<\/strong> "Any urinary symptoms in the past month?" What other diagnoses require asking questions patients will never volunteer unprompted?' },
+            { icon:'&#128101;', q:'<strong>Partner notification:<\/strong> Jordan was embarrassed. How do you have this conversation while meeting your medical and legal obligations?' },
+            { icon:'&#9203;', q:'<strong>HLA-B27 and the future:<\/strong> Jordan is HLA-B27 positive at 19. What does this mean for long-term risk — and how do you follow him?' }
           ]
         }
       ]
@@ -3086,9 +3098,9 @@ CASES['Raymond'] = {
           nextFinding:'ANA: 1:640 (homogeneous). Anti-dsDNA: strongly positive >1:320. Anti-Smith: positive. C3/C4: low. CBC: lymphopenia, mild hemolytic anemia. UA: 2+ proteinuria, RBC casts. Diagnosis: SLE with probable lupus nephritis.',
           nextFindingLabel:'Serologic and urine workup',
           feedback:[
-            { icon:'&#9888;', text:'<strong>RBC casts and proteinuria in SLE = lupus nephritis.</strong> Immediate nephrology referral. Lupus nephritis is the leading cause of morbidity — and it is silent until found on urinalysis.' },
-            { icon:'&#9733;', text:'<strong>2019 EULAR/ACR SLE criteria:</strong> Priya has malar rash, photosensitivity, oral ulcers, arthritis, hemolytic anemia, lymphopenia, proteinuria, ANA, anti-dsDNA, anti-Smith. Meets criteria definitively.' },
-            { icon:'&#128269;', text:'<strong>Black women:</strong> highest SLE incidence, earliest onset, most severe disease — including higher rates of lupus nephritis. This is biologic and systemic, not incidental.' }
+            { icon:'&#9888;', text:'<strong>RBC casts and proteinuria in SLE = lupus nephritis.<\/strong> Immediate nephrology referral. Lupus nephritis is the leading cause of morbidity — and it is silent until found on urinalysis.' },
+            { icon:'&#9733;', text:'<strong>2019 EULAR/ACR SLE criteria:<\/strong> Priya has malar rash, photosensitivity, oral ulcers, arthritis, hemolytic anemia, lymphopenia, proteinuria, ANA, anti-dsDNA, anti-Smith. Meets criteria definitively.' },
+            { icon:'&#128269;', text:'<strong>Black women:<\/strong> highest SLE incidence, earliest onset, most severe disease — including higher rates of lupus nephritis. This is biologic and systemic, not incidental.' }
           ]
         },
         { id:'v2', label:'Visit 2', icon:'&#128202;', iconClass:'v2', title:'Lupus Nephritis Confirmed', sub:'Kidney biopsy: Class III focal proliferative nephritis.',
@@ -3101,9 +3113,9 @@ CASES['Raymond'] = {
           nextFinding:'At 6 months: proteinuria 2.3g/day → 0.4g/day. Anti-dsDNA falling. Complement normalizing. No flare. Priya starts college with a management plan in place.',
           nextFindingLabel:'Six-month response',
           feedback:[
-            { icon:'&#9889;', text:'<strong>Hydroxychloroquine reduces flares, organ damage, thrombosis, and mortality in SLE</strong> — foundational therapy for essentially all patients regardless of disease activity. Non-adherence dramatically worsens outcomes.' },
-            { icon:'&#128101;', text:'<strong>Class III nephritis treated early</strong> has good renal prognosis — >80% avoid dialysis at 10 years with modern treatment.' },
-            { icon:'&#9203;', text:'<strong>Urinalysis at every SLE visit:</strong> Lupus nephritis is clinically silent. Routine UA with microscopy is the only way to detect early nephritis before irreversible damage.' }
+            { icon:'&#9889;', text:'<strong>Hydroxychloroquine reduces flares, organ damage, thrombosis, and mortality in SLE<\/strong> — foundational therapy for essentially all patients regardless of disease activity. Non-adherence dramatically worsens outcomes.' },
+            { icon:'&#128101;', text:'<strong>Class III nephritis treated early<\/strong> has good renal prognosis — >80% avoid dialysis at 10 years with modern treatment.' },
+            { icon:'&#9203;', text:'<strong>Urinalysis at every SLE visit:<\/strong> Lupus nephritis is clinically silent. Routine UA with microscopy is the only way to detect early nephritis before irreversible damage.' }
           ]
         },
         { id:'v3', label:'Decision', icon:'&#128250;', iconClass:'v3', title:'What If Arthritis Had Been Treated in Isolation?', sub:'What would have happened if you\'d just given her NSAIDs?',
@@ -3123,9 +3135,9 @@ CASES['Raymond'] = {
           diagnosisText:'SLE is most common in women of reproductive age and disproportionately affects Black, Hispanic, and Asian women. Arthritis is a presenting complaint of a multisystem disease — not a disease in itself. Lupus nephritis, present in ~50% of SLE patients, requires urinalysis to detect.',
           genaText:'GENA Screen is not indicated for SLE — polygenic multifactorial autoimmune condition. However, the multisystem pattern here — arthritis, renal involvement, specific autoantibodies — is where GENA\'s cross-system pattern recognition adds value in identifying rare mimics or overlapping genetic syndromes. In this case the clinical picture is sufficient.',
           reflection:[
-            { icon:'&#9888;', q:'<strong>The silent kidney:</strong> Lupus nephritis has no symptoms until advanced. What other serious conditions present silently — and what is your protocol for detecting them before symptoms develop?' },
-            { icon:'&#128269;', q:'<strong>Demographics:</strong> Priya is a 16-year-old Black female. How explicitly do you incorporate demographic risk factors into clinical reasoning — and where is the line between appropriate Bayesian thinking and stereotyping?' },
-            { icon:'&#9203;', q:'<strong>Arthritis as a presenting complaint:</strong> Both Priya (SLE) and Elena (RA) had joint pain as their primary complaint. What features in the first 5 minutes of Priya\'s history told you this was a systemic disease?' }
+            { icon:'&#9888;', q:'<strong>The silent kidney:<\/strong> Lupus nephritis has no symptoms until advanced. What other serious conditions present silently — and what is your protocol for detecting them before symptoms develop?' },
+            { icon:'&#128269;', q:'<strong>Demographics:<\/strong> Priya is a 16-year-old Black female. How explicitly do you incorporate demographic risk factors into clinical reasoning — and where is the line between appropriate Bayesian thinking and stereotyping?' },
+            { icon:'&#9203;', q:'<strong>Arthritis as a presenting complaint:<\/strong> Both Priya (SLE) and Elena (RA) had joint pain as their primary complaint. What features in the first 5 minutes of Priya\'s history told you this was a systemic disease?' }
           ]
         }
       ]
@@ -3142,9 +3154,9 @@ CASES['Raymond'] = {
           nextFinding:'Bone marrow biopsy: no malignancy. Blood cultures: negative at 72 hours. ANA/RF/anti-CCP: negative. Echo: small pericardial effusion. Repeat ferritin: 6,200 ng/mL. Rheumatology confirms sJIA. MAS concerns raised.',
           nextFindingLabel:'Workup and rheumatology evaluation',
           feedback:[
-            { icon:'&#9733;', text:'<strong>Systemic JIA</strong> (10–15% of JIA): quotidian fever + salmon evanescent rash + arthritis is the diagnostic triad. The rash — appearing with fever and fading as it breaks — is pathognomonic.' },
-            { icon:'&#9888;', text:'<strong>MAS</strong> complicates sJIA in 10–15% of cases. Ferritin >500 = attention; ferritin >10,000 in sJIA = MAS until proven otherwise. Rising ferritin in a sick sJIA patient is an emergency signal.' },
-            { icon:'&#128269;', text:'<strong>Leukemia was appropriate on the differential</strong> — fever + lymphadenopathy + hepatosplenomegaly in a child requires bone marrow biopsy before committing to JIA. Both can coexist.' }
+            { icon:'&#9733;', text:'<strong>Systemic JIA<\/strong> (10–15% of JIA): quotidian fever + salmon evanescent rash + arthritis is the diagnostic triad. The rash — appearing with fever and fading as it breaks — is pathognomonic.' },
+            { icon:'&#9888;', text:'<strong>MAS<\/strong> complicates sJIA in 10–15% of cases. Ferritin >500 = attention; ferritin >10,000 in sJIA = MAS until proven otherwise. Rising ferritin in a sick sJIA patient is an emergency signal.' },
+            { icon:'&#128269;', text:'<strong>Leukemia was appropriate on the differential<\/strong> — fever + lymphadenopathy + hepatosplenomegaly in a child requires bone marrow biopsy before committing to JIA. Both can coexist.' }
           ]
         },
         { id:'v2', label:'Visit 2', icon:'&#128202;', iconClass:'v2', title:'MAS Risk and Treatment', sub:'Ferritin rising. MAS evolving. Admission required.',
@@ -3157,9 +3169,9 @@ CASES['Raymond'] = {
           nextFinding:'IV methylprednisolone + anakinra: ferritin 6,200 → 1,800 over 5 days, platelets stabilize, fibrinogen recovers. Discharged on canakinumab (IL-1 inhibitor) + steroid taper.',
           nextFindingLabel:'Treatment response',
           feedback:[
-            { icon:'&#9889;', text:'<strong>MAS</strong> = hyperactivated macrophages/T cells, cytokine storm, consumptive coagulopathy, multiorgan failure. Mortality of untreated MAS: 20–30%. IL-1 blockade + corticosteroids is now standard of care.' },
-            { icon:'&#9203;', text:'<strong>Biologics transformed sJIA:</strong> Before IL-1 and IL-6 inhibitors, sJIA had the highest morbidity/mortality of all JIA subtypes. With modern treatment, sustained remission is achievable in many.' },
-            { icon:'&#128269;', text:'<strong>Ferritin trend > single value:</strong> 2,840 → 6,200 in 48 hours signals loss of control. Rate of change is the warning — not any single measurement.' }
+            { icon:'&#9889;', text:'<strong>MAS<\/strong> = hyperactivated macrophages/T cells, cytokine storm, consumptive coagulopathy, multiorgan failure. Mortality of untreated MAS: 20–30%. IL-1 blockade + corticosteroids is now standard of care.' },
+            { icon:'&#9203;', text:'<strong>Biologics transformed sJIA:<\/strong> Before IL-1 and IL-6 inhibitors, sJIA had the highest morbidity/mortality of all JIA subtypes. With modern treatment, sustained remission is achievable in many.' },
+            { icon:'&#128269;', text:'<strong>Ferritin trend > single value:<\/strong> 2,840 → 6,200 in 48 hours signals loss of control. Rate of change is the warning — not any single measurement.' }
           ]
         },
         { id:'v3', label:'Decision', icon:'&#128250;', iconClass:'v3', title:'The Primary Care Role — What Should Have Happened Earlier?', sub:'Marcus was seen twice with antibiotics before rheumatology.',
@@ -3179,9 +3191,9 @@ CASES['Raymond'] = {
           diagnosisText:'sJIA is driven by innate immune dysregulation (IL-1β, IL-18, IL-6). The quotidian fever + salmon rash triad is pathognomonic. MAS complicates 10–15% with 20–30% mortality untreated. IL-1 and IL-6 inhibitors have transformed outcomes. Primary care role: pattern recognition and urgent referral.',
           genaText:'GENA Screen is not indicated for sJIA — not a single-gene disorder. However, the MAS phenotype can overlap with genetic autoinflammatory syndromes (NLRC4-MAS, HLH) that GENA would appropriately flag when the phenotype is atypical or severe. Knowing when the phenotype warrants genetic autoinflammatory workup is an advanced clinical skill.',
           reflection:[
-            { icon:'&#9889;', q:'<strong>The quotidian pattern:</strong> Fever that peaks in the afternoon and resolves overnight is not bacterial. How reliably do you ask about fever timing — not just "does he have a fever?" but "when does it peak and when does it break?"' },
-            { icon:'&#9888;', q:'<strong>The ferritin trend:</strong> Marcus\'s ferritin went from 2,840 to 6,200 in 48 hours. When you order a ferritin, do you trend it — or look at one value and move on?' },
-            { icon:'&#128269;', q:'<strong>Across the joint pain family:</strong> Elena (RA), Harold (OA), Jordan (reactive), Priya (SLE), Marcus (sJIA). What is the single most distinguishing feature of each at the first visit, before any labs?' }
+            { icon:'&#9889;', q:'<strong>The quotidian pattern:<\/strong> Fever that peaks in the afternoon and resolves overnight is not bacterial. How reliably do you ask about fever timing — not just "does he have a fever?" but "when does it peak and when does it break?"' },
+            { icon:'&#9888;', q:'<strong>The ferritin trend:<\/strong> Marcus\'s ferritin went from 2,840 to 6,200 in 48 hours. When you order a ferritin, do you trend it — or look at one value and move on?' },
+            { icon:'&#128269;', q:'<strong>Across the joint pain family:<\/strong> Elena (RA), Harold (OA), Jordan (reactive), Priya (SLE), Marcus (sJIA). What is the single most distinguishing feature of each at the first visit, before any labs?' }
           ]
         }
       ]
@@ -3237,18 +3249,18 @@ function buildCaseHeader(id) {
   const hdr = document.getElementById('hdr-' + id);
   hdr.innerHTML =
     '<div class="case-header-inner">' +
-      '<button class="back-btn" onclick="goBack()">&#8592; Back to Cases</button>' +
-      '<div class="case-tag-line">' + caseLabel + '</div>' +
-      '<h2 class="case-headline">' + c.headline + '</h2>' +
-      '<p class="case-subline">' + c.patient + '<br><em style="color:rgba(255,255,255,.5)">' + c.tagline + '</em></p>' +
+      '<button class="back-btn" onclick="goBack()">&#8592; Back to Cases<\/button>' +
+      '<div class="case-tag-line">' + caseLabel + '<\/div>' +
+      '<h2 class="case-headline">' + c.headline + '<\/h2>' +
+      '<p class="case-subline">' + c.patient + '<br><em style="color:rgba(255,255,255,.5)">' + c.tagline + '<\/em><\/p>' +
       '<div class="case-chips">' +
-        '<span class="case-chip">&#9200; Longitudinal case</span>' +
-        '<span class="case-chip">&#128250; Decision points</span>' +
-        '<span class="case-chip">&#128202; Visual reasoning map</span>' +
-        (MODULES[id] ? '<span class="case-chip" style="color:var(--gold-light)">&#128218; Evidence modules</span>' : '') +
-      '</div>' +
-    '</div>' +
-    '<div class="visit-nav"><div class="visit-nav-inner" id="vnav-' + id + '"></div></div>';
+        '<span class="case-chip">&#9200; Longitudinal case<\/span>' +
+        '<span class="case-chip">&#128250; Decision points<\/span>' +
+        '<span class="case-chip">&#128202; Visual reasoning map<\/span>' +
+        (MODULES[id] ? '<span class="case-chip" style="color:var(--gold-light)">&#128218; Evidence modules<\/span>' : '') +
+      '<\/div>' +
+    '<\/div>' +
+    '<div class="visit-nav"><div class="visit-nav-inner" id="vnav-' + id + '"><\/div><\/div>';
   updateVisitNav(id);
   // Show FAB if modules exist
   showModuleFab(id);
@@ -3263,7 +3275,7 @@ function updateVisitNav(id) {
     let cls = 'vnav-item';
     if (i === state.visit) cls += ' active';
     else if (i < state.visit) cls += ' done';
-    return '<div class="' + cls + '">' + v.label + '</div>';
+    return '<div class="' + cls + '">' + v.label + '<\/div>';
   }).join('');
 }
 
@@ -3279,7 +3291,7 @@ function buildVisit(id, visitIdx) {
 
   // Build vitals
   const vitalsHtml = v.vitals ? v.vitals.map(function(vt) {
-    return '<span class="snap-vital' + (vt.f ? ' flag' : '') + '">' + vt.t + '</span>';
+    return '<span class="snap-vital' + (vt.f ? ' flag' : '') + '">' + vt.t + '<\/span>';
   }).join('') : '';
 
   let html = '';
@@ -3289,88 +3301,88 @@ function buildVisit(id, visitIdx) {
     html +=
       '<div class="visit-card" id="vcard-' + id + '-' + visitIdx + '">' +
         '<div class="visit-card-hdr">' +
-          '<div class="visit-hdr-icon ' + v.iconClass + '">' + v.icon + '</div>' +
+          '<div class="visit-hdr-icon ' + v.iconClass + '">' + v.icon + '<\/div>' +
           '<div class="visit-hdr-text">' +
-            '<div class="visit-hdr-title">' + v.label + ' &mdash; ' + v.title + '</div>' +
-            '<div class="visit-hdr-sub">' + v.sub + '</div>' +
-          '</div>' +
-        '</div>' +
+            '<div class="visit-hdr-title">' + v.label + ' &mdash; ' + v.title + '<\/div>' +
+            '<div class="visit-hdr-sub">' + v.sub + '<\/div>' +
+          '<\/div>' +
+        '<\/div>' +
         '<div class="visit-card-body">' +
           '<div class="patient-snapshot">' +
-            '<div class="snap-label">Clinical Picture</div>' +
-            '<div class="snap-text">' + v.snapshot + '</div>' +
-            '<div class="snap-vitals">' + vitalsHtml + '</div>' +
-          '</div>';
+            '<div class="snap-label">Clinical Picture<\/div>' +
+            '<div class="snap-text">' + v.snapshot + '<\/div>' +
+            '<div class="snap-vitals">' + vitalsHtml + '<\/div>' +
+          '<\/div>';
 
     // Questions
     v.questions.forEach(function(q, qi) {
       html +=
         '<div class="q-block">' +
-          '<div class="q-label">Question ' + (qi+1) + ' of ' + v.questions.length + '</div>' +
-          '<div class="q-prompt">' + q.prompt + '</div>' +
-          '<textarea class="q-textarea" id="' + q.id + '" placeholder="' + q.placeholder + '"></textarea>' +
-        '</div>';
+          '<div class="q-label">Question ' + (qi+1) + ' of ' + v.questions.length + '<\/div>' +
+          '<div class="q-prompt">' + q.prompt + '<\/div>' +
+          '<textarea class="q-textarea" id="' + q.id + '" placeholder="' + q.placeholder + '"><\/textarea>' +
+        '<\/div>';
     });
 
     html +=
           '<div style="display:flex;justify-content:flex-end;">' +
-            '<button class="q-submit" onclick="submitVisit(\'' + id + '\',' + visitIdx + ')">Submit &amp; Continue &#8594;</button>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
+            '<button class="q-submit" onclick="submitVisit(\'' + id + '\',' + visitIdx + ')">Submit &amp; Continue &#8594;<\/button>' +
+          '<\/div>' +
+        '<\/div>' +
+      '<\/div>';
 
     // Next finding (hidden until submit)
     html +=
       '<div class="next-prompt-card" id="next-' + id + '-' + visitIdx + '" style="display:none">' +
-        '<div class="next-prompt-label">' + v.nextFindingLabel + '</div>' +
-        '<div class="next-finding show">' + v.nextFinding + '</div>' +
-      '</div>';
+        '<div class="next-prompt-label">' + v.nextFindingLabel + '<\/div>' +
+        '<div class="next-finding show">' + v.nextFinding + '<\/div>' +
+      '<\/div>';
 
     // Visit feedback (hidden until submit, or immediate if that mode)
     html +=
       '<div class="visit-feedback" id="vfeed-' + id + '-' + visitIdx + '">' +
-        '<div class="vf-title">Visit ' + (visitIdx+1) + ' Teaching Points</div>' +
+        '<div class="vf-title">Visit ' + (visitIdx+1) + ' Teaching Points<\/div>' +
         v.feedback.map(function(f) {
-          return '<div class="vf-item"><div class="vf-icon">' + f.icon + '</div><div class="vf-text">' + f.text + '</div></div>';
+          return '<div class="vf-item"><div class="vf-icon">' + f.icon + '<\/div><div class="vf-text">' + f.text + '<\/div><\/div>';
         }).join('') +
         '<button class="next-visit-btn" onclick="advanceVisit(\'' + id + '\',' + visitIdx + ')">' +
           (visitIdx < c.visits.length - 1 ? 'Continue to ' + c.visits[visitIdx+1].label + ' &#8594;' : 'See Diagnosis &amp; Debrief &#8594;') +
-        '</button>' +
-      '</div>';
+        '<\/button>' +
+      '<\/div>';
 
   } else {
     // Decision visit
     html +=
-      '<div class="sec-hdr"><div class="sec-icon gold">&#128250;</div><div class="sec-title">Clinical Decision Point</div><span class="sec-tag">Decision</span></div>';
+      '<div class="sec-hdr"><div class="sec-icon gold">&#128250;<\/div><div class="sec-title">Clinical Decision Point<\/div><span class="sec-tag">Decision<\/span><\/div>';
 
     html +=
       '<div class="decision-card" id="vcard-' + id + '-' + visitIdx + '">' +
         '<div class="decision-hdr" style="background:var(--deep)">' +
-          '<div class="decision-hdr-text">' + v.title + '</div>' +
-          '<div class="decision-hdr-sub">' + v.sub + '</div>' +
-        '</div>' +
-        '<div class="decision-scenario">' + v.decisionPrompt + '</div>' +
+          '<div class="decision-hdr-text">' + v.title + '<\/div>' +
+          '<div class="decision-hdr-sub">' + v.sub + '<\/div>' +
+        '<\/div>' +
+        '<div class="decision-scenario">' + v.decisionPrompt + '<\/div>' +
         '<div class="decision-choices">';
 
     v.choices.forEach(function(ch, ci) {
       html += '<button class="dchoice" id="dc-' + id + '-' + ci + '" onclick="makeDecision(\'' + id + '\',' + visitIdx + ',' + ci + ',\'' + ch.outcome + '\')">' +
-        '<span class="dchoice-letter">' + String.fromCharCode(65+ci) + '</span>' + ch.text + '</button>';
+        '<span class="dchoice-letter">' + String.fromCharCode(65+ci) + '<\/span>' + ch.text + '<\/button>';
     });
 
-    html += '</div>';
+    html += '<\/div>';
 
     ['good','bad','partial'].forEach(function(o) {
       html += '<div class="outcome-box ' + o + '" id="out-' + id + '-' + o + '">' +
-        '<div class="outcome-title">' + (o==='good'?'&#10003; Strong Reasoning':o==='bad'?'&#9888; Missed':'&#8635; Partial') + '</div>' +
+        '<div class="outcome-title">' + (o==='good'?'&#10003; Strong Reasoning':o==='bad'?'&#9888; Missed':'&#8635; Partial') + '<\/div>' +
         v.outcomes[o] +
-        '<div class="key-finding"><strong>Key findings in this case:</strong><ul style="margin-top:6px;margin-left:16px;">' +
-        v.keyFindings.map(function(kf){ return '<li style="margin-bottom:4px;font-size:12.5px;">' + kf + '</li>'; }).join('') +
-        '</ul></div>' +
-      '</div>';
+        '<div class="key-finding"><strong>Key findings in this case:<\/strong><ul style="margin-top:6px;margin-left:16px;">' +
+        v.keyFindings.map(function(kf){ return '<li style="margin-bottom:4px;font-size:12.5px;">' + kf + '<\/li>'; }).join('') +
+        '<\/ul><\/div>' +
+      '<\/div>';
     });
 
-    html += '<button class="next-visit-btn" id="to-debrief-' + id + '" style="display:none;margin:0 22px 20px" onclick="showDebrief(\'' + id + '\')">See Diagnosis &amp; Full Debrief &#8594;</button>';
-    html += '</div>';
+    html += '<button class="next-visit-btn" id="to-debrief-' + id + '" style="display:none;margin:0 22px 20px" onclick="showDebrief(\'' + id + '\')">See Diagnosis &amp; Full Debrief &#8594;<\/button>';
+    html += '<\/div>';
   }
 
   bodyEl.innerHTML = html;
@@ -3487,61 +3499,61 @@ function showDebrief(id) {
 
   // Build debrief HTML
   let html =
-    '<div class="sec-hdr"><div class="sec-icon green">&#9733;</div><div class="sec-title">Diagnosis &amp; Debrief</div><span class="sec-tag">Complete</span></div>' +
+    '<div class="sec-hdr"><div class="sec-icon green">&#9733;<\/div><div class="sec-title">Diagnosis &amp; Debrief<\/div><span class="sec-tag">Complete<\/span><\/div>' +
 
     // Diagnosis reveal
     '<div class="dx-reveal">' +
-      '<div class="dx-reveal-label">Final Diagnosis</div>' +
-      '<div class="dx-reveal-name">' + c.diagnosis + '</div>' +
-      '<div class="dx-reveal-body">' + c.diagnosisText + '</div>' +
+      '<div class="dx-reveal-label">Final Diagnosis<\/div>' +
+      '<div class="dx-reveal-name">' + c.diagnosis + '<\/div>' +
+      '<div class="dx-reveal-body">' + c.diagnosisText + '<\/div>' +
       '<div class="dx-reveal-grid">' +
-        '<div class="dx-col yours"><div class="dx-col-label">Your Decision</div><div class="dx-col-text">' +
+        '<div class="dx-col yours"><div class="dx-col-label">Your Decision<\/div><div class="dx-col-text">' +
           (decisionOutcome === 'good' ? '&#10003; Strong reasoning — you identified the correct management pathway.' :
            decisionOutcome === 'partial' ? '&#8635; Partial — you were on the right track but missed key elements.' :
            '&#9888; The management decision missed the critical pathway. Review the key findings below.') +
-        '</div></div>' +
-        '<div class="dx-col expert"><div class="dx-col-label">Expert Pathway</div><div class="dx-col-text">' + c.visits[decisionVisitIdx].choices[0].text + '</div></div>' +
-      '</div>' +
-    '</div>' +
+        '<\/div><\/div>' +
+        '<div class="dx-col expert"><div class="dx-col-label">Expert Pathway<\/div><div class="dx-col-text">' + c.visits[decisionVisitIdx].choices[0].text + '<\/div><\/div>' +
+      '<\/div>' +
+    '<\/div>' +
 
     // Visual reasoning map
-    '<div class="sec-hdr"><div class="sec-icon blue">&#128202;</div><div class="sec-title">Your Reasoning Path vs. Expert Path</div><span class="sec-tag">Visual Map</span></div>' +
+    '<div class="sec-hdr"><div class="sec-icon blue">&#128202;<\/div><div class="sec-title">Your Reasoning Path vs. Expert Path<\/div><span class="sec-tag">Visual Map<\/span><\/div>' +
     '<div class="map-container">' +
       '<div class="map-header" style="background:var(--deep)">' +
-        '<div class="map-header-title">Reasoning Map &mdash; ' + c.visits[0].label + ' through Decision</div>' +
-        '<div class="map-header-sub">Where your path matched the expert pathway, and where it diverged</div>' +
-      '</div>' +
-      '<div class="map-body"><div class="map-svg-wrap">' + mapSvg + '</div></div>' +
+        '<div class="map-header-title">Reasoning Map &mdash; ' + c.visits[0].label + ' through Decision<\/div>' +
+        '<div class="map-header-sub">Where your path matched the expert pathway, and where it diverged<\/div>' +
+      '<\/div>' +
+      '<div class="map-body"><div class="map-svg-wrap">' + mapSvg + '<\/div><\/div>' +
       '<div class="map-legend">' +
-        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--ocean)"></div> Expert pathway</div>' +
-        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--gold)"></div> Your path (aligned)</div>' +
-        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--red)"></div> Your path (diverged)</div>' +
-        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--green)"></div> Correct decision</div>' +
-      '</div>' +
-    '</div>' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--ocean)"><\/div> Expert pathway<\/div>' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--gold)"><\/div> Your path (aligned)<\/div>' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--red)"><\/div> Your path (diverged)<\/div>' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--green)"><\/div> Correct decision<\/div>' +
+      '<\/div>' +
+    '<\/div>' +
 
     // GENA demo callout
     '<div class="gena-demo">' +
-      '<div class="gena-demo-badge">GENA &nbsp;&#183;&nbsp; Clinical Decision Support</div>' +
-      '<div class="gena-demo-title">How GENA Screen fits into this case</div>' +
-      '<div class="gena-demo-text">' + c.genaText + '</div>' +
-    '</div>' +
+      '<div class="gena-demo-badge">GENA &nbsp;&#183;&nbsp; Clinical Decision Support<\/div>' +
+      '<div class="gena-demo-title">How GENA Screen fits into this case<\/div>' +
+      '<div class="gena-demo-text">' + c.genaText + '<\/div>' +
+    '<\/div>' +
 
     // Reflection
-    '<div class="sec-hdr"><div class="sec-icon red">&#128172;</div><div class="sec-title">Reflection</div><span class="sec-tag">Self-Assessment</span></div>' +
-    '<div class="reflect-card"><div class="reflect-title">Consider these before moving to the next case.</div>' +
+    '<div class="sec-hdr"><div class="sec-icon red">&#128172;<\/div><div class="sec-title">Reflection<\/div><span class="sec-tag">Self-Assessment<\/span><\/div>' +
+    '<div class="reflect-card"><div class="reflect-title">Consider these before moving to the next case.<\/div>' +
     c.visits[decisionVisitIdx].reflection.map(function(r) {
-      return '<div class="reflect-q"><div class="rq-icon">' + r.icon + '</div><div class="rq-text">' + r.q + '</div></div>';
+      return '<div class="reflect-q"><div class="rq-icon">' + r.icon + '<\/div><div class="rq-text">' + r.q + '<\/div><\/div>';
     }).join('') +
-    '</div>' +
+    '<\/div>' +
 
     // Teaching modules inline summary in debrief
     buildInlineModuleSummary(id) +
 
     // Back to dashboard
     '<div style="margin-top:28px;text-align:center;">' +
-      '<button class="q-submit" onclick="goBack()" style="background:var(--deep);padding:12px 28px;font-size:14px;">&#8592; Return to Case Suite</button>' +
-    '</div>';
+      '<button class="q-submit" onclick="goBack()" style="background:var(--deep);padding:12px 28px;font-size:14px;">&#8592; Return to Case Suite<\/button>' +
+    '<\/div>';
 
   bodyEl.innerHTML = html;
   window.scrollTo(0,0);
@@ -3600,14 +3612,14 @@ function buildReasoningMap(id, state, finalOutcome) {
   for (let i = 0; i < nodes.length - 1; i++) {
     svg += '<line x1="' + (nodes[i].x + nodeR) + '" y1="' + topY + '" x2="' + (nodes[i+1].x - nodeR) + '" y2="' + topY + '" stroke="var(--ocean)" stroke-width="2.5" stroke-dasharray="6,3"/>';
   }
-  svg += '</g>';
+  svg += '<\/g>';
 
   // Learner path line (bottom)
   svg += '<g opacity=".18">';
   for (let i = 0; i < nodes.length - 1; i++) {
     svg += '<line x1="' + (nodes[i].x + nodeR) + '" y1="' + botY + '" x2="' + (nodes[i+1].x - nodeR) + '" y2="' + botY + '" stroke="' + learnerColors[Math.min(i+1, learnerColors.length-1)] + '" stroke-width="2.5" stroke-dasharray="4,2"/>';
   }
-  svg += '</g>';
+  svg += '<\/g>';
 
   // Center connecting lines
   for (let i = 0; i < nodes.length; i++) {
@@ -3618,30 +3630,30 @@ function buildReasoningMap(id, state, finalOutcome) {
   nodes.forEach(function(n, i) {
     // Expert node (top)
     svg += '<circle cx="' + n.x + '" cy="' + topY + '" r="' + nodeR + '" fill="' + nodeColors[i] + '" opacity="0.9"/>';
-    svg += '<text x="' + n.x + '" y="' + (topY + 5) + '" text-anchor="middle" font-size="13" fill="white" font-family="system-ui">' + (i+1) + '</text>';
+    svg += '<text x="' + n.x + '" y="' + (topY + 5) + '" text-anchor="middle" font-size="13" fill="white" font-family="system-ui">' + (i+1) + '<\/text>';
     // Expert label
     if (expertLabels[i]) {
-      svg += '<text x="' + n.x + '" y="' + (topY - nodeR - 8) + '" text-anchor="middle" font-size="10" fill="var(--ocean)" font-family="system-ui" font-weight="600">' + expertLabels[i] + '</text>';
+      svg += '<text x="' + n.x + '" y="' + (topY - nodeR - 8) + '" text-anchor="middle" font-size="10" fill="var(--ocean)" font-family="system-ui" font-weight="600">' + expertLabels[i] + '<\/text>';
     }
 
     // Learner node (bottom)
     svg += '<circle cx="' + n.x + '" cy="' + botY + '" r="' + nodeR + '" fill="' + learnerColors[i] + '" opacity="0.9"/>';
-    svg += '<text x="' + n.x + '" y="' + (botY + 5) + '" text-anchor="middle" font-size="13" fill="white" font-family="system-ui">' + (i+1) + '</text>';
+    svg += '<text x="' + n.x + '" y="' + (botY + 5) + '" text-anchor="middle" font-size="13" fill="white" font-family="system-ui">' + (i+1) + '<\/text>';
 
     // Visit label below
-    svg += '<text x="' + n.x + '" y="' + (botY + nodeR + 14) + '" text-anchor="middle" font-size="10.5" fill="var(--neutral-mid)" font-family="system-ui">' + n.label + '</text>';
+    svg += '<text x="' + n.x + '" y="' + (botY + nodeR + 14) + '" text-anchor="middle" font-size="10.5" fill="var(--neutral-mid)" font-family="system-ui">' + n.label + '<\/text>';
   });
 
   // Labels
-  svg += '<text x="30" y="' + (topY + 4) + '" text-anchor="end" font-size="10" fill="var(--ocean)" font-family="system-ui" font-weight="700">Expert</text>';
-  svg += '<text x="30" y="' + (botY + 4) + '" text-anchor="end" font-size="10" fill="var(--gold)" font-family="system-ui" font-weight="700">You</text>';
+  svg += '<text x="30" y="' + (topY + 4) + '" text-anchor="end" font-size="10" fill="var(--ocean)" font-family="system-ui" font-weight="700">Expert<\/text>';
+  svg += '<text x="30" y="' + (botY + 4) + '" text-anchor="end" font-size="10" fill="var(--gold)" font-family="system-ui" font-weight="700">You<\/text>';
 
   // Outcome annotation
   const outText = finalOutcome === 'good' ? '&#10003; Aligned' : finalOutcome === 'bad' ? '&#9888; Diverged' : '&#8635; Partial';
   const outColor = finalOutcome === 'good' ? 'var(--green)' : finalOutcome === 'bad' ? 'var(--red)' : 'var(--orange)';
-  svg += '<text x="' + (W - 10) + '" y="' + (botY + 4) + '" text-anchor="end" font-size="11" fill="' + outColor + '" font-family="system-ui" font-weight="700">' + outText + '</text>';
+  svg += '<text x="' + (W - 10) + '" y="' + (botY + 4) + '" text-anchor="end" font-size="11" fill="' + outColor + '" font-family="system-ui" font-weight="700">' + outText + '<\/text>';
 
-  svg += '</svg>';
+  svg += '<\/svg>';
   return svg;
 }
 
@@ -3662,7 +3674,7 @@ function showModuleFab(caseId) {
   if (!moduleFabEl) {
     moduleFabEl = document.createElement('button');
     moduleFabEl.className = 'module-fab';
-    moduleFabEl.innerHTML = '<span class="module-fab-dot"></span>Evidence Base';
+    moduleFabEl.innerHTML = '<span class="module-fab-dot"><\/span>Evidence Base';
     moduleFabEl.onclick = function() { openModules(activeModuleCaseId); };
     document.body.appendChild(moduleFabEl);
   }
@@ -3690,7 +3702,7 @@ function openModules(caseId) {
   ];
   const tabsEl = document.getElementById('module-tabs');
   tabsEl.innerHTML = tabDefs.map(function(t) {
-    return '<button class="module-tab' + (t.id === activeModuleTab ? ' active' : '') + '" onclick="switchModuleTab(\'' + t.id + '\')">' + t.icon + ' ' + t.label + '</button>';
+    return '<button class="module-tab' + (t.id === activeModuleTab ? ' active' : '') + '" onclick="switchModuleTab(\'' + t.id + '\')">' + t.icon + ' ' + t.label + '<\/button>';
   }).join('');
   // Build content
   renderModuleContent(caseId, activeModuleTab);
@@ -3717,32 +3729,32 @@ function renderModuleContent(caseId, tabId) {
   if (!m || !m[tabId]) return;
   var data = m[tabId];
   var html = '<div class="module-panel active">';
-  html += '<div class="module-section-title">' + data.title + '</div>';
+  html += '<div class="module-section-title">' + data.title + '<\/div>';
   if (data.body) {
-    html += '<div class="module-body-text">' + data.body + '</div>';
+    html += '<div class="module-body-text">' + data.body + '<\/div>';
   }
   if (tabId === 'emr' && data.body) {
-    html += '<div class="module-emr-note">&#128187; <strong>EMR Integration Note:</strong> These structured fields, when consistently populated, enable clinical decision support rules to surface this diagnosis earlier. They represent the intersection of clinical reasoning education and documentation practice.</div>';
+    html += '<div class="module-emr-note">&#128187; <strong>EMR Integration Note:<\/strong> These structured fields, when consistently populated, enable clinical decision support rules to surface this diagnosis earlier. They represent the intersection of clinical reasoning education and documentation practice.<\/div>';
   }
   if (data.table) {
     html += buildModuleTable(data.table);
   }
   if (data.refs) {
-    html += '<div class="module-refs"><div class="module-refs-label">References</div>';
+    html += '<div class="module-refs"><div class="module-refs-label">References<\/div>';
     data.refs.forEach(function(r) {
-      html += '<div class="module-ref-item">' + r + '</div>';
+      html += '<div class="module-ref-item">' + r + '<\/div>';
     });
-    html += '</div>';
+    html += '<\/div>';
   }
-  html += '</div>';
+  html += '<\/div>';
   document.getElementById('module-content').innerHTML = html;
 }
 
 function buildModuleTable(rows) {
   if (!rows || !rows.length) return '';
   var html = '<table class="module-table"><thead><tr>';
-  rows[0].forEach(function(h) { html += '<th>' + h + '</th>'; });
-  html += '</tr></thead><tbody>';
+  rows[0].forEach(function(h) { html += '<th>' + h + '<\/th>'; });
+  html += '<\/tr><\/thead><tbody>';
   for (var i = 1; i < rows.length; i++) {
     html += '<tr>';
     rows[i].forEach(function(cell) {
@@ -3752,11 +3764,11 @@ function buildModuleTable(rows) {
         if (cell.includes('Grade A') || cell.includes('Grade A —')) cellClass = ' class="ev-a-cell"';
         else if (cell.includes('Grade D')) cellClass = ' class="ev-d-cell"';
       }
-      html += '<td' + cellClass + '>' + cell + '</td>';
+      html += '<td' + cellClass + '>' + cell + '<\/td>';
     });
-    html += '</tr>';
+    html += '<\/tr>';
   }
-  html += '</tbody></table>';
+  html += '<\/tbody><\/table>';
   return html;
 }
 
@@ -3769,18 +3781,18 @@ function buildInlineModuleSummary(id) {
   var m = MODULES[id];
   if (!m || !m.evidence) return '';
   var rows = m.evidence.table || [];
-  var html = '<div class="sec-hdr"><div class="sec-icon" style="background:#fdf3dc">&#9733;</div><div class="sec-title">Evidence Summary</div><span class="sec-tag">Research Base</span></div>';
+  var html = '<div class="sec-hdr"><div class="sec-icon" style="background:#fdf3dc">&#9733;<\/div><div class="sec-title">Evidence Summary<\/div><span class="sec-tag">Research Base<\/span><\/div>';
   html += '<div style="background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px;">';
   html += '<div style="padding:14px 20px;border-bottom:1px solid var(--border);background:#fafcfe;">';
-  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:6px;">Management Decisions — Evidence Grades</div>';
+  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:6px;">Management Decisions — Evidence Grades<\/div>';
   html += '<div style="font-size:12px;color:var(--neutral-mid);">';
-  html += '<span class="ev-grade ev-a">Grade A</span> Strong evidence (RCTs, systematic reviews) &nbsp; ';
-  html += '<span class="ev-grade ev-b">Grade B</span> Moderate evidence (controlled studies, guidelines) &nbsp; ';
-  html += '<span class="ev-grade ev-c">Grade C</span> Limited evidence (expert consensus, observational) &nbsp; ';
-  html += '<span class="ev-grade ev-d">Grade D</span> Not recommended / harmful';
-  html += '</div></div>';
+  html += '<span class="ev-grade ev-a">Grade A<\/span> Strong evidence (RCTs, systematic reviews) &nbsp; ';
+  html += '<span class="ev-grade ev-b">Grade B<\/span> Moderate evidence (controlled studies, guidelines) &nbsp; ';
+  html += '<span class="ev-grade ev-c">Grade C<\/span> Limited evidence (expert consensus, observational) &nbsp; ';
+  html += '<span class="ev-grade ev-d">Grade D<\/span> Not recommended / harmful';
+  html += '<\/div><\/div>';
   html += '<table class="module-table" style="margin:0">';
-  html += '<thead><tr><th style="width:45%">Decision</th><th style="width:25%">Evidence Level</th><th>Notes</th></tr></thead><tbody>';
+  html += '<thead><tr><th style="width:45%">Decision<\/th><th style="width:25%">Evidence Level<\/th><th>Notes<\/th><\/tr><\/thead><tbody>';
   for (var i = 1; i < rows.length; i++) {
     var row = rows[i];
     if (!row || row.length < 2) continue;
@@ -3791,13 +3803,13 @@ function buildInlineModuleSummary(id) {
     else if (gradeText.startsWith('Grade B')) { gradeClass = 'ev-b'; gradeTag = 'Grade B'; }
     else if (gradeText.startsWith('Grade C')) { gradeClass = 'ev-c'; gradeTag = 'Grade C'; }
     else if (gradeText.startsWith('Grade D')) { gradeClass = 'ev-d'; gradeTag = 'Grade D'; }
-    html += '<tr><td>' + (row[0] || '') + '</td><td><span class="ev-grade ' + gradeClass + '">' + gradeTag + '</span><br><span style="font-size:11px;color:var(--neutral-mid)">' + gradeText.replace(/Grade [ABCD] ?—? ?/, '') + '</span></td><td style="font-size:11.5px">' + (row[2] || '') + '</td></tr>';
+    html += '<tr><td>' + (row[0] || '') + '<\/td><td><span class="ev-grade ' + gradeClass + '">' + gradeTag + '<\/span><br><span style="font-size:11px;color:var(--neutral-mid)">' + gradeText.replace(/Grade [ABCD] ?—? ?/, '') + '<\/span><\/td><td style="font-size:11.5px">' + (row[2] || '') + '<\/td><\/tr>';
   }
-  html += '</tbody></table>';
+  html += '<\/tbody><\/table>';
   html += '<div style="padding:12px 20px;background:#fafcfe;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;">';
-  html += '<span style="font-size:12px;color:var(--neutral-mid);">Full teaching modules — pathophysiology, clinical guidelines, diagnostic frameworks, and EMR lens:</span>';
-  html += '<button onclick="openModules(\'' + id + '\')" style="padding:7px 14px;border-radius:5px;background:var(--ocean);color:white;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;">Open Evidence Base &#8594;</button>';
-  html += '</div></div>';
+  html += '<span style="font-size:12px;color:var(--neutral-mid);">Full teaching modules — pathophysiology, clinical guidelines, diagnostic frameworks, and EMR lens:<\/span>';
+  html += '<button onclick="openModules(\'' + id + '\')" style="padding:7px 14px;border-radius:5px;background:var(--ocean);color:white;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;">Open Evidence Base &#8594;<\/button>';
+  html += '<\/div><\/div>';
   return html;
 }
 
@@ -3832,11 +3844,20 @@ function updateDashboard(justCompletedId) {
   }
 }
 
+
+// Failsafe: remove loading screen after 1 second regardless
+setTimeout(function() {
+  var l = document.getElementById('js-loading');
+  if (l) l.style.display = 'none';
+}, 1000);
+
 // Remove loading screen
 (function() {
   var loader = document.getElementById('js-loading');
   if (loader) loader.style.display = 'none';
 })();
+
+
 
 </script>
 </body>
