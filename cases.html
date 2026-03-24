@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinical Reasoning in Practice — Demo</title>
+<style>
+
+/* RENDER FIX: dashboard visible immediately before JS */
+#screen-dash { display: block !important; }
+.screen { display: none; }
+.screen.active { display: block; }
+
+:root {
+  --deep:#1a3a52; --ocean:#2874A6; --light:#aed6f1; --pale:#eaf4fb;
+  --gold:#c9a84c; --gold-light:#fdf3dc;
+  --red:#c0392b; --red-light:#fadbd8;
+  --green:#1e8449; --green-light:#d5f5e3;
+  --orange:#d35400; --orange-light:#fdebd0;
+  --purple:#6c3483; --purple-light:#e8daef;
+  --neutral-dark:#1c2833; --neutral-mid:#566573; --neutral-light:#f4f6f7;
+  --border:#d5e8f5; --border-soft:#e8eef4;
+  --shadow:0 4px 24px rgba(26,58,82,.10);
+  --shadow-lg:0 12px 48px rgba(26,58,82,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#f0f5fa;color:var(--neutral-dark);min-height:100vh;}
+.screen:not(.active){display:none;}
+a{color:var(--ocean);}
+
+/* ── DASHBOARD ── */
+.dash-hero{background:linear-gradient(135deg,#0d1f33,#1a3a52 60%,#1c3040);color:white;padding:0;position:relative;overflow:hidden;}
+.dash-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(40,116,166,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(40,116,166,.07) 1px,transparent 1px);background-size:48px 48px;}
+.dash-hero-inner{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:52px 32px 44px;}
+.demo-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:4px;padding:5px 12px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.dash-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(28px,4vw,46px);font-weight:700;line-height:1.12;color:white;margin-bottom:10px;}
+.dash-title em{color:var(--gold);font-style:italic;}
+.dash-sub{font-size:15px;color:rgba(255,255,255,.62);max-width:560px;line-height:1.7;margin-bottom:24px;}
+.dash-notice{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--gold);border-radius:6px;padding:14px 18px;max-width:580px;font-size:13px;color:rgba(255,255,255,.75);line-height:1.65;}
+.dash-notice strong{color:var(--gold);}
+.gena-credit{display:flex;align-items:center;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.07em;text-transform:uppercase;}
+.gena-pill{padding:4px 10px;border-radius:3px;background:var(--ocean);color:white;font-weight:700;font-size:11px;}
+
+/* feedback toggle */
+.feedback-toggle{max-width:980px;margin:0 auto;padding:24px 32px 0;}
+.ftog-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:10px;}
+.ftog-row{display:flex;gap:8px;flex-wrap:wrap;}
+.ftog-btn{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:white;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:var(--neutral-mid);transition:all .2s;}
+.ftog-btn:hover{border-color:var(--ocean);color:var(--ocean);}
+.ftog-btn.active{border-color:var(--ocean);background:var(--pale);color:var(--ocean);}
+
+/* progress */
+.dash-progress{max-width:980px;margin:0 auto;padding:20px 32px 0;}
+.prog-bar-wrap{background:white;border:1px solid var(--border);border-radius:10px;padding:16px 22px;display:flex;align-items:center;gap:20px;box-shadow:var(--shadow);}
+.prog-stat{text-align:center;min-width:48px;}
+.prog-num{font-family:Georgia,serif;font-size:26px;font-weight:700;color:var(--ocean);display:block;}
+.prog-lbl{font-size:10px;color:var(--neutral-mid);}
+.prog-track{flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--ocean);border-radius:4px;transition:width .4s;}
+
+/* case grid */
+.dash-body{max-width:980px;margin:0 auto;padding:24px 32px 64px;}
+.dash-grid-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:14px;}
+.case-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.case-card{background:white;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;box-shadow:var(--shadow);}
+.case-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--ocean);}
+.case-card.done{border-color:#82e0aa;}
+.case-accent{height:5px;background:var(--ocean);}
+.case-card.done .case-accent{background:var(--green);}
+.case-body-inner{padding:20px;}
+.case-num{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:8px;}
+.case-chief{font-family:Georgia,serif;font-size:17px;font-weight:700;color:var(--deep);line-height:1.3;margin-bottom:8px;}
+.case-demo{font-size:12.5px;color:var(--neutral-mid);margin-bottom:14px;line-height:1.5;}
+.case-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.ctag{padding:4px 9px;border-radius:3px;font-size:11px;font-weight:600;background:var(--neutral-light);color:var(--neutral-mid);}
+.case-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
+.case-status{font-size:11px;color:var(--neutral-mid);}
+.case-status.done{color:var(--green);font-weight:600;}
+.case-btn{padding:8px 16px;border-radius:6px;background:var(--ocean);color:white;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;}
+.case-btn:hover{background:var(--deep);}
+
+/* ── CASE MODULE ── */
+.case-header{color:white;padding:0;position:relative;overflow:hidden;}
+.case-header-inner{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:36px 32px 32px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:4px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:20px;transition:background .2s;font-family:inherit;}
+.back-btn:hover{background:rgba(255,255,255,.16);}
+.case-tag-line{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;}
+.case-headline{font-family:Georgia,serif;font-size:clamp(22px,3.5vw,36px);font-weight:700;color:white;line-height:1.2;margin-bottom:8px;}
+.case-headline em{font-style:italic;}
+.case-subline{font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;max-width:520px;margin-bottom:18px;}
+.case-chips{display:flex;gap:16px;flex-wrap:wrap;}
+.case-chip{font-size:12px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px;}
+
+/* visit nav */
+.visit-nav{background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.1);}
+.visit-nav-inner{max-width:960px;margin:0 auto;padding:0 32px;display:flex;gap:0;}
+.vnav-item{padding:12px 20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);cursor:default;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.vnav-item.active{color:white;border-bottom-color:var(--gold);}
+.vnav-item.done{color:rgba(255,255,255,.65);}
+.vnav-item.done::before{content:'✓ ';}
+
+/* case body */
+.case-module-body{max-width:960px;margin:0 auto;padding:28px 32px 64px;}
+
+/* visit card */
+.visit-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px;}
+.visit-card-hdr{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px;}
+.visit-hdr-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.visit-hdr-icon.v1{background:#e8f4fb;} .visit-hdr-icon.v2{background:#fdf3dc;} .visit-hdr-icon.v3{background:var(--green-light);}
+.visit-hdr-text{flex:1;}
+.visit-hdr-title{font-weight:700;font-size:15px;color:var(--deep);margin-bottom:3px;}
+.visit-hdr-sub{font-size:12.5px;color:var(--neutral-mid);}
+.visit-card-body{padding:20px 24px;}
+
+/* patient snapshot */
+.patient-snapshot{background:var(--pale);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:16px;}
+.snap-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ocean);margin-bottom:10px;}
+.snap-text{font-size:14px;line-height:1.75;color:var(--neutral-dark);}
+.snap-vitals{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.snap-vital{padding:5px 11px;border-radius:4px;font-size:12px;font-weight:500;background:white;border:1px solid var(--border);font-family:'Courier New',monospace;}
+.snap-vital.flag{background:#fdf3dc;color:#7d5a00;border-color:var(--gold-light);}
+.snap-vital.normal{background:var(--green-light);color:var(--green);border-color:#82e0aa;}
+
+/* question blocks */
+.q-block{margin-bottom:20px;}
+.q-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:8px;}
+.q-prompt{font-size:14px;font-weight:600;color:var(--neutral-dark);line-height:1.55;margin-bottom:12px;}
+.q-textarea{width:100%;min-height:88px;padding:10px 13px;border-radius:6px;border:1.5px solid var(--border);font-family:inherit;font-size:13px;line-height:1.6;background:#fafcfe;resize:vertical;transition:border-color .2s;}
+.q-textarea:focus{outline:none;border-color:var(--ocean);}
+.q-submit{padding:9px 20px;border-radius:6px;background:var(--ocean);color:white;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:background .2s;margin-top:8px;}
+.q-submit:hover{background:var(--deep);}
+.q-locked{padding:10px 14px;background:var(--green-light);border-top:1px solid #82e0aa;font-size:13px;color:var(--green);font-weight:600;display:none;border-radius:0 0 6px 6px;}
+
+/* next question / next asking */
+.next-prompt-card{background:var(--gold-light);border:1.5px solid var(--gold);border-radius:8px;padding:16px 20px;margin-bottom:16px;}
+.next-prompt-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7d5a00;margin-bottom:6px;}
+.next-prompt-q{font-size:14px;font-weight:600;color:var(--neutral-dark);line-height:1.55;margin-bottom:10px;}
+.next-finding{background:white;border:1px solid var(--border);border-radius:6px;padding:12px 16px;font-size:13.5px;line-height:1.65;margin-top:8px;display:none;}
+.next-finding.show{display:block;}
+
+/* decision point */
+.decision-card{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px;}
+.decision-hdr{padding:14px 22px;display:flex;align-items:center;gap:12px;}
+.decision-hdr-text{font-size:14px;font-weight:700;color:white;}
+.decision-hdr-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;}
+.decision-scenario{padding:16px 22px;background:#fafcfe;border-bottom:1px solid var(--border);font-size:14px;line-height:1.7;}
+.decision-choices{padding:16px 22px;}
+.dchoice{width:100%;text-align:left;padding:12px 16px;margin-bottom:9px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-family:inherit;font-size:13.5px;line-height:1.5;color:var(--neutral-dark);transition:all .2s;display:flex;align-items:flex-start;gap:11px;}
+.dchoice:hover{border-color:var(--ocean);background:var(--pale);transform:translateX(3px);}
+.dchoice.good{border-color:var(--green);background:var(--green-light);color:var(--green);}
+.dchoice.bad{border-color:var(--red);background:var(--red-light);color:var(--red);}
+.dchoice.partial{border-color:var(--orange);background:var(--orange-light);color:var(--orange);}
+.dchoice.dimmed{opacity:.35;pointer-events:none;}
+.dchoice-letter{min-width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px;opacity:.65;}
+
+/* outcome */
+.outcome-box{display:none;margin:0 22px 16px;padding:14px 18px;border-radius:8px;font-size:13.5px;line-height:1.65;}
+.outcome-box.show{display:block;}
+.outcome-box.good{background:var(--green-light);border:1px solid #82e0aa;}
+.outcome-box.bad{background:var(--red-light);border:1px solid #f1948a;}
+.outcome-box.partial{background:var(--orange-light);border:1px solid #f0b27a;}
+.outcome-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.outcome-box.good .outcome-title{color:var(--green);}
+.outcome-box.bad .outcome-title{color:var(--red);}
+.outcome-box.partial .outcome-title{color:var(--orange);}
+.key-finding{margin-top:10px;padding:9px 12px;background:white;border-left:3px solid var(--gold);font-size:12.5px;color:var(--neutral-mid);line-height:1.55;border-radius:0 4px 4px 0;}
+
+/* visit feedback */
+.visit-feedback{display:none;background:linear-gradient(135deg,#1c2833,#2c3e50);border-radius:10px;padding:22px 26px;margin-bottom:16px;color:white;}
+.visit-feedback.show{display:block;}
+.vf-title{font-family:Georgia,serif;font-size:17px;color:white;margin-bottom:14px;}
+.vf-item{display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08);}
+.vf-item:last-child{border-bottom:none;margin-bottom:0;}
+.vf-icon{font-size:16px;margin-top:2px;}
+.vf-text{font-size:13px;color:rgba(255,255,255,.8);line-height:1.65;}
+.vf-text strong{color:white;}
+.next-visit-btn{margin-top:14px;padding:10px 20px;border-radius:6px;background:var(--gold);color:#1c2833;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s;}
+.next-visit-btn:hover{background:#b8932a;}
+
+/* section headers */
+.sec-hdr{display:flex;align-items:center;gap:12px;margin:28px 0 14px;}
+.sec-icon{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.sec-icon.blue{background:var(--pale);} .sec-icon.gold{background:#fdf3dc;} .sec-icon.green{background:var(--green-light);} .sec-icon.red{background:var(--red-light);}
+.sec-title{font-family:Georgia,serif;font-size:18px;font-weight:700;color:var(--deep);}
+.sec-tag{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:3px;background:var(--neutral-light);color:var(--neutral-mid);}
+
+/* ── VISUAL REASONING MAP ── */
+.map-container{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px;}
+.map-header{padding:16px 22px;border-bottom:1px solid var(--border);}
+.map-header-title{font-weight:700;font-size:14px;color:white;}
+.map-header-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;}
+.map-body{padding:20px 24px;overflow-x:auto;}
+.map-svg-wrap{min-width:500px;}
+.map-legend{display:flex;gap:20px;flex-wrap:wrap;padding:12px 22px;border-top:1px solid var(--border);background:var(--neutral-light);}
+.map-legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--neutral-mid);}
+.map-legend-dot{width:12px;height:12px;border-radius:50%;}
+
+/* diagnosis reveal */
+.dx-reveal{background:linear-gradient(135deg,var(--deep),#1f4f72);border-radius:10px;padding:24px 28px;color:white;margin-bottom:20px;}
+.dx-reveal-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--light);margin-bottom:10px;}
+.dx-reveal-name{font-family:Georgia,serif;font-size:24px;color:white;margin-bottom:10px;}
+.dx-reveal-body{font-size:13.5px;color:rgba(255,255,255,.8);line-height:1.7;}
+.dx-reveal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+@media(max-width:600px){.dx-reveal-grid{grid-template-columns:1fr;}}
+.dx-col{padding:14px 16px;border-radius:6px;}
+.dx-col.yours{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);}
+.dx-col.expert{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);}
+.dx-col-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:7px;}
+.dx-col-text{font-size:13px;color:rgba(255,255,255,.8);line-height:1.65;}
+
+/* gena demo callout */
+.gena-demo{background:linear-gradient(135deg,#0d1f33,#1a3a52);border:1px solid rgba(40,116,166,.4);border-radius:10px;padding:20px 24px;margin-bottom:20px;}
+.gena-demo-badge{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--light);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.gena-demo-badge::before{content:'DEMO';padding:2px 7px;background:var(--gold);color:#1c2833;border-radius:3px;font-size:9px;}
+.gena-demo-title{font-size:14px;font-weight:600;color:white;margin-bottom:8px;}
+.gena-demo-text{font-size:13px;color:rgba(255,255,255,.75);line-height:1.65;}
+
+/* reflection */
+.reflect-card{background:linear-gradient(135deg,#1c2833,#2c3e50);border-radius:10px;padding:22px 26px;box-shadow:var(--shadow-lg);}
+.reflect-title{font-family:Georgia,serif;font-size:17px;color:white;margin-bottom:14px;}
+.reflect-q{display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08);}
+.reflect-q:last-child{border-bottom:none;margin-bottom:0;}
+.rq-icon{font-size:16px;margin-top:2px;}
+.rq-text{font-size:13.5px;color:rgba(255,255,255,.8);line-height:1.65;}
+.rq-text strong{color:white;}
+
+/* module footer */
+.mod-footer{max-width:960px;margin:0 auto;padding:0 32px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.footer-txt{font-size:11px;color:var(--neutral-mid);}
+.footer-txt strong{color:var(--ocean);}
+.cme-chip{padding:5px 12px;border-radius:4px;background:var(--deep);color:var(--light);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+
+/* Family tabs */
+.family-tab{flex:1;padding:12px 16px;border:none;background:transparent;cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;text-align:left;transition:all .2s;display:flex;flex-direction:column;gap:2px;}
+.family-tab:hover{background:var(--pale);}
+.family-tab.active{border-bottom-color:var(--ocean);background:var(--pale);}
+.ftab-num{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--neutral-mid);}
+.family-tab.active .ftab-num{color:var(--ocean);}
+.ftab-label{font-size:13px;font-weight:600;color:var(--neutral-dark);}
+.ftab-count{font-size:11px;color:var(--neutral-mid);}
+.family-panel{display:block;}
+.family-intro{background:white;border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:18px;box-shadow:var(--shadow);}
+.family-intro-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:6px;}
+.family-intro-title{font-family:Georgia,serif;font-size:20px;font-weight:700;color:var(--deep);margin-bottom:8px;}
+.family-intro-sub{font-size:13.5px;color:var(--neutral-mid);line-height:1.7;}
+
+/* ── TEACHING MODULES ── */
+.module-fab{position:fixed;bottom:28px;right:28px;z-index:200;background:var(--deep);color:white;border:none;border-radius:50px;padding:12px 20px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(26,58,82,.35);display:flex;align-items:center;gap:8px;transition:background .2s,transform .2s;}
+.module-fab:hover{background:var(--ocean);transform:translateY(-2px);}
+.module-fab-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.module-drawer{position:fixed;top:0;right:-480px;width:460px;height:100vh;background:white;box-shadow:-8px 0 48px rgba(26,58,82,.18);z-index:300;transition:right .3s ease;overflow-y:auto;display:flex;flex-direction:column;}
+.module-drawer.open{right:0;}
+.module-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:299;display:none;}
+.module-drawer-overlay.show{display:block;}
+.module-drawer-hdr{padding:20px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;background:white;z-index:2;}
+.module-drawer-title{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--deep);}
+.module-drawer-sub{font-size:11px;color:var(--neutral-mid);margin-top:2px;}
+.module-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--neutral-mid);padding:4px 8px;border-radius:4px;transition:background .15s;flex-shrink:0;}
+.module-close:hover{background:var(--neutral-light);}
+.module-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 8px;overflow-x:auto;gap:0;background:#fafcfe;flex-shrink:0;}
+.module-tab{padding:10px 10px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--neutral-mid);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:inherit;transition:all .15s;}
+.module-tab.active{color:var(--ocean);border-bottom-color:var(--ocean);}
+.module-tab:hover:not(.active){color:var(--deep);}
+.module-content{padding:20px 22px;flex:1;overflow-y:auto;}
+.module-panel{display:none;}
+.module-panel.active{display:block;}
+.module-section-title{font-family:Georgia,serif;font-size:15px;font-weight:700;color:var(--deep);margin-bottom:10px;}
+.module-body-text{font-size:13px;line-height:1.75;color:var(--neutral-dark);margin-bottom:14px;}
+.module-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px;}
+.module-table th{background:var(--deep);color:white;padding:7px 10px;text-align:left;font-weight:600;font-size:11px;}
+.module-table td{padding:6px 10px;border-bottom:1px solid var(--border);color:var(--neutral-dark);vertical-align:top;line-height:1.5;}
+.module-table tr:last-child td{border-bottom:none;}
+.module-table tr:nth-child(even) td{background:#fafcfe;}
+.module-refs{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.module-refs-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:6px;}
+.module-ref-item{font-size:11px;color:var(--neutral-mid);line-height:1.6;margin-bottom:4px;padding-left:10px;border-left:2px solid var(--border);}
+.ev-grade{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:3px;font-size:11px;font-weight:700;margin-right:5px;margin-bottom:5px;}
+.ev-a{background:#d5f5e3;color:var(--green);}
+.ev-b{background:#e8f4fb;color:var(--ocean);}
+.ev-c{background:#fdf3dc;color:#7d5a00;}
+.ev-d{background:#fadbd8;color:var(--red);}
+.module-emr-note{background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--neutral-mid);line-height:1.65;margin-bottom:12px;}
+@media(max-width:520px){.module-drawer{width:100%;right:-100%;}.module-drawer.open{right:0;}}
+</head>
+<body style="background:#f0f5fa;">
+<div id="js-loading" style="position:fixed;inset:0;background:#f0f5fa;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:system-ui;color:#566573;font-size:14px;">Loading cases...</div>
+
+<!-- ── TEACHING MODULE DRAWER ── -->
+<div class="module-drawer-overlay" id="module-overlay" onclick="closeModules()"></div>
+<div class="module-drawer" id="module-drawer">
+  <div class="module-drawer-hdr">
+    <div>
+      <div class="module-drawer-title" id="module-drawer-title">Evidence Base</div>
+      <div class="module-drawer-sub" id="module-drawer-sub">Teaching modules for this case</div>
+    </div>
+    <button class="module-close" onclick="closeModules()">&#10005;</button>
+  </div>
+  <div class="module-tabs" id="module-tabs"></div>
+  <div class="module-content" id="module-content"></div>
+</div>
+     DASHBOARD
+═══════════════════════════════════ -->
+<div id="screen-dash" class="screen active">
+  <div class="dash-hero">
+    <div class="dash-hero-grid"></div>
+    <div class="dash-hero-inner">
+      <div class="demo-chip">Clinical Reasoning Demo &nbsp;&#183;&nbsp; 20 Cases &nbsp;&#183;&nbsp; 4 Complaint Families</div>
+      <h1 class="dash-title">What Are You<br><em>Actually</em> Looking At?</h1>
+      <p class="dash-sub">Fifteen patients. Three common chief complaints. Within each family, cases share the same opening — and diverge in ways that matter. Your job is to reason from the details, not the diagnosis.</p>
+      <div class="dash-notice"><strong>Before you begin:</strong> Cases within a family share the same chief complaint. Some share the same diagnosis but present differently. Some look identical and resolve to opposite answers. There are no labels. Reason from clinical evidence — not from what you expect.</div>
+      <div class="gena-credit">
+        <span class="gena-pill">GENA</span>
+        <span>&#183; SIVOTEC BioInformatics &#183; Clinical Decision Support Demo</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback-toggle">
+    <div class="ftog-label">When would you like feedback?</div>
+    <div class="ftog-row">
+      <button class="ftog-btn active" id="fb-visit" onclick="setFeedback('visit')">After each visit</button>
+      <button class="ftog-btn" id="fb-end" onclick="setFeedback('end')">End of case only</button>
+      <button class="ftog-btn" id="fb-immediate" onclick="setFeedback('immediate')">As I go</button>
+    </div>
+  </div>
+
+  <div class="dash-progress">
+    <div class="prog-bar-wrap">
+      <div class="prog-stat"><span class="prog-num" id="dash-done">0</span><span class="prog-lbl">Done</span></div>
+      <div class="prog-stat"><span class="prog-num">20</span><span class="prog-lbl">Cases</span></div>
+      <div class="prog-track"><div class="prog-fill" id="dash-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Family tabs -->
+  <div style="max-width:980px;margin:20px auto 0;padding:0 32px;">
+    <div style="display:flex;gap:0;border-bottom:2px solid var(--border);">
+      <button class="family-tab active" id="ftab-1" onclick="showFamily(1)">
+        <span class="ftab-num">Family 1</span>
+        <span class="ftab-label">"I'm exhausted all the time"</span>
+        <span class="ftab-count" id="fcount-1">0/5</span>
+      </button>
+      <button class="family-tab" id="ftab-2" onclick="showFamily(2)">
+        <span class="ftab-num">Family 2</span>
+        <span class="ftab-label">"He keeps getting sick"</span>
+        <span class="ftab-count" id="fcount-2">0/5</span>
+      </button>
+      <button class="family-tab" id="ftab-3" onclick="showFamily(3)">
+        <span class="ftab-num">Family 3</span>
+        <span class="ftab-label">"Something's not right with my child"</span>
+        <span class="ftab-count" id="fcount-3">0/5</span>
+      </button>
+      <button class="family-tab" id="ftab-4" onclick="showFamily(4)">
+        <span class="ftab-num">Family 4</span>
+        <span class="ftab-label">"My joints hurt"</span>
+        <span class="ftab-count" id="fcount-4">0/5</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- FAMILY 1: Fatigue -->
+    <div id="family-1" class="family-panel">
+      <div class="family-intro">
+        <div class="family-intro-label">Case Family 1</div>
+        <div class="family-intro-title">"I'm exhausted all the time"</div>
+        <div class="family-intro-sub">Five adults with chronic fatigue. The same complaint. Five completely different diagnoses. Some obvious if you ask the right questions. One that has been missed for an average of 14 years. One where the answer is in the bedroom.</div>
+      </div>
+      <div class="case-grid">
+        <div class="case-card" id="card-A" onclick="openCase('A')">
+          <div class="case-accent" style="background:#2874A6"></div>
+          <div class="case-body-inner">
+            <div class="case-num">1A</div>
+            <div class="case-chief">"I've been exhausted for over a year and I can't figure out why"</div>
+            <div class="case-demo">Sofia, 34F &nbsp;&#183;&nbsp; Teacher &nbsp;&#183;&nbsp; Two children</div>
+            <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Fatigue</span></div>
+            <div class="case-footer"><span class="case-status" id="status-A">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-B" onclick="openCase('B')">
+          <div class="case-accent" style="background:#2874A6"></div>
+          <div class="case-body-inner">
+            <div class="case-num">1B</div>
+            <div class="case-chief">"I'm exhausted all the time — it's been going on for years"</div>
+            <div class="case-demo">Marcus, 41M &nbsp;&#183;&nbsp; Finance &nbsp;&#183;&nbsp; "Probably stress"</div>
+            <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Fatigue</span></div>
+            <div class="case-footer"><span class="case-status" id="status-B">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-D1" onclick="openCase('D1')">
+          <div class="case-accent" style="background:#2874A6"></div>
+          <div class="case-body-inner">
+            <div class="case-num">1C</div>
+            <div class="case-chief">"I gain weight no matter what I do and I'm exhausted all the time"</div>
+            <div class="case-demo">Priya, 29F &nbsp;&#183;&nbsp; Medical student &nbsp;&#183;&nbsp; Attributes it to stress</div>
+            <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Fatigue</span></div>
+            <div class="case-footer"><span class="case-status" id="status-D1">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-E1" onclick="openCase('E1')">
+          <div class="case-accent" style="background:#2874A6"></div>
+          <div class="case-body-inner">
+            <div class="case-num">1D</div>
+            <div class="case-chief">"I fall asleep at my desk — I sleep 8 hours but I'm never rested"</div>
+            <div class="case-demo">James, 52M &nbsp;&#183;&nbsp; Teacher &nbsp;&#183;&nbsp; Wife says he snores</div>
+            <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Fatigue</span></div>
+            <div class="case-footer"><span class="case-status" id="status-E1">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-Raymond" onclick="openCase('Raymond')">
+          <div class="case-accent" style="background:#2874A6"></div>
+          <div class="case-body-inner">
+            <div class="case-num">1E</div>
+            <div class="case-chief">"I've been tired and a bit short of breath — thought it was just getting older"</div>
+            <div class="case-demo">Raymond, 68M &nbsp;&#183;&nbsp; Retired &nbsp;&#183;&nbsp; No recent bloodwork</div>
+            <div class="case-tags"><span class="ctag">Older Adult</span><span class="ctag">Fatigue</span></div>
+            <div class="case-footer"><span class="case-status" id="status-Raymond">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAMILY 2: Infections -->
+    <div id="family-2" class="family-panel" style="display:none">
+      <div class="family-intro">
+        <div class="family-intro-label">Case Family 2</div>
+        <div class="family-intro-title">"He keeps getting sick"</div>
+        <div class="family-intro-sub">Five children with recurrent infections. One is completely normal. One has a rare immune deficiency missed for years. One has a common condition that mimics immune deficiency perfectly. The details are everything.</div>
+      </div>
+      <div class="case-grid">
+        <div class="case-card" id="card-C" onclick="openCase('C')">
+          <div class="case-accent" style="background:#1e8449"></div>
+          <div class="case-body-inner">
+            <div class="case-num">2A</div>
+            <div class="case-chief">"Third pneumonia in 18 months — parents blame daycare"</div>
+            <div class="case-demo">Liam, 5M &nbsp;&#183;&nbsp; Daycare &nbsp;&#183;&nbsp; Bacterial pneumonias</div>
+            <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
+            <div class="case-footer"><span class="case-status" id="status-C">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-D" onclick="openCase('D')">
+          <div class="case-accent" style="background:#1e8449"></div>
+          <div class="case-body-inner">
+            <div class="case-num">2B</div>
+            <div class="case-chief">"Three urgent care visits this year — parents are worried"</div>
+            <div class="case-demo">Noah, 4M &nbsp;&#183;&nbsp; Daycare &nbsp;&#183;&nbsp; Similar story</div>
+            <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
+            <div class="case-footer"><span class="case-status" id="status-D">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-C2" onclick="openCase('C2')">
+          <div class="case-accent" style="background:#1e8449"></div>
+          <div class="case-body-inner">
+            <div class="case-num">2C</div>
+            <div class="case-chief">"Four serious infections in three years — ear, sinus, lungs, stomach"</div>
+            <div class="case-demo">Aisha, 8F &nbsp;&#183;&nbsp; Previously healthy until age 5</div>
+            <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
+            <div class="case-footer"><span class="case-status" id="status-C2">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-D2" onclick="openCase('D2')">
+          <div class="case-accent" style="background:#1e8449"></div>
+          <div class="case-body-inner">
+            <div class="case-num">2D</div>
+            <div class="case-chief">"Lots of sinus infections and stomach bugs — more than his friends"</div>
+            <div class="case-demo">Tyler, 7M &nbsp;&#183;&nbsp; Active, school-age child</div>
+            <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
+            <div class="case-footer"><span class="case-status" id="status-D2">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-E2" onclick="openCase('E2')">
+          <div class="case-accent" style="background:#1e8449"></div>
+          <div class="case-body-inner">
+            <div class="case-num">2E</div>
+            <div class="case-chief">"Four chest infections this year and he never puts on weight"</div>
+            <div class="case-demo">Diego, 6M &nbsp;&#183;&nbsp; Hispanic family &nbsp;&#183;&nbsp; Normal newborn screen reported</div>
+            <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span><span class="ctag">FTT</span></div>
+            <div class="case-footer"><span class="case-status" id="status-E2">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAMILY 3: Child Development -->
+    <div id="family-3" class="family-panel" style="display:none">
+      <div class="family-intro">
+        <div class="family-intro-label">Case Family 3</div>
+        <div class="family-intro-title">"Something's not right with my child"</div>
+        <div class="family-intro-sub">Five children with developmental concerns brought to primary care. One needs reassurance. One needs urgent early intervention. Three need genetic or endocrine workup. The stakes are highest in this family — delay costs development.</div>
+      </div>
+      <div class="case-grid">
+        <div class="case-card" id="card-A3" onclick="openCase('A3')">
+          <div class="case-accent" style="background:#6c3483"></div>
+          <div class="case-body-inner">
+            <div class="case-num">3A</div>
+            <div class="case-chief">"She's not walking yet — all her friends are walking"</div>
+            <div class="case-demo">Maya, 14 months F &nbsp;&#183;&nbsp; First child &nbsp;&#183;&nbsp; Anxious parents</div>
+            <div class="case-tags"><span class="ctag">Infant</span><span class="ctag">Development</span></div>
+            <div class="case-footer"><span class="case-status" id="status-A3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-B3" onclick="openCase('B3')">
+          <div class="case-accent" style="background:#6c3483"></div>
+          <div class="case-body-inner">
+            <div class="case-num">3B</div>
+            <div class="case-chief">"He used to say words but he's stopped — and doesn't look at us anymore"</div>
+            <div class="case-demo">Ethan, 18 months M &nbsp;&#183;&nbsp; Previously developing normally</div>
+            <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Regression</span></div>
+            <div class="case-footer"><span class="case-status" id="status-B3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-C3" onclick="openCase('C3')">
+          <div class="case-accent" style="background:#6c3483"></div>
+          <div class="case-body-inner">
+            <div class="case-num">3C</div>
+            <div class="case-chief">"She's behind but she's such a happy baby — we're not too worried"</div>
+            <div class="case-demo">Lily, 18 months F &nbsp;&#183;&nbsp; Happy affect &nbsp;&#183;&nbsp; No words</div>
+            <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Development</span></div>
+            <div class="case-footer"><span class="case-status" id="status-C3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-D3" onclick="openCase('D3')">
+          <div class="case-accent" style="background:#6c3483"></div>
+          <div class="case-body-inner">
+            <div class="case-num">3D</div>
+            <div class="case-chief">"He's just a slow developer — our doctor says boys are slower"</div>
+            <div class="case-demo">Carlos, 15 months M &nbsp;&#183;&nbsp; International adoption &nbsp;&#183;&nbsp; No newborn screen</div>
+            <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Global Delay</span></div>
+            <div class="case-footer"><span class="case-status" id="status-D3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-E3" onclick="openCase('E3')">
+          <div class="case-accent" style="background:#6c3483"></div>
+          <div class="case-body-inner">
+            <div class="case-num">3E</div>
+            <div class="case-chief">"She was doing everything right — and then around her first birthday she just stopped"</div>
+            <div class="case-demo">Ava, 20 months F &nbsp;&#183;&nbsp; Normal development until 12 months</div>
+            <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Regression</span></div>
+            <div class="case-footer"><span class="case-status" id="status-E3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAMILY 4: Joint Pain -->
+    <div id="family-4" class="family-panel" style="display:none">
+      <div class="family-intro">
+        <div class="family-intro-label">Case Family 4</div>
+        <div class="family-intro-title">"My joints hurt"</div>
+        <div class="family-intro-sub">Five patients with joint pain. One has inflammatory arthritis — easy to treat if you recognize it early. One has mechanical arthritis — easy to over-investigate. One has arthritis as the presenting complaint of a systemic disease. One has a post-infectious arthritis that nobody asks the right questions to find. And one has a pediatric arthritis that looks like infection.</div>
+      </div>
+      <div class="case-grid">
+        <div class="case-card" id="card-F4A" onclick="openCase('F4A')">
+          <div class="case-accent" style="background:#c0392b"></div>
+          <div class="case-body-inner">
+            <div class="case-num">4A</div>
+            <div class="case-chief">"My hands are stiff and swollen every morning — it's been months"</div>
+            <div class="case-demo">Elena, 34F &nbsp;&#183;&nbsp; Administrative coordinator</div>
+            <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Arthritis</span></div>
+            <div class="case-footer"><span class="case-status" id="status-F4A">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-F4B" onclick="openCase('F4B')">
+          <div class="case-accent" style="background:#c0392b"></div>
+          <div class="case-body-inner">
+            <div class="case-num">4B</div>
+            <div class="case-chief">"My knees have been aching for years — they're getting worse"</div>
+            <div class="case-demo">Harold, 72M &nbsp;&#183;&nbsp; Retired carpenter, walks daily</div>
+            <div class="case-tags"><span class="ctag">Older Adult</span><span class="ctag">Arthritis</span></div>
+            <div class="case-footer"><span class="case-status" id="status-F4B">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-F4C" onclick="openCase('F4C')">
+          <div class="case-accent" style="background:#c0392b"></div>
+          <div class="case-body-inner">
+            <div class="case-num">4C</div>
+            <div class="case-chief">"My knee and ankle have been swollen for two weeks — I don't know why"</div>
+            <div class="case-demo">Jordan, 19M &nbsp;&#183;&nbsp; College student</div>
+            <div class="case-tags"><span class="ctag">Young Adult</span><span class="ctag">Arthritis</span></div>
+            <div class="case-footer"><span class="case-status" id="status-F4C">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-F4D" onclick="openCase('F4D')">
+          <div class="case-accent" style="background:#c0392b"></div>
+          <div class="case-body-inner">
+            <div class="case-num">4D</div>
+            <div class="case-chief">"My joints have been aching and I've been exhausted — I thought it was stress"</div>
+            <div class="case-demo">Priya, 16F &nbsp;&#183;&nbsp; High school student, facial rash after beach</div>
+            <div class="case-tags"><span class="ctag">Adolescent</span><span class="ctag">Arthritis</span></div>
+            <div class="case-footer"><span class="case-status" id="status-F4D">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-F4E" onclick="openCase('F4E')">
+          <div class="case-accent" style="background:#c0392b"></div>
+          <div class="case-body-inner">
+            <div class="case-num">4E</div>
+            <div class="case-chief">"He's been spiking fevers every day for three weeks and now his knee is swollen"</div>
+            <div class="case-demo">Marcus, 8M &nbsp;&#183;&nbsp; Parents worried about leukemia</div>
+            <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Arthritis</span><span class="ctag">Fever</span></div>
+            <div class="case-footer"><span class="case-status" id="status-F4E">Not started</span><button class="case-btn">Begin &#8594;</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     CASE SCREENS
+═══════════════════════════════════ -->
+<div id="screen-A" class="screen"><div class="case-header" id="hdr-A" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-A"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-B" class="screen"><div class="case-header" id="hdr-B" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-B"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-D1" class="screen"><div class="case-header" id="hdr-D1" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-D1"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-E1" class="screen"><div class="case-header" id="hdr-E1" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-E1"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-Raymond" class="screen"><div class="case-header" id="hdr-Raymond" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-Raymond"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-C" class="screen"><div class="case-header" id="hdr-C" style="background:linear-gradient(135deg,#1a3a28,#1f5240)"></div><div id="body-C"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-D" class="screen"><div class="case-header" id="hdr-D" style="background:linear-gradient(135deg,#1a3a28,#1f5240)"></div><div id="body-D"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-C2" class="screen"><div class="case-header" id="hdr-C2" style="background:linear-gradient(135deg,#1a3a28,#1f5240)"></div><div id="body-C2"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-D2" class="screen"><div class="case-header" id="hdr-D2" style="background:linear-gradient(135deg,#1a3a28,#1f5240)"></div><div id="body-D2"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-E2" class="screen"><div class="case-header" id="hdr-E2" style="background:linear-gradient(135deg,#1a3a28,#1f5240)"></div><div id="body-E2"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-A3" class="screen"><div class="case-header" id="hdr-A3" style="background:linear-gradient(135deg,#2c1a52,#4a2c7a)"></div><div id="body-A3"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-B3" class="screen"><div class="case-header" id="hdr-B3" style="background:linear-gradient(135deg,#2c1a52,#4a2c7a)"></div><div id="body-B3"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-C3" class="screen"><div class="case-header" id="hdr-C3" style="background:linear-gradient(135deg,#2c1a52,#4a2c7a)"></div><div id="body-C3"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-D3" class="screen"><div class="case-header" id="hdr-D3" style="background:linear-gradient(135deg,#2c1a52,#4a2c7a)"></div><div id="body-D3"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-E3" class="screen"><div class="case-header" id="hdr-E3" style="background:linear-gradient(135deg,#2c1a52,#4a2c7a)"></div><div id="body-E3"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-F4A" class="screen"><div class="case-header" id="hdr-F4A" style="background:linear-gradient(135deg,#3d0c0c,#7b1f1f)"></div><div id="body-F4A"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-F4B" class="screen"><div class="case-header" id="hdr-F4B" style="background:linear-gradient(135deg,#3d0c0c,#7b1f1f)"></div><div id="body-F4B"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-F4C" class="screen"><div class="case-header" id="hdr-F4C" style="background:linear-gradient(135deg,#3d0c0c,#7b1f1f)"></div><div id="body-F4C"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-F4D" class="screen"><div class="case-header" id="hdr-F4D" style="background:linear-gradient(135deg,#3d0c0c,#7b1f1f)"></div><div id="body-F4D"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-F4E" class="screen"><div class="case-header" id="hdr-F4E" style="background:linear-gradient(135deg,#3d0c0c,#7b1f1f)"></div><div id="body-F4E"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+
+<script>
+(function() {
+  var script = document.createElement('script');
+  script.src = 'case-data.js';
+  script.onload = function() {
+    // case-data.js has run, window.CASES and window.MODULES are defined
+    // Now run the engine
+fetch('case-data.js')
+  .then(function(r) { return r.text(); })
+  .then(function(code) {
+    try {
+      eval(code);
+    } catch(e) {
+      console.error('Data load error:', e);
+    }
+    // Now run engine
+    window.onerror = function(msg, src, line, col, err) {
+  document.getElementById('js-loading').innerHTML = 
+    '<div style="text-align:center"><div style="font-size:18px;color:#c0392b;margin-bottom:10px">&#9888; Script Error<\/div>' +
+    '<div style="font-size:12px;color:#566573">' + msg + ' (line ' + line + ')<\/div><\/div>';
+  return false;
+};
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let feedbackMode = 'visit'; // 'visit' | 'end' | 'immediate'
+const caseState = {}; // per-case progress
+const completed = {};
+
+function setFeedback(mode) {
+  feedbackMode = mode;
+  ['visit','end','immediate'].forEach(function(m) {
+    document.getElementById('fb-' + m).classList.toggle('active', m === mode);
+  });
+}
+
+// ═══════════════════════════════════════════
+// TEACHING MODULE DATA
+// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// TEACHING MODULES — all 20 cases
+// Each case gets: pathophys, guidelines, framework, evidence, emr
+// ═══════════════════════════════════════════════════
+var currentFamily = 1;
+function showFamily(n) {
+  currentFamily = n;
+  [1,2,3,4].forEach(function(i){
+    document.getElementById('ftab-' + i).classList.toggle('active', i === n);
+    var panel = document.getElementById('family-' + i);
+    if (panel) panel.style.display = (i === n) ? 'block' : 'none';
+  });
+}
+
+let currentCase = null;
+
+function openCase(id) {
+  currentCase = id;
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('screen-' + id).classList.add('active');
+  if (!caseState[id]) {
+    caseState[id] = { visit: 0, responses: {}, decisions: {}, complete: false };
+    buildCaseHeader(id);
+    buildVisit(id, 0);
+  }
+  window.scrollTo(0,0);
+}
+
+function goBack() {
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('screen-dash').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════
+// BUILD HEADER
+// ═══════════════════════════════════════════
+function buildCaseHeader(id) {
+  const c = CASES[id];
+  const familyMap = {1:['A','B','D1','E1','Raymond'], 2:['C','D','C2','D2','E2'], 3:['A3','B3','C3','D3','E3'], 4:['F4A','F4B','F4C','F4D','F4E']};
+  const familyNum = c.family || 1;
+  const familyCases = familyMap[familyNum] || [];
+  const caseIdx = familyCases.indexOf(id);
+  const caseLabel = 'Case ' + familyNum + String.fromCharCode(65 + caseIdx);
+  const hdr = document.getElementById('hdr-' + id);
+  hdr.innerHTML =
+    '<div class="case-header-inner">' +
+      '<button class="back-btn" onclick="goBack()">&#8592; Back to Cases<\/button>' +
+      '<div class="case-tag-line">' + caseLabel + '<\/div>' +
+      '<h2 class="case-headline">' + c.headline + '<\/h2>' +
+      '<p class="case-subline">' + c.patient + '<br><em style="color:rgba(255,255,255,.5)">' + c.tagline + '<\/em><\/p>' +
+      '<div class="case-chips">' +
+        '<span class="case-chip">&#9200; Longitudinal case<\/span>' +
+        '<span class="case-chip">&#128250; Decision points<\/span>' +
+        '<span class="case-chip">&#128202; Visual reasoning map<\/span>' +
+        (MODULES[id] ? '<span class="case-chip" style="color:var(--gold-light)">&#128218; Evidence modules<\/span>' : '') +
+      '<\/div>' +
+    '<\/div>' +
+    '<div class="visit-nav"><div class="visit-nav-inner" id="vnav-' + id + '"><\/div><\/div>';
+  updateVisitNav(id);
+  // Show FAB if modules exist
+  showModuleFab(id);
+}
+
+function updateVisitNav(id) {
+  const c = CASES[id];
+  const state = caseState[id];
+  const nav = document.getElementById('vnav-' + id);
+  if (!nav) return;
+  nav.innerHTML = c.visits.map(function(v,i) {
+    let cls = 'vnav-item';
+    if (i === state.visit) cls += ' active';
+    else if (i < state.visit) cls += ' done';
+    return '<div class="' + cls + '">' + v.label + '<\/div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// BUILD VISIT
+// ═══════════════════════════════════════════
+function buildVisit(id, visitIdx) {
+  const c = CASES[id];
+  const v = c.visits[visitIdx];
+  const bodyEl = document.getElementById('body-' + id);
+
+  const isDecision = !!v.decisionPrompt;
+
+  // Build vitals
+  const vitalsHtml = v.vitals ? v.vitals.map(function(vt) {
+    return '<span class="snap-vital' + (vt.f ? ' flag' : '') + '">' + vt.t + '<\/span>';
+  }).join('') : '';
+
+  let html = '';
+
+  if (!isDecision) {
+    // Regular visit
+    html +=
+      '<div class="visit-card" id="vcard-' + id + '-' + visitIdx + '">' +
+        '<div class="visit-card-hdr">' +
+          '<div class="visit-hdr-icon ' + v.iconClass + '">' + v.icon + '<\/div>' +
+          '<div class="visit-hdr-text">' +
+            '<div class="visit-hdr-title">' + v.label + ' &mdash; ' + v.title + '<\/div>' +
+            '<div class="visit-hdr-sub">' + v.sub + '<\/div>' +
+          '<\/div>' +
+        '<\/div>' +
+        '<div class="visit-card-body">' +
+          '<div class="patient-snapshot">' +
+            '<div class="snap-label">Clinical Picture<\/div>' +
+            '<div class="snap-text">' + v.snapshot + '<\/div>' +
+            '<div class="snap-vitals">' + vitalsHtml + '<\/div>' +
+          '<\/div>';
+
+    // Questions
+    v.questions.forEach(function(q, qi) {
+      html +=
+        '<div class="q-block">' +
+          '<div class="q-label">Question ' + (qi+1) + ' of ' + v.questions.length + '<\/div>' +
+          '<div class="q-prompt">' + q.prompt + '<\/div>' +
+          '<textarea class="q-textarea" id="' + q.id + '" placeholder="' + q.placeholder + '"><\/textarea>' +
+        '<\/div>';
+    });
+
+    html +=
+          '<div style="display:flex;justify-content:flex-end;">' +
+            '<button class="q-submit" onclick="submitVisit(\'' + id + '\',' + visitIdx + ')">Submit &amp; Continue &#8594;<\/button>' +
+          '<\/div>' +
+        '<\/div>' +
+      '<\/div>';
+
+    // Next finding (hidden until submit)
+    html +=
+      '<div class="next-prompt-card" id="next-' + id + '-' + visitIdx + '" style="display:none">' +
+        '<div class="next-prompt-label">' + v.nextFindingLabel + '<\/div>' +
+        '<div class="next-finding show">' + v.nextFinding + '<\/div>' +
+      '<\/div>';
+
+    // Visit feedback (hidden until submit, or immediate if that mode)
+    html +=
+      '<div class="visit-feedback" id="vfeed-' + id + '-' + visitIdx + '">' +
+        '<div class="vf-title">Visit ' + (visitIdx+1) + ' Teaching Points<\/div>' +
+        v.feedback.map(function(f) {
+          return '<div class="vf-item"><div class="vf-icon">' + f.icon + '<\/div><div class="vf-text">' + f.text + '<\/div><\/div>';
+        }).join('') +
+        '<button class="next-visit-btn" onclick="advanceVisit(\'' + id + '\',' + visitIdx + ')">' +
+          (visitIdx < c.visits.length - 1 ? 'Continue to ' + c.visits[visitIdx+1].label + ' &#8594;' : 'See Diagnosis &amp; Debrief &#8594;') +
+        '<\/button>' +
+      '<\/div>';
+
+  } else {
+    // Decision visit
+    html +=
+      '<div class="sec-hdr"><div class="sec-icon gold">&#128250;<\/div><div class="sec-title">Clinical Decision Point<\/div><span class="sec-tag">Decision<\/span><\/div>';
+
+    html +=
+      '<div class="decision-card" id="vcard-' + id + '-' + visitIdx + '">' +
+        '<div class="decision-hdr" style="background:var(--deep)">' +
+          '<div class="decision-hdr-text">' + v.title + '<\/div>' +
+          '<div class="decision-hdr-sub">' + v.sub + '<\/div>' +
+        '<\/div>' +
+        '<div class="decision-scenario">' + v.decisionPrompt + '<\/div>' +
+        '<div class="decision-choices">';
+
+    v.choices.forEach(function(ch, ci) {
+      html += '<button class="dchoice" id="dc-' + id + '-' + ci + '" onclick="makeDecision(\'' + id + '\',' + visitIdx + ',' + ci + ',\'' + ch.outcome + '\')">' +
+        '<span class="dchoice-letter">' + String.fromCharCode(65+ci) + '<\/span>' + ch.text + '<\/button>';
+    });
+
+    html += '<\/div>';
+
+    ['good','bad','partial'].forEach(function(o) {
+      html += '<div class="outcome-box ' + o + '" id="out-' + id + '-' + o + '">' +
+        '<div class="outcome-title">' + (o==='good'?'&#10003; Strong Reasoning':o==='bad'?'&#9888; Missed':'&#8635; Partial') + '<\/div>' +
+        v.outcomes[o] +
+        '<div class="key-finding"><strong>Key findings in this case:<\/strong><ul style="margin-top:6px;margin-left:16px;">' +
+        v.keyFindings.map(function(kf){ return '<li style="margin-bottom:4px;font-size:12.5px;">' + kf + '<\/li>'; }).join('') +
+        '<\/ul><\/div>' +
+      '<\/div>';
+    });
+
+    html += '<button class="next-visit-btn" id="to-debrief-' + id + '" style="display:none;margin:0 22px 20px" onclick="showDebrief(\'' + id + '\')">See Diagnosis &amp; Full Debrief &#8594;<\/button>';
+    html += '<\/div>';
+  }
+
+  bodyEl.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// SUBMIT VISIT
+// ═══════════════════════════════════════════
+function submitVisit(id, visitIdx) {
+  const c = CASES[id];
+  const v = c.visits[visitIdx];
+  const state = caseState[id];
+
+  // Store responses
+  v.questions.forEach(function(q) {
+    const el = document.getElementById(q.id);
+    state.responses[q.id] = el ? el.value.trim() : '';
+    if (el) { el.disabled = true; el.style.background = '#f4f6f7'; }
+  });
+
+  // Disable submit button
+  const submitBtn = document.querySelector('#vcard-' + id + '-' + visitIdx + ' .q-submit');
+  if (submitBtn) submitBtn.style.display = 'none';
+
+  // Show next finding
+  const nextEl = document.getElementById('next-' + id + '-' + visitIdx);
+  if (nextEl) nextEl.style.display = 'block';
+
+  // Show feedback based on mode
+  const feedEl = document.getElementById('vfeed-' + id + '-' + visitIdx);
+  if (feedEl) {
+    if (feedbackMode === 'immediate' || feedbackMode === 'visit') {
+      feedEl.classList.add('show');
+      setTimeout(function(){ feedEl.scrollIntoView({behavior:'smooth',block:'start'}); }, 200);
+    } else {
+      // end mode — show a "continue" button that will reveal feedback before advancing
+      feedEl.classList.add('show');
+      setTimeout(function(){ feedEl.scrollIntoView({behavior:'smooth',block:'start'}); }, 200);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+// ADVANCE VISIT
+// ═══════════════════════════════════════════
+function advanceVisit(id, currentVisitIdx) {
+  const c = CASES[id];
+  const state = caseState[id];
+  const nextIdx = currentVisitIdx + 1;
+
+  if (nextIdx >= c.visits.length) {
+    showDebrief(id);
+    return;
+  }
+
+  state.visit = nextIdx;
+  updateVisitNav(id);
+  buildVisit(id, nextIdx);
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════
+// DECISION
+// ═══════════════════════════════════════════
+function makeDecision(id, visitIdx, choiceIdx, outcome) {
+  const state = caseState[id];
+  if (state.decisions[visitIdx] !== undefined) return;
+  state.decisions[visitIdx] = outcome;
+
+  // Style buttons
+  [0,1,2].forEach(function(i) {
+    const btn = document.getElementById('dc-' + id + '-' + i);
+    if (!btn) return;
+    const btnOutcome = CASES[id].visits[visitIdx].choices[i].outcome;
+    if (btnOutcome === outcome) btn.classList.add(outcome);
+    else btn.classList.add('dimmed');
+  });
+
+  // Show outcome
+  ['good','bad','partial'].forEach(function(o) {
+    const el = document.getElementById('out-' + id + '-' + o);
+    if (el) el.classList.toggle('show', o === outcome);
+  });
+
+  // Show debrief button
+  const db = document.getElementById('to-debrief-' + id);
+  if (db) {
+    db.style.display = 'block';
+    setTimeout(function(){
+      const outEl = document.getElementById('out-' + id + '-' + outcome);
+      if (outEl) outEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }, 150);
+  }
+}
+
+// ═══════════════════════════════════════════
+// DEBRIEF
+// ═══════════════════════════════════════════
+function showDebrief(id) {
+  const c = CASES[id];
+  const state = caseState[id];
+  state.complete = true;
+  completed[id] = true;
+  updateDashboard(id);
+
+  const bodyEl = document.getElementById('body-' + id);
+
+  // Determine decision outcome
+  const decisionVisitIdx = c.visits.length - 1;
+  const decisionOutcome = state.decisions[decisionVisitIdx] || null;
+
+  // Build reasoning map SVG
+  const mapSvg = buildReasoningMap(id, state, decisionOutcome);
+
+  // Build debrief HTML
+  let html =
+    '<div class="sec-hdr"><div class="sec-icon green">&#9733;<\/div><div class="sec-title">Diagnosis &amp; Debrief<\/div><span class="sec-tag">Complete<\/span><\/div>' +
+
+    // Diagnosis reveal
+    '<div class="dx-reveal">' +
+      '<div class="dx-reveal-label">Final Diagnosis<\/div>' +
+      '<div class="dx-reveal-name">' + c.diagnosis + '<\/div>' +
+      '<div class="dx-reveal-body">' + c.diagnosisText + '<\/div>' +
+      '<div class="dx-reveal-grid">' +
+        '<div class="dx-col yours"><div class="dx-col-label">Your Decision<\/div><div class="dx-col-text">' +
+          (decisionOutcome === 'good' ? '&#10003; Strong reasoning — you identified the correct management pathway.' :
+           decisionOutcome === 'partial' ? '&#8635; Partial — you were on the right track but missed key elements.' :
+           '&#9888; The management decision missed the critical pathway. Review the key findings below.') +
+        '<\/div><\/div>' +
+        '<div class="dx-col expert"><div class="dx-col-label">Expert Pathway<\/div><div class="dx-col-text">' + c.visits[decisionVisitIdx].choices[0].text + '<\/div><\/div>' +
+      '<\/div>' +
+    '<\/div>' +
+
+    // Visual reasoning map
+    '<div class="sec-hdr"><div class="sec-icon blue">&#128202;<\/div><div class="sec-title">Your Reasoning Path vs. Expert Path<\/div><span class="sec-tag">Visual Map<\/span><\/div>' +
+    '<div class="map-container">' +
+      '<div class="map-header" style="background:var(--deep)">' +
+        '<div class="map-header-title">Reasoning Map &mdash; ' + c.visits[0].label + ' through Decision<\/div>' +
+        '<div class="map-header-sub">Where your path matched the expert pathway, and where it diverged<\/div>' +
+      '<\/div>' +
+      '<div class="map-body"><div class="map-svg-wrap">' + mapSvg + '<\/div><\/div>' +
+      '<div class="map-legend">' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--ocean)"><\/div> Expert pathway<\/div>' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--gold)"><\/div> Your path (aligned)<\/div>' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--red)"><\/div> Your path (diverged)<\/div>' +
+        '<div class="map-legend-item"><div class="map-legend-dot" style="background:var(--green)"><\/div> Correct decision<\/div>' +
+      '<\/div>' +
+    '<\/div>' +
+
+    // GENA demo callout
+    '<div class="gena-demo">' +
+      '<div class="gena-demo-badge">GENA &nbsp;&#183;&nbsp; Clinical Decision Support<\/div>' +
+      '<div class="gena-demo-title">How GENA Screen fits into this case<\/div>' +
+      '<div class="gena-demo-text">' + c.genaText + '<\/div>' +
+    '<\/div>' +
+
+    // Reflection
+    '<div class="sec-hdr"><div class="sec-icon red">&#128172;<\/div><div class="sec-title">Reflection<\/div><span class="sec-tag">Self-Assessment<\/span><\/div>' +
+    '<div class="reflect-card"><div class="reflect-title">Consider these before moving to the next case.<\/div>' +
+    c.visits[decisionVisitIdx].reflection.map(function(r) {
+      return '<div class="reflect-q"><div class="rq-icon">' + r.icon + '<\/div><div class="rq-text">' + r.q + '<\/div><\/div>';
+    }).join('') +
+    '<\/div>' +
+
+    // Teaching modules inline summary in debrief
+    buildInlineModuleSummary(id) +
+
+    // Back to dashboard
+    '<div style="margin-top:28px;text-align:center;">' +
+      '<button class="q-submit" onclick="goBack()" style="background:var(--deep);padding:12px 28px;font-size:14px;">&#8592; Return to Case Suite<\/button>' +
+    '<\/div>';
+
+  bodyEl.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════
+// REASONING MAP SVG
+// ═══════════════════════════════════════════
+function buildReasoningMap(id, state, finalOutcome) {
+  const c = CASES[id];
+  const visits = c.visits;
+  const W = 620, H = 220;
+  const nodeR = 22;
+
+  // Nodes: one per visit
+  const nodes = visits.map(function(v, i) {
+    const x = 60 + i * ((W - 120) / (visits.length - 1));
+    const y = H / 2;
+    return { x: x, y: y, label: v.label, icon: v.icon };
+  });
+
+  // Determine which nodes were handled well
+  const isDecision = !!visits[visits.length-1].decisionPrompt;
+  const nodeColors = nodes.map(function(_, i) {
+    if (i === visits.length - 1) {
+      if (finalOutcome === 'good') return 'var(--green)';
+      if (finalOutcome === 'bad') return 'var(--red)';
+      return 'var(--orange)';
+    }
+    return 'var(--ocean)';
+  });
+
+  const learnerColors = nodes.map(function(_, i) {
+    if (i === visits.length - 1) {
+      if (finalOutcome === 'good') return 'var(--green)';
+      if (finalOutcome === 'bad') return 'var(--red)';
+      return 'var(--orange)';
+    }
+    return 'var(--gold)';
+  });
+
+  // Expert path labels (key reasoning moves)
+  const expertLabels = [
+    c.isGenetic ? 'Recognize atypical features' : 'Identify common etiology',
+    c.isGenetic ? 'Constellation narrows to genetic' : 'Labs confirm common cause',
+    finalOutcome === 'good' ? 'Correct management' : 'Expert management pathway'
+  ];
+
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">';
+
+  // Expert path line (top)
+  const topY = H/2 - 40;
+  const botY = H/2 + 40;
+
+  svg += '<g opacity=".18">';
+  for (let i = 0; i < nodes.length - 1; i++) {
+    svg += '<line x1="' + (nodes[i].x + nodeR) + '" y1="' + topY + '" x2="' + (nodes[i+1].x - nodeR) + '" y2="' + topY + '" stroke="var(--ocean)" stroke-width="2.5" stroke-dasharray="6,3"/>';
+  }
+  svg += '<\/g>';
+
+  // Learner path line (bottom)
+  svg += '<g opacity=".18">';
+  for (let i = 0; i < nodes.length - 1; i++) {
+    svg += '<line x1="' + (nodes[i].x + nodeR) + '" y1="' + botY + '" x2="' + (nodes[i+1].x - nodeR) + '" y2="' + botY + '" stroke="' + learnerColors[Math.min(i+1, learnerColors.length-1)] + '" stroke-width="2.5" stroke-dasharray="4,2"/>';
+  }
+  svg += '<\/g>';
+
+  // Center connecting lines
+  for (let i = 0; i < nodes.length; i++) {
+    svg += '<line x1="' + nodes[i].x + '" y1="' + topY + '" x2="' + nodes[i].x + '" y2="' + botY + '" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="3,3"/>';
+  }
+
+  // Nodes
+  nodes.forEach(function(n, i) {
+    // Expert node (top)
+    svg += '<circle cx="' + n.x + '" cy="' + topY + '" r="' + nodeR + '" fill="' + nodeColors[i] + '" opacity="0.9"/>';
+    svg += '<text x="' + n.x + '" y="' + (topY + 5) + '" text-anchor="middle" font-size="13" fill="white" font-family="system-ui">' + (i+1) + '<\/text>';
+    // Expert label
+    if (expertLabels[i]) {
+      svg += '<text x="' + n.x + '" y="' + (topY - nodeR - 8) + '" text-anchor="middle" font-size="10" fill="var(--ocean)" font-family="system-ui" font-weight="600">' + expertLabels[i] + '<\/text>';
+    }
+
+    // Learner node (bottom)
+    svg += '<circle cx="' + n.x + '" cy="' + botY + '" r="' + nodeR + '" fill="' + learnerColors[i] + '" opacity="0.9"/>';
+    svg += '<text x="' + n.x + '" y="' + (botY + 5) + '" text-anchor="middle" font-size="13" fill="white" font-family="system-ui">' + (i+1) + '<\/text>';
+
+    // Visit label below
+    svg += '<text x="' + n.x + '" y="' + (botY + nodeR + 14) + '" text-anchor="middle" font-size="10.5" fill="var(--neutral-mid)" font-family="system-ui">' + n.label + '<\/text>';
+  });
+
+  // Labels
+  svg += '<text x="30" y="' + (topY + 4) + '" text-anchor="end" font-size="10" fill="var(--ocean)" font-family="system-ui" font-weight="700">Expert<\/text>';
+  svg += '<text x="30" y="' + (botY + 4) + '" text-anchor="end" font-size="10" fill="var(--gold)" font-family="system-ui" font-weight="700">You<\/text>';
+
+  // Outcome annotation
+  const outText = finalOutcome === 'good' ? '&#10003; Aligned' : finalOutcome === 'bad' ? '&#9888; Diverged' : '&#8635; Partial';
+  const outColor = finalOutcome === 'good' ? 'var(--green)' : finalOutcome === 'bad' ? 'var(--red)' : 'var(--orange)';
+  svg += '<text x="' + (W - 10) + '" y="' + (botY + 4) + '" text-anchor="end" font-size="11" fill="' + outColor + '" font-family="system-ui" font-weight="700">' + outText + '<\/text>';
+
+  svg += '<\/svg>';
+  return svg;
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// TEACHING MODULES — FAB, DRAWER, RENDERER
+// ═══════════════════════════════════════════
+
+var moduleFabEl = null;
+var activeModuleCaseId = null;
+var activeModuleTab = 'pathophys';
+
+function showModuleFab(caseId) {
+  if (!MODULES[caseId]) return;
+  activeModuleCaseId = caseId;
+  if (!moduleFabEl) {
+    moduleFabEl = document.createElement('button');
+    moduleFabEl.className = 'module-fab';
+    moduleFabEl.innerHTML = '<span class="module-fab-dot"><\/span>Evidence Base';
+    moduleFabEl.onclick = function() { openModules(activeModuleCaseId); };
+    document.body.appendChild(moduleFabEl);
+  }
+  moduleFabEl.style.display = 'flex';
+}
+
+function hideModuleFab() {
+  if (moduleFabEl) moduleFabEl.style.display = 'none';
+}
+
+function openModules(caseId) {
+  if (!MODULES[caseId]) return;
+  const c = CASES[caseId];
+  const m = MODULES[caseId];
+  // Set header
+  document.getElementById('module-drawer-title').textContent = c.diagnosis || 'Evidence Base';
+  document.getElementById('module-drawer-sub').textContent = 'Pathophysiology · Guidelines · Framework · Evidence · EMR Lens';
+  // Build tabs
+  const tabDefs = [
+    {id:'pathophys', label:'Pathophys', icon:'&#9883;'},
+    {id:'guidelines', label:'Guidelines', icon:'&#128203;'},
+    {id:'framework', label:'Framework', icon:'&#128270;'},
+    {id:'evidence', label:'Evidence', icon:'&#9733;'},
+    {id:'emr', label:'EMR Lens', icon:'&#128187;'}
+  ];
+  const tabsEl = document.getElementById('module-tabs');
+  tabsEl.innerHTML = tabDefs.map(function(t) {
+    return '<button class="module-tab' + (t.id === activeModuleTab ? ' active' : '') + '" onclick="switchModuleTab(\'' + t.id + '\')">' + t.icon + ' ' + t.label + '<\/button>';
+  }).join('');
+  // Build content
+  renderModuleContent(caseId, activeModuleTab);
+  // Open
+  document.getElementById('module-drawer').classList.add('open');
+  document.getElementById('module-overlay').classList.add('show');
+}
+
+function switchModuleTab(tabId) {
+  activeModuleTab = tabId;
+  document.querySelectorAll('.module-tab').forEach(function(t) {
+    t.classList.toggle('active', t.textContent.toLowerCase().includes(tabId.substring(0,4).toLowerCase()) || t.onclick.toString().includes(tabId));
+  });
+  // Re-check by rebuilding tabs properly
+  var tabDefs = ['pathophys','guidelines','framework','evidence','emr'];
+  document.querySelectorAll('.module-tab').forEach(function(t, i) {
+    t.classList.toggle('active', tabDefs[i] === tabId);
+  });
+  renderModuleContent(activeModuleCaseId, tabId);
+}
+
+function renderModuleContent(caseId, tabId) {
+  var m = MODULES[caseId];
+  if (!m || !m[tabId]) return;
+  var data = m[tabId];
+  var html = '<div class="module-panel active">';
+  html += '<div class="module-section-title">' + data.title + '<\/div>';
+  if (data.body) {
+    html += '<div class="module-body-text">' + data.body + '<\/div>';
+  }
+  if (tabId === 'emr' && data.body) {
+    html += '<div class="module-emr-note">&#128187; <strong>EMR Integration Note:<\/strong> These structured fields, when consistently populated, enable clinical decision support rules to surface this diagnosis earlier. They represent the intersection of clinical reasoning education and documentation practice.<\/div>';
+  }
+  if (data.table) {
+    html += buildModuleTable(data.table);
+  }
+  if (data.refs) {
+    html += '<div class="module-refs"><div class="module-refs-label">References<\/div>';
+    data.refs.forEach(function(r) {
+      html += '<div class="module-ref-item">' + r + '<\/div>';
+    });
+    html += '<\/div>';
+  }
+  html += '<\/div>';
+  document.getElementById('module-content').innerHTML = html;
+}
+
+function buildModuleTable(rows) {
+  if (!rows || !rows.length) return '';
+  var html = '<table class="module-table"><thead><tr>';
+  rows[0].forEach(function(h) { html += '<th>' + h + '<\/th>'; });
+  html += '<\/tr><\/thead><tbody>';
+  for (var i = 1; i < rows.length; i++) {
+    html += '<tr>';
+    rows[i].forEach(function(cell) {
+      // Apply evidence grade coloring
+      var cellClass = '';
+      if (typeof cell === 'string') {
+        if (cell.includes('Grade A') || cell.includes('Grade A —')) cellClass = ' class="ev-a-cell"';
+        else if (cell.includes('Grade D')) cellClass = ' class="ev-d-cell"';
+      }
+      html += '<td' + cellClass + '>' + cell + '<\/td>';
+    });
+    html += '<\/tr>';
+  }
+  html += '<\/tbody><\/table>';
+  return html;
+}
+
+function closeModules() {
+  document.getElementById('module-drawer').classList.remove('open');
+  document.getElementById('module-overlay').classList.remove('show');
+}
+
+function buildInlineModuleSummary(id) {
+  var m = MODULES[id];
+  if (!m || !m.evidence) return '';
+  var rows = m.evidence.table || [];
+  var html = '<div class="sec-hdr"><div class="sec-icon" style="background:#fdf3dc">&#9733;<\/div><div class="sec-title">Evidence Summary<\/div><span class="sec-tag">Research Base<\/span><\/div>';
+  html += '<div style="background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px;">';
+  html += '<div style="padding:14px 20px;border-bottom:1px solid var(--border);background:#fafcfe;">';
+  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:6px;">Management Decisions — Evidence Grades<\/div>';
+  html += '<div style="font-size:12px;color:var(--neutral-mid);">';
+  html += '<span class="ev-grade ev-a">Grade A<\/span> Strong evidence (RCTs, systematic reviews) &nbsp; ';
+  html += '<span class="ev-grade ev-b">Grade B<\/span> Moderate evidence (controlled studies, guidelines) &nbsp; ';
+  html += '<span class="ev-grade ev-c">Grade C<\/span> Limited evidence (expert consensus, observational) &nbsp; ';
+  html += '<span class="ev-grade ev-d">Grade D<\/span> Not recommended / harmful';
+  html += '<\/div><\/div>';
+  html += '<table class="module-table" style="margin:0">';
+  html += '<thead><tr><th style="width:45%">Decision<\/th><th style="width:25%">Evidence Level<\/th><th>Notes<\/th><\/tr><\/thead><tbody>';
+  for (var i = 1; i < rows.length; i++) {
+    var row = rows[i];
+    if (!row || row.length < 2) continue;
+    var gradeText = row[1] || '';
+    var gradeClass = '';
+    var gradeTag = '';
+    if (gradeText.startsWith('Grade A')) { gradeClass = 'ev-a'; gradeTag = 'Grade A'; }
+    else if (gradeText.startsWith('Grade B')) { gradeClass = 'ev-b'; gradeTag = 'Grade B'; }
+    else if (gradeText.startsWith('Grade C')) { gradeClass = 'ev-c'; gradeTag = 'Grade C'; }
+    else if (gradeText.startsWith('Grade D')) { gradeClass = 'ev-d'; gradeTag = 'Grade D'; }
+    html += '<tr><td>' + (row[0] || '') + '<\/td><td><span class="ev-grade ' + gradeClass + '">' + gradeTag + '<\/span><br><span style="font-size:11px;color:var(--neutral-mid)">' + gradeText.replace(/Grade [ABCD] ?—? ?/, '') + '<\/span><\/td><td style="font-size:11.5px">' + (row[2] || '') + '<\/td><\/tr>';
+  }
+  html += '<\/tbody><\/table>';
+  html += '<div style="padding:12px 20px;background:#fafcfe;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;">';
+  html += '<span style="font-size:12px;color:var(--neutral-mid);">Full teaching modules — pathophysiology, clinical guidelines, diagnostic frameworks, and EMR lens:<\/span>';
+  html += '<button onclick="openModules(\'' + id + '\')" style="padding:7px 14px;border-radius:5px;background:var(--ocean);color:white;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;">Open Evidence Base &#8594;<\/button>';
+  html += '<\/div><\/div>';
+  return html;
+}
+
+// Hide FAB when returning to dashboard
+var _origGoBack = goBack;
+goBack = function() {
+  hideModuleFab();
+  closeModules();
+  _origGoBack();
+};
+
+function updateDashboard(justCompletedId) {
+  const familyIds = {1:['A','B','D1','E1','Raymond'], 2:['C','D','C2','D2','E2'], 3:['A3','B3','C3','D3','E3'], 4:['F4A','F4B','F4C','F4D','F4E']};
+  const allIds = [].concat(familyIds[1], familyIds[2], familyIds[3], familyIds[4]);
+  const doneCount = allIds.filter(function(id){ return completed[id]; }).length;
+  document.getElementById('dash-done').textContent = doneCount;
+  document.getElementById('dash-bar').style.width = (doneCount/20*100) + '%';
+  var totalEl = document.querySelector('.prog-stat:nth-child(2) .prog-num');
+  if (totalEl) totalEl.textContent = '20';
+
+  [1,2,3,4].forEach(function(f) {
+    var fdone = familyIds[f].filter(function(id){ return completed[id]; }).length;
+    var el = document.getElementById('fcount-' + f);
+    if (el) el.textContent = fdone + '/5';
+  });
+
+  if (justCompletedId) {
+    const card = document.getElementById('card-' + justCompletedId);
+    if (card) { card.classList.add('done'); }
+    const st = document.getElementById('status-' + justCompletedId);
+    if (st) { st.textContent = '&#10003; Completed'; st.className = 'case-status done'; }
+  }
+}
+
+
+// Failsafe: remove loading screen after 1 second regardless
+setTimeout(function() {
+  var l = document.getElementById('js-loading');
+  if (l) l.style.display = 'none';
+}, 1000);
+
+// Remove loading screen
+(function() {
+  var loader = document.getElementById('js-loading');
+  if (loader) loader.style.display = 'none';
+})();
+    // Remove loading screen
+    var l = document.getElementById('js-loading');
+    if (l) l.style.display = 'none';
+  })
+  .catch(function(e) {
+    console.error('Fetch error:', e);
+  });
+    // Remove loading screen
+    var l = document.getElementById('js-loading');
+    if (l) l.style.display = 'none';
+  };
+  script.onerror = function() {
+    var l = document.getElementById('js-loading');
+    if (l) l.innerHTML = '<div style="color:#c0392b;text-align:center;padding:40px">Failed to load case data</div>';
+  };
+  document.head.appendChild(script);
+})();
+</script>
+
+</body>
+</html>
