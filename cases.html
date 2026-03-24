@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clinical Reasoning in Practice — Demo</title>
+<title>Clinical Reasoning in Practice &mdash; Demo</title>
 <style>
 
 /* RENDER FIX: dashboard visible immediately before JS */
@@ -28,7 +28,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .screen:not(.active){display:none;}
 a{color:var(--ocean);}
 
-/* ── DASHBOARD ── */
+/* -- DASHBOARD -- */
 .dash-hero{background:linear-gradient(135deg,#0d1f33,#1a3a52 60%,#1c3040);color:white;padding:0;position:relative;overflow:hidden;}
 .dash-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(40,116,166,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(40,116,166,.07) 1px,transparent 1px);background-size:48px 48px;}
 .dash-hero-inner{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:52px 32px 44px;}
@@ -79,7 +79,7 @@ a{color:var(--ocean);}
 .case-btn{padding:8px 16px;border-radius:6px;background:var(--ocean);color:white;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;}
 .case-btn:hover{background:var(--deep);}
 
-/* ── CASE MODULE ── */
+/* -- CASE MODULE -- */
 .case-header{color:white;padding:0;position:relative;overflow:hidden;}
 .case-header-inner{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:36px 32px 32px;}
 .back-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:4px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:20px;transition:background .2s;font-family:inherit;}
@@ -97,7 +97,7 @@ a{color:var(--ocean);}
 .vnav-item{padding:12px 20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);cursor:default;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
 .vnav-item.active{color:white;border-bottom-color:var(--gold);}
 .vnav-item.done{color:rgba(255,255,255,.65);}
-.vnav-item.done::before{content:'✓ ';}
+.vnav-item.done::before{content:'&#10003; ';}
 
 /* case body */
 .case-module-body{max-width:960px;margin:0 auto;padding:28px 32px 64px;}
@@ -184,7 +184,7 @@ a{color:var(--ocean);}
 .sec-title{font-family:Georgia,serif;font-size:18px;font-weight:700;color:var(--deep);}
 .sec-tag{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:3px;background:var(--neutral-light);color:var(--neutral-mid);}
 
-/* ── VISUAL REASONING MAP ── */
+/* -- VISUAL REASONING MAP -- */
 .map-container{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px;}
 .map-header{padding:16px 22px;border-bottom:1px solid var(--border);}
 .map-header-title{font-weight:700;font-size:14px;color:white;}
@@ -244,7 +244,7 @@ a{color:var(--ocean);}
 .family-intro-title{font-family:Georgia,serif;font-size:20px;font-weight:700;color:var(--deep);margin-bottom:8px;}
 .family-intro-sub{font-size:13.5px;color:var(--neutral-mid);line-height:1.7;}
 
-/* ── TEACHING MODULES ── */
+/* -- TEACHING MODULES -- */
 .module-fab{position:fixed;bottom:28px;right:28px;z-index:200;background:var(--deep);color:white;border:none;border-radius:50px;padding:12px 20px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(26,58,82,.35);display:flex;align-items:center;gap:8px;transition:background .2s,transform .2s;}
 .module-fab:hover{background:var(--ocean);transform:translateY(-2px);}
 .module-fab-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
@@ -285,7 +285,7 @@ a{color:var(--ocean);}
 <body style="background:#f0f5fa;">
 <div id="js-loading" style="position:fixed;inset:0;background:#f0f5fa;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:system-ui;color:#566573;font-size:14px;">Loading cases...</div>
 
-<!-- ── TEACHING MODULE DRAWER ── -->
+<!-- -- TEACHING MODULE DRAWER -- -->
 <div class="module-drawer-overlay" id="module-overlay" onclick="closeModules()"></div>
 <div class="module-drawer" id="module-drawer">
   <div class="module-drawer-hdr">
@@ -299,15 +299,15 @@ a{color:var(--ocean);}
   <div class="module-content" id="module-content"></div>
 </div>
      DASHBOARD
-═══════════════════════════════════ -->
+----------------------------------- -->
 <div id="screen-dash" class="screen active">
   <div class="dash-hero">
     <div class="dash-hero-grid"></div>
     <div class="dash-hero-inner">
       <div class="demo-chip">Clinical Reasoning Demo &nbsp;&#183;&nbsp; 20 Cases &nbsp;&#183;&nbsp; 4 Complaint Families</div>
       <h1 class="dash-title">What Are You<br><em>Actually</em> Looking At?</h1>
-      <p class="dash-sub">Fifteen patients. Three common chief complaints. Within each family, cases share the same opening — and diverge in ways that matter. Your job is to reason from the details, not the diagnosis.</p>
-      <div class="dash-notice"><strong>Before you begin:</strong> Cases within a family share the same chief complaint. Some share the same diagnosis but present differently. Some look identical and resolve to opposite answers. There are no labels. Reason from clinical evidence — not from what you expect.</div>
+      <p class="dash-sub">Fifteen patients. Three common chief complaints. Within each family, cases share the same opening &mdash; and diverge in ways that matter. Your job is to reason from the details, not the diagnosis.</p>
+      <div class="dash-notice"><strong>Before you begin:</strong> Cases within a family share the same chief complaint. Some share the same diagnosis but present differently. Some look identical and resolve to opposite answers. There are no labels. Reason from clinical evidence &mdash; not from what you expect.</div>
       <div class="gena-credit">
         <span class="gena-pill">GENA</span>
         <span>&#183; SIVOTEC BioInformatics &#183; Clinical Decision Support Demo</span>
@@ -382,7 +382,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#2874A6"></div>
           <div class="case-body-inner">
             <div class="case-num">1B</div>
-            <div class="case-chief">"I'm exhausted all the time — it's been going on for years"</div>
+            <div class="case-chief">"I'm exhausted all the time &mdash; it's been going on for years"</div>
             <div class="case-demo">Marcus, 41M &nbsp;&#183;&nbsp; Finance &nbsp;&#183;&nbsp; "Probably stress"</div>
             <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Fatigue</span></div>
             <div class="case-footer"><span class="case-status" id="status-B">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -402,7 +402,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#2874A6"></div>
           <div class="case-body-inner">
             <div class="case-num">1D</div>
-            <div class="case-chief">"I fall asleep at my desk — I sleep 8 hours but I'm never rested"</div>
+            <div class="case-chief">"I fall asleep at my desk &mdash; I sleep 8 hours but I'm never rested"</div>
             <div class="case-demo">James, 52M &nbsp;&#183;&nbsp; Teacher &nbsp;&#183;&nbsp; Wife says he snores</div>
             <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Fatigue</span></div>
             <div class="case-footer"><span class="case-status" id="status-E1">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -412,7 +412,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#2874A6"></div>
           <div class="case-body-inner">
             <div class="case-num">1E</div>
-            <div class="case-chief">"I've been tired and a bit short of breath — thought it was just getting older"</div>
+            <div class="case-chief">"I've been tired and a bit short of breath &mdash; thought it was just getting older"</div>
             <div class="case-demo">Raymond, 68M &nbsp;&#183;&nbsp; Retired &nbsp;&#183;&nbsp; No recent bloodwork</div>
             <div class="case-tags"><span class="ctag">Older Adult</span><span class="ctag">Fatigue</span></div>
             <div class="case-footer"><span class="case-status" id="status-Raymond">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -433,7 +433,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#1e8449"></div>
           <div class="case-body-inner">
             <div class="case-num">2A</div>
-            <div class="case-chief">"Third pneumonia in 18 months — parents blame daycare"</div>
+            <div class="case-chief">"Third pneumonia in 18 months &mdash; parents blame daycare"</div>
             <div class="case-demo">Liam, 5M &nbsp;&#183;&nbsp; Daycare &nbsp;&#183;&nbsp; Bacterial pneumonias</div>
             <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
             <div class="case-footer"><span class="case-status" id="status-C">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -443,7 +443,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#1e8449"></div>
           <div class="case-body-inner">
             <div class="case-num">2B</div>
-            <div class="case-chief">"Three urgent care visits this year — parents are worried"</div>
+            <div class="case-chief">"Three urgent care visits this year &mdash; parents are worried"</div>
             <div class="case-demo">Noah, 4M &nbsp;&#183;&nbsp; Daycare &nbsp;&#183;&nbsp; Similar story</div>
             <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
             <div class="case-footer"><span class="case-status" id="status-D">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -453,7 +453,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#1e8449"></div>
           <div class="case-body-inner">
             <div class="case-num">2C</div>
-            <div class="case-chief">"Four serious infections in three years — ear, sinus, lungs, stomach"</div>
+            <div class="case-chief">"Four serious infections in three years &mdash; ear, sinus, lungs, stomach"</div>
             <div class="case-demo">Aisha, 8F &nbsp;&#183;&nbsp; Previously healthy until age 5</div>
             <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
             <div class="case-footer"><span class="case-status" id="status-C2">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -463,7 +463,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#1e8449"></div>
           <div class="case-body-inner">
             <div class="case-num">2D</div>
-            <div class="case-chief">"Lots of sinus infections and stomach bugs — more than his friends"</div>
+            <div class="case-chief">"Lots of sinus infections and stomach bugs &mdash; more than his friends"</div>
             <div class="case-demo">Tyler, 7M &nbsp;&#183;&nbsp; Active, school-age child</div>
             <div class="case-tags"><span class="ctag">Pediatric</span><span class="ctag">Infections</span></div>
             <div class="case-footer"><span class="case-status" id="status-D2">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -487,14 +487,14 @@ a{color:var(--ocean);}
       <div class="family-intro">
         <div class="family-intro-label">Case Family 3</div>
         <div class="family-intro-title">"Something's not right with my child"</div>
-        <div class="family-intro-sub">Five children with developmental concerns brought to primary care. One needs reassurance. One needs urgent early intervention. Three need genetic or endocrine workup. The stakes are highest in this family — delay costs development.</div>
+        <div class="family-intro-sub">Five children with developmental concerns brought to primary care. One needs reassurance. One needs urgent early intervention. Three need genetic or endocrine workup. The stakes are highest in this family &mdash; delay costs development.</div>
       </div>
       <div class="case-grid">
         <div class="case-card" id="card-A3" onclick="openCase('A3')">
           <div class="case-accent" style="background:#6c3483"></div>
           <div class="case-body-inner">
             <div class="case-num">3A</div>
-            <div class="case-chief">"She's not walking yet — all her friends are walking"</div>
+            <div class="case-chief">"She's not walking yet &mdash; all her friends are walking"</div>
             <div class="case-demo">Maya, 14 months F &nbsp;&#183;&nbsp; First child &nbsp;&#183;&nbsp; Anxious parents</div>
             <div class="case-tags"><span class="ctag">Infant</span><span class="ctag">Development</span></div>
             <div class="case-footer"><span class="case-status" id="status-A3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -504,7 +504,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#6c3483"></div>
           <div class="case-body-inner">
             <div class="case-num">3B</div>
-            <div class="case-chief">"He used to say words but he's stopped — and doesn't look at us anymore"</div>
+            <div class="case-chief">"He used to say words but he's stopped &mdash; and doesn't look at us anymore"</div>
             <div class="case-demo">Ethan, 18 months M &nbsp;&#183;&nbsp; Previously developing normally</div>
             <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Regression</span></div>
             <div class="case-footer"><span class="case-status" id="status-B3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -514,7 +514,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#6c3483"></div>
           <div class="case-body-inner">
             <div class="case-num">3C</div>
-            <div class="case-chief">"She's behind but she's such a happy baby — we're not too worried"</div>
+            <div class="case-chief">"She's behind but she's such a happy baby &mdash; we're not too worried"</div>
             <div class="case-demo">Lily, 18 months F &nbsp;&#183;&nbsp; Happy affect &nbsp;&#183;&nbsp; No words</div>
             <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Development</span></div>
             <div class="case-footer"><span class="case-status" id="status-C3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -524,7 +524,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#6c3483"></div>
           <div class="case-body-inner">
             <div class="case-num">3D</div>
-            <div class="case-chief">"He's just a slow developer — our doctor says boys are slower"</div>
+            <div class="case-chief">"He's just a slow developer &mdash; our doctor says boys are slower"</div>
             <div class="case-demo">Carlos, 15 months M &nbsp;&#183;&nbsp; International adoption &nbsp;&#183;&nbsp; No newborn screen</div>
             <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Global Delay</span></div>
             <div class="case-footer"><span class="case-status" id="status-D3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -534,7 +534,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#6c3483"></div>
           <div class="case-body-inner">
             <div class="case-num">3E</div>
-            <div class="case-chief">"She was doing everything right — and then around her first birthday she just stopped"</div>
+            <div class="case-chief">"She was doing everything right &mdash; and then around her first birthday she just stopped"</div>
             <div class="case-demo">Ava, 20 months F &nbsp;&#183;&nbsp; Normal development until 12 months</div>
             <div class="case-tags"><span class="ctag">Toddler</span><span class="ctag">Regression</span></div>
             <div class="case-footer"><span class="case-status" id="status-E3">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -548,14 +548,14 @@ a{color:var(--ocean);}
       <div class="family-intro">
         <div class="family-intro-label">Case Family 4</div>
         <div class="family-intro-title">"My joints hurt"</div>
-        <div class="family-intro-sub">Five patients with joint pain. One has inflammatory arthritis — easy to treat if you recognize it early. One has mechanical arthritis — easy to over-investigate. One has arthritis as the presenting complaint of a systemic disease. One has a post-infectious arthritis that nobody asks the right questions to find. And one has a pediatric arthritis that looks like infection.</div>
+        <div class="family-intro-sub">Five patients with joint pain. One has inflammatory arthritis &mdash; easy to treat if you recognize it early. One has mechanical arthritis &mdash; easy to over-investigate. One has arthritis as the presenting complaint of a systemic disease. One has a post-infectious arthritis that nobody asks the right questions to find. And one has a pediatric arthritis that looks like infection.</div>
       </div>
       <div class="case-grid">
         <div class="case-card" id="card-F4A" onclick="openCase('F4A')">
           <div class="case-accent" style="background:#c0392b"></div>
           <div class="case-body-inner">
             <div class="case-num">4A</div>
-            <div class="case-chief">"My hands are stiff and swollen every morning — it's been months"</div>
+            <div class="case-chief">"My hands are stiff and swollen every morning &mdash; it's been months"</div>
             <div class="case-demo">Elena, 34F &nbsp;&#183;&nbsp; Administrative coordinator</div>
             <div class="case-tags"><span class="ctag">Adult</span><span class="ctag">Arthritis</span></div>
             <div class="case-footer"><span class="case-status" id="status-F4A">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -565,7 +565,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#c0392b"></div>
           <div class="case-body-inner">
             <div class="case-num">4B</div>
-            <div class="case-chief">"My knees have been aching for years — they're getting worse"</div>
+            <div class="case-chief">"My knees have been aching for years &mdash; they're getting worse"</div>
             <div class="case-demo">Harold, 72M &nbsp;&#183;&nbsp; Retired carpenter, walks daily</div>
             <div class="case-tags"><span class="ctag">Older Adult</span><span class="ctag">Arthritis</span></div>
             <div class="case-footer"><span class="case-status" id="status-F4B">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -575,7 +575,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#c0392b"></div>
           <div class="case-body-inner">
             <div class="case-num">4C</div>
-            <div class="case-chief">"My knee and ankle have been swollen for two weeks — I don't know why"</div>
+            <div class="case-chief">"My knee and ankle have been swollen for two weeks &mdash; I don't know why"</div>
             <div class="case-demo">Jordan, 19M &nbsp;&#183;&nbsp; College student</div>
             <div class="case-tags"><span class="ctag">Young Adult</span><span class="ctag">Arthritis</span></div>
             <div class="case-footer"><span class="case-status" id="status-F4C">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -585,7 +585,7 @@ a{color:var(--ocean);}
           <div class="case-accent" style="background:#c0392b"></div>
           <div class="case-body-inner">
             <div class="case-num">4D</div>
-            <div class="case-chief">"My joints have been aching and I've been exhausted — I thought it was stress"</div>
+            <div class="case-chief">"My joints have been aching and I've been exhausted &mdash; I thought it was stress"</div>
             <div class="case-demo">Priya, 16F &nbsp;&#183;&nbsp; High school student, facial rash after beach</div>
             <div class="case-tags"><span class="ctag">Adolescent</span><span class="ctag">Arthritis</span></div>
             <div class="case-footer"><span class="case-status" id="status-F4D">Not started</span><button class="case-btn">Begin &#8594;</button></div>
@@ -607,9 +607,9 @@ a{color:var(--ocean);}
   </div>
 </div>
 
-<!-- ═══════════════════════════════════
+<!-- -----------------------------------
      CASE SCREENS
-═══════════════════════════════════ -->
+----------------------------------- -->
 <div id="screen-A" class="screen"><div class="case-header" id="hdr-A" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-A"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
 <div id="screen-B" class="screen"><div class="case-header" id="hdr-B" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-B"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
 <div id="screen-D1" class="screen"><div class="case-header" id="hdr-D1" style="background:linear-gradient(135deg,#1a2840,#2c3e6a)"></div><div id="body-D1"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
@@ -647,13 +647,13 @@ function setFeedback(mode) {
   });
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // TEACHING MODULE DATA
-// ═══════════════════════════════════════════
-// ═══════════════════════════════════════════════════
-// TEACHING MODULES — all 20 cases
+// ===========================================
+// ===================================================
+// TEACHING MODULES &mdash; all 20 cases
 // Each case gets: pathophys, guidelines, framework, evidence, emr
-// ═══════════════════════════════════════════════════
+// ===================================================
 var currentFamily = 1;
 function showFamily(n) {
   currentFamily = n;
@@ -684,9 +684,9 @@ function goBack() {
   window.scrollTo(0,0);
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // BUILD HEADER
-// ═══════════════════════════════════════════
+// ===========================================
 function buildCaseHeader(id) {
   const c = CASES[id];
   const familyMap = {1:['A','B','D1','E1','Raymond'], 2:['C','D','C2','D2','E2'], 3:['A3','B3','C3','D3','E3'], 4:['F4A','F4B','F4C','F4D','F4E']};
@@ -727,9 +727,9 @@ function updateVisitNav(id) {
   }).join('');
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // BUILD VISIT
-// ═══════════════════════════════════════════
+// ===========================================
 function buildVisit(id, visitIdx) {
   const c = CASES[id];
   const v = c.visits[visitIdx];
@@ -836,9 +836,9 @@ function buildVisit(id, visitIdx) {
   bodyEl.innerHTML = html;
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // SUBMIT VISIT
-// ═══════════════════════════════════════════
+// ===========================================
 function submitVisit(id, visitIdx) {
   const c = CASES[id];
   const v = c.visits[visitIdx];
@@ -866,16 +866,16 @@ function submitVisit(id, visitIdx) {
       feedEl.classList.add('show');
       setTimeout(function(){ feedEl.scrollIntoView({behavior:'smooth',block:'start'}); }, 200);
     } else {
-      // end mode — show a "continue" button that will reveal feedback before advancing
+      // end mode &mdash; show a "continue" button that will reveal feedback before advancing
       feedEl.classList.add('show');
       setTimeout(function(){ feedEl.scrollIntoView({behavior:'smooth',block:'start'}); }, 200);
     }
   }
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // ADVANCE VISIT
-// ═══════════════════════════════════════════
+// ===========================================
 function advanceVisit(id, currentVisitIdx) {
   const c = CASES[id];
   const state = caseState[id];
@@ -892,9 +892,9 @@ function advanceVisit(id, currentVisitIdx) {
   window.scrollTo(0,0);
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // DECISION
-// ═══════════════════════════════════════════
+// ===========================================
 function makeDecision(id, visitIdx, choiceIdx, outcome) {
   const state = caseState[id];
   if (state.decisions[visitIdx] !== undefined) return;
@@ -926,9 +926,9 @@ function makeDecision(id, visitIdx, choiceIdx, outcome) {
   }
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // DEBRIEF
-// ═══════════════════════════════════════════
+// ===========================================
 function showDebrief(id) {
   const c = CASES[id];
   const state = caseState[id];
@@ -956,8 +956,8 @@ function showDebrief(id) {
       '<div class="dx-reveal-body">' + c.diagnosisText + '<\/div>' +
       '<div class="dx-reveal-grid">' +
         '<div class="dx-col yours"><div class="dx-col-label">Your Decision<\/div><div class="dx-col-text">' +
-          (decisionOutcome === 'good' ? '&#10003; Strong reasoning — you identified the correct management pathway.' :
-           decisionOutcome === 'partial' ? '&#8635; Partial — you were on the right track but missed key elements.' :
+          (decisionOutcome === 'good' ? '&#10003; Strong reasoning &mdash; you identified the correct management pathway.' :
+           decisionOutcome === 'partial' ? '&#8635; Partial &mdash; you were on the right track but missed key elements.' :
            '&#9888; The management decision missed the critical pathway. Review the key findings below.') +
         '<\/div><\/div>' +
         '<div class="dx-col expert"><div class="dx-col-label">Expert Pathway<\/div><div class="dx-col-text">' + c.visits[decisionVisitIdx].choices[0].text + '<\/div><\/div>' +
@@ -1007,9 +1007,9 @@ function showDebrief(id) {
   window.scrollTo(0,0);
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // REASONING MAP SVG
-// ═══════════════════════════════════════════
+// ===========================================
 function buildReasoningMap(id, state, finalOutcome) {
   const c = CASES[id];
   const visits = c.visits;
@@ -1105,12 +1105,12 @@ function buildReasoningMap(id, state, finalOutcome) {
   return svg;
 }
 
-// ═══════════════════════════════════════════
+// ===========================================
 // DASHBOARD
-// ═══════════════════════════════════════════
-// ═══════════════════════════════════════════
-// TEACHING MODULES — FAB, DRAWER, RENDERER
-// ═══════════════════════════════════════════
+// ===========================================
+// ===========================================
+// TEACHING MODULES &mdash; FAB, DRAWER, RENDERER
+// ===========================================
 
 var moduleFabEl = null;
 var activeModuleCaseId = null;
@@ -1139,7 +1139,7 @@ function openModules(caseId) {
   const m = MODULES[caseId];
   // Set header
   document.getElementById('module-drawer-title').textContent = c.diagnosis || 'Evidence Base';
-  document.getElementById('module-drawer-sub').textContent = 'Pathophysiology · Guidelines · Framework · Evidence · EMR Lens';
+  document.getElementById('module-drawer-sub').textContent = 'Pathophysiology &#183; Guidelines &#183; Framework &#183; Evidence &#183; EMR Lens';
   // Build tabs
   const tabDefs = [
     {id:'pathophys', label:'Pathophys', icon:'&#9883;'},
@@ -1209,7 +1209,7 @@ function buildModuleTable(rows) {
       // Apply evidence grade coloring
       var cellClass = '';
       if (typeof cell === 'string') {
-        if (cell.includes('Grade A') || cell.includes('Grade A —')) cellClass = ' class="ev-a-cell"';
+        if (cell.includes('Grade A') || cell.includes('Grade A &mdash;')) cellClass = ' class="ev-a-cell"';
         else if (cell.includes('Grade D')) cellClass = ' class="ev-d-cell"';
       }
       html += '<td' + cellClass + '>' + cell + '<\/td>';
@@ -1232,7 +1232,7 @@ function buildInlineModuleSummary(id) {
   var html = '<div class="sec-hdr"><div class="sec-icon" style="background:#fdf3dc">&#9733;<\/div><div class="sec-title">Evidence Summary<\/div><span class="sec-tag">Research Base<\/span><\/div>';
   html += '<div style="background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px;">';
   html += '<div style="padding:14px 20px;border-bottom:1px solid var(--border);background:#fafcfe;">';
-  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:6px;">Management Decisions — Evidence Grades<\/div>';
+  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral-mid);margin-bottom:6px;">Management Decisions &mdash; Evidence Grades<\/div>';
   html += '<div style="font-size:12px;color:var(--neutral-mid);">';
   html += '<span class="ev-grade ev-a">Grade A<\/span> Strong evidence (RCTs, systematic reviews) &nbsp; ';
   html += '<span class="ev-grade ev-b">Grade B<\/span> Moderate evidence (controlled studies, guidelines) &nbsp; ';
@@ -1251,11 +1251,11 @@ function buildInlineModuleSummary(id) {
     else if (gradeText.startsWith('Grade B')) { gradeClass = 'ev-b'; gradeTag = 'Grade B'; }
     else if (gradeText.startsWith('Grade C')) { gradeClass = 'ev-c'; gradeTag = 'Grade C'; }
     else if (gradeText.startsWith('Grade D')) { gradeClass = 'ev-d'; gradeTag = 'Grade D'; }
-    html += '<tr><td>' + (row[0] || '') + '<\/td><td><span class="ev-grade ' + gradeClass + '">' + gradeTag + '<\/span><br><span style="font-size:11px;color:var(--neutral-mid)">' + gradeText.replace(/Grade [ABCD] ?—? ?/, '') + '<\/span><\/td><td style="font-size:11.5px">' + (row[2] || '') + '<\/td><\/tr>';
+    html += '<tr><td>' + (row[0] || '') + '<\/td><td><span class="ev-grade ' + gradeClass + '">' + gradeTag + '<\/span><br><span style="font-size:11px;color:var(--neutral-mid)">' + gradeText.replace(/Grade [ABCD] ?&mdash;? ?/, '') + '<\/span><\/td><td style="font-size:11.5px">' + (row[2] || '') + '<\/td><\/tr>';
   }
   html += '<\/tbody><\/table>';
   html += '<div style="padding:12px 20px;background:#fafcfe;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;">';
-  html += '<span style="font-size:12px;color:var(--neutral-mid);">Full teaching modules — pathophysiology, clinical guidelines, diagnostic frameworks, and EMR lens:<\/span>';
+  html += '<span style="font-size:12px;color:var(--neutral-mid);">Full teaching modules &mdash; pathophysiology, clinical guidelines, diagnostic frameworks, and EMR lens:<\/span>';
   html += '<button onclick="openModules(\'' + id + '\')" style="padding:7px 14px;border-radius:5px;background:var(--ocean);color:white;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;">Open Evidence Base &#8594;<\/button>';
   html += '<\/div><\/div>';
   return html;
