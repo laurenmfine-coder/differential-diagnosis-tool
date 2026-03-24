@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clinical Reasoning in Practice — A GENA × SIVOTEC Demo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+
+
 <style>
 :root {
   --ink: #080e1a;
@@ -30,7 +30,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   background: var(--ink);
   color: var(--white);
   overflow-x: hidden;
@@ -63,7 +63,7 @@ nav {
   border-bottom: 1px solid var(--border);
 }
 .nav-logo {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: .12em;
@@ -169,7 +169,7 @@ nav {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 11px;
   font-weight: 400;
   letter-spacing: .18em;
@@ -186,7 +186,7 @@ nav {
 }
 
 .hero-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(52px, 7vw, 96px);
   font-weight: 300;
   line-height: 1.0;
@@ -281,7 +281,7 @@ nav {
   animation: fade-up .8s ease .8s forwards;
 }
 .hero-stat-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 42px;
   font-weight: 600;
   color: var(--white);
@@ -320,7 +320,7 @@ nav {
   align-items: center;
 }
 .problem-label {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -328,7 +328,7 @@ nav {
   margin-bottom: 20px;
 }
 .problem-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(32px, 3.5vw, 52px);
   font-weight: 400;
   line-height: 1.15;
@@ -371,7 +371,7 @@ nav {
   transform: translateX(4px);
 }
 .pstat-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 38px;
   font-weight: 600;
   color: var(--gold);
@@ -402,7 +402,7 @@ nav {
 .tools-inner { max-width: 1100px; margin: 0 auto; }
 
 .section-label {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -411,7 +411,7 @@ nav {
   margin-bottom: 14px;
 }
 .section-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(30px, 3.5vw, 50px);
   font-weight: 400;
   color: var(--white);
@@ -466,7 +466,7 @@ nav {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 10px;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -479,7 +479,7 @@ nav {
 .tool-tag-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
 .tool-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 30px;
   font-weight: 400;
   color: var(--white);
@@ -489,7 +489,7 @@ nav {
 .tool-sub {
   font-size: 13px;
   color: var(--gold);
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   letter-spacing: .06em;
   margin-bottom: 16px;
 }
@@ -559,7 +559,7 @@ nav {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 10px;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -595,7 +595,7 @@ nav {
 .how-step:hover { background: rgba(26,95,168,.04); }
 .how-step + .how-step { border-left: 1px solid var(--border); }
 .how-step-num {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 11px;
   letter-spacing: .14em;
   color: var(--gold);
@@ -613,7 +613,7 @@ nav {
 }
 .how-step-icon { font-size: 28px; margin-bottom: 14px; }
 .how-step-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 22px;
   color: var(--white);
   margin-bottom: 10px;
@@ -649,7 +649,7 @@ nav {
   z-index: 2;
 }
 .gena-label {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -657,7 +657,7 @@ nav {
   margin-bottom: 16px;
 }
 .gena-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(32px, 3.5vw, 50px);
   font-weight: 400;
   line-height: 1.12;
@@ -724,7 +724,7 @@ nav {
   margin-bottom: 20px;
 }
 .gena-card-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 28px;
   font-weight: 400;
   color: var(--white);
@@ -751,7 +751,7 @@ nav {
   text-align: center;
 }
 .gcs-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 28px;
   color: var(--blue-light);
   font-weight: 600;
@@ -781,7 +781,7 @@ footer {
   gap: 20px;
 }
 .footer-logo {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Courier New', 'Lucida Console', monospace;
   font-size: 12px;
   letter-spacing: .14em;
   text-transform: uppercase;
